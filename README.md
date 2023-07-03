@@ -1,2 +1,2 @@
-# lakehouse-java-sdk
-This is used for lakehouse Java SDK
+# watsonxdata-java-sdk
+This is used for Watsonx.data Java SDK
