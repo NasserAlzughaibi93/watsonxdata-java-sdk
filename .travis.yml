@@ -22,7 +22,7 @@ env:
 
 stages:
   - name: Build-Test
-# Uncomment these stages when you're ready to use them.
+# Uncomment these stages when you're ready to use them
  - name: Semantic-Release
    if: (branch = main) AND (type IN (push, api)) AND (fork = false)
  - name: Publish-Release
