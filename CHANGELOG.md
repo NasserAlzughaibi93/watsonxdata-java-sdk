@@ -1,3 +1,10 @@
+## [0.1.1](https://github.com/IBM/watsonxdata-java-sdk/compare/0.1.0...0.1.1) (2023-07-13)
+
+
+### Bug Fixes
+
+* update sign ([410fdb8](https://github.com/IBM/watsonxdata-java-sdk/commit/410fdb81bc7b2ce66624d377cbeb7f68ea8923ac))
+
 # [0.1.0](https://github.com/IBM/watsonxdata-java-sdk/compare/v0.0.1...0.1.0) (2023-07-13)
 
 
