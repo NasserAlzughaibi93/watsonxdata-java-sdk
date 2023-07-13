@@ -28,7 +28,6 @@ stages:
   - name: Publish-Release
     if: (tag IS present) AND (fork = false)
 
-
 before_install:
   - sudo apt-get update
   - env | grep TRAVIS
