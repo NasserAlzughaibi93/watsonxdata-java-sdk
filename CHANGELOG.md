@@ -1,3 +1,10 @@
+## [0.1.2](https://github.com/IBM/watsonxdata-java-sdk/compare/0.1.1...0.1.2) (2023-07-13)
+
+
+### Bug Fixes
+
+* update travis yml file to test ([8f74c32](https://github.com/IBM/watsonxdata-java-sdk/commit/8f74c32a006bbc37d9e49bdb03cae7a55328e078))
+
 ## [0.1.1](https://github.com/IBM/watsonxdata-java-sdk/compare/0.1.0...0.1.1) (2023-07-13)
 
 
