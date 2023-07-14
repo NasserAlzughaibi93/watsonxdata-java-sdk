@@ -1,3 +1,10 @@
+## [0.1.3](https://github.com/IBM/watsonxdata-java-sdk/compare/0.1.2...0.1.3) (2023-07-14)
+
+
+### Bug Fixes
+
+* comment out coverage report in parent pom file ([e5ed27e](https://github.com/IBM/watsonxdata-java-sdk/commit/e5ed27e0939ff689316f9275a5690e521ce61f1b))
+
 ## [0.1.2](https://github.com/IBM/watsonxdata-java-sdk/compare/0.1.1...0.1.2) (2023-07-13)
 
 
