@@ -1,3 +1,10 @@
+## [0.1.5](https://github.com/IBM/watsonxdata-java-sdk/compare/0.1.4...0.1.5) (2023-07-17)
+
+
+### Bug Fixes
+
+* remove 'latest' link from gh-pages ([4e894d0](https://github.com/IBM/watsonxdata-java-sdk/commit/4e894d049d541c373c0ac00d28cb7a35639aaa00))
+
 ## [0.1.4](https://github.com/IBM/watsonxdata-java-sdk/compare/0.1.3...0.1.4) (2023-07-14)
 
 
