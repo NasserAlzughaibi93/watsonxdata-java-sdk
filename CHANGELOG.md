@@ -1,3 +1,10 @@
+# [0.3.0](https://github.com/IBM/watsonxdata-java-sdk/compare/0.2.0...0.3.0) (2024-02-01)
+
+
+### Features
+
+* **v2 SDK:** Update v2 SDK with new v2 API definition ([#3](https://github.com/IBM/watsonxdata-java-sdk/issues/3)) ([5a9e866](https://github.com/IBM/watsonxdata-java-sdk/commit/5a9e86642bc912c76e44fe7900e6a98e2eaae490))
+
 # [0.2.0](https://github.com/IBM/watsonxdata-java-sdk/compare/0.1.5...0.2.0) (2023-12-07)
 
 
