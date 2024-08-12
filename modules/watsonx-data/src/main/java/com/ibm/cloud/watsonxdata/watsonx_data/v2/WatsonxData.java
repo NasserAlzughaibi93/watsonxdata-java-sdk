@@ -26,7 +26,7 @@ import com.ibm.cloud.sdk.core.security.ConfigBasedAuthenticatorFactory;
 import com.ibm.cloud.sdk.core.service.BaseService;
 import com.ibm.cloud.sdk.core.util.RequestUtils;
 import com.ibm.cloud.sdk.core.util.ResponseConverterUtils;
-import com.ibm.cloud.watsonxdata.common.SdkCommon;
+import com.ibm.cloud.watsonx_data.common.SdkCommon;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.AddPrestissimoEngineCatalogsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.AddPrestoEngineCatalogsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.AddSparkEngineCatalogsOptions;
@@ -47,11 +47,14 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEnginePauseCreatedB
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEngineRestartCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEngineResumeCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEngineScaleCreatedBody;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateIngestionJobsLocalFilesOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateIngestionJobsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateMilvusServiceOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateNetezzaEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateOtherEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePrestissimoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePrestoEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePreviewIngestionFileOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSchemaCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSchemaOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSparkEngineApplicationOptions;
@@ -68,6 +71,7 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDatabaseCatalogOpti
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDb2EngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDeactivateBucketOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteIngestionJobsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteMilvusServiceOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteNetezzaEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteOtherEngineOptions;
@@ -84,6 +88,7 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeregisterBucketOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetBucketRegistrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetCatalogOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetDatabaseOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetIngestionJobOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetMilvusServiceOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetPrestissimoEngineCatalogOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetPrestissimoEngineOptions;
@@ -94,6 +99,7 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSparkEngineCatalogOpti
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSparkEngineHistoryServerOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSparkEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetTableOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJob;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListBucketObjectsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListBucketRegistrationsOptions;
@@ -130,6 +136,7 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestissimoEngine;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestissimoEngineCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEngine;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEngineCollection;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PreviewIngestionFile;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RenameTableOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ReplaceSnapshotCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RestartPrestissimoEngineOptions;
@@ -171,6 +178,7 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateSyncCatalogOptions;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import okhttp3.MultipartBody;
 
 /**
  * This is the Public API for IBM watsonx.data.
@@ -3200,14 +3208,196 @@ public class WatsonxData extends BaseService {
     }
     builder.header("Accept", "application/json");
     builder.header("AuthInstanceId", listIngestionJobsOptions.authInstanceId());
-    if (listIngestionJobsOptions.start() != null) {
-      builder.query("start", String.valueOf(listIngestionJobsOptions.start()));
+    if (listIngestionJobsOptions.page() != null) {
+      builder.query("page", String.valueOf(listIngestionJobsOptions.page()));
     }
     if (listIngestionJobsOptions.jobsPerPage() != null) {
       builder.query("jobs_per_page", String.valueOf(listIngestionJobsOptions.jobsPerPage()));
     }
     ResponseConverter<IngestionJobCollection> responseConverter =
       ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<IngestionJobCollection>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Create an ingestion job.
+   *
+   * Create an ingestion job.
+   *
+   * @param createIngestionJobsOptions the {@link CreateIngestionJobsOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link IngestionJob}
+   */
+  public ServiceCall<IngestionJob> createIngestionJobs(CreateIngestionJobsOptions createIngestionJobsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(createIngestionJobsOptions,
+      "createIngestionJobsOptions cannot be null");
+    RequestBuilder builder = RequestBuilder.post(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/ingestion_jobs"));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("watsonx_data", "v2", "createIngestionJobs");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    builder.header("AuthInstanceId", createIngestionJobsOptions.authInstanceId());
+    final JsonObject contentJson = new JsonObject();
+    contentJson.addProperty("job_id", createIngestionJobsOptions.jobId());
+    contentJson.addProperty("source_data_files", createIngestionJobsOptions.sourceDataFiles());
+    contentJson.addProperty("target_table", createIngestionJobsOptions.targetTable());
+    contentJson.addProperty("username", createIngestionJobsOptions.username());
+    if (createIngestionJobsOptions.createIfNotExist() != null) {
+      contentJson.addProperty("create_if_not_exist", createIngestionJobsOptions.createIfNotExist());
+    }
+    if (createIngestionJobsOptions.csvProperty() != null) {
+      contentJson.add("csv_property", com.ibm.cloud.sdk.core.util.GsonSingleton.getGson().toJsonTree(createIngestionJobsOptions.csvProperty()));
+    }
+    if (createIngestionJobsOptions.engineId() != null) {
+      contentJson.addProperty("engine_id", createIngestionJobsOptions.engineId());
+    }
+    if (createIngestionJobsOptions.executeConfig() != null) {
+      contentJson.add("execute_config", com.ibm.cloud.sdk.core.util.GsonSingleton.getGson().toJsonTree(createIngestionJobsOptions.executeConfig()));
+    }
+    if (createIngestionJobsOptions.partitionBy() != null) {
+      contentJson.addProperty("partition_by", createIngestionJobsOptions.partitionBy());
+    }
+    if (createIngestionJobsOptions.schema() != null) {
+      contentJson.addProperty("schema", createIngestionJobsOptions.schema());
+    }
+    if (createIngestionJobsOptions.sourceFileType() != null) {
+      contentJson.addProperty("source_file_type", createIngestionJobsOptions.sourceFileType());
+    }
+    if (createIngestionJobsOptions.validateCsvHeader() != null) {
+      contentJson.addProperty("validate_csv_header", createIngestionJobsOptions.validateCsvHeader());
+    }
+    builder.bodyJson(contentJson);
+    ResponseConverter<IngestionJob> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<IngestionJob>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Create an ingestion job for user local files.
+   *
+   * Create an ingestion job for user local files.
+   *
+   * @param createIngestionJobsLocalFilesOptions the {@link CreateIngestionJobsLocalFilesOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link IngestionJob}
+   */
+  public ServiceCall<IngestionJob> createIngestionJobsLocalFiles(CreateIngestionJobsLocalFilesOptions createIngestionJobsLocalFilesOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(createIngestionJobsLocalFilesOptions,
+      "createIngestionJobsLocalFilesOptions cannot be null");
+    RequestBuilder builder = RequestBuilder.post(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/ingestion_jobs_local_files"));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("watsonx_data", "v2", "createIngestionJobsLocalFiles");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    builder.header("AuthInstanceId", createIngestionJobsLocalFilesOptions.authInstanceId());
+    MultipartBody.Builder multipartBuilder = new MultipartBody.Builder();
+    multipartBuilder.setType(MultipartBody.FORM);
+    okhttp3.RequestBody sourceDataFileBody = RequestUtils.inputStreamBody(createIngestionJobsLocalFilesOptions.sourceDataFile(), createIngestionJobsLocalFilesOptions.sourceDataFileContentType());
+    multipartBuilder.addFormDataPart("source_data_file", "filename", sourceDataFileBody);
+    multipartBuilder.addFormDataPart("target_table", createIngestionJobsLocalFilesOptions.targetTable());
+    multipartBuilder.addFormDataPart("job_id", createIngestionJobsLocalFilesOptions.jobId());
+    multipartBuilder.addFormDataPart("username", createIngestionJobsLocalFilesOptions.username());
+    if (createIngestionJobsLocalFilesOptions.sourceFileType() != null) {
+      multipartBuilder.addFormDataPart("source_file_type", createIngestionJobsLocalFilesOptions.sourceFileType());
+    }
+    if (createIngestionJobsLocalFilesOptions.csvProperty() != null) {
+      multipartBuilder.addFormDataPart("csv_property", createIngestionJobsLocalFilesOptions.csvProperty());
+    }
+    if (createIngestionJobsLocalFilesOptions.createIfNotExist() != null) {
+      multipartBuilder.addFormDataPart("create_if_not_exist", String.valueOf(createIngestionJobsLocalFilesOptions.createIfNotExist()));
+    }
+    if (createIngestionJobsLocalFilesOptions.validateCsvHeader() != null) {
+      multipartBuilder.addFormDataPart("validate_csv_header", String.valueOf(createIngestionJobsLocalFilesOptions.validateCsvHeader()));
+    }
+    if (createIngestionJobsLocalFilesOptions.executeConfig() != null) {
+      multipartBuilder.addFormDataPart("execute_config", createIngestionJobsLocalFilesOptions.executeConfig());
+    }
+    if (createIngestionJobsLocalFilesOptions.engineId() != null) {
+      multipartBuilder.addFormDataPart("engine_id", createIngestionJobsLocalFilesOptions.engineId());
+    }
+    builder.body(multipartBuilder.build());
+    ResponseConverter<IngestionJob> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<IngestionJob>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Get ingestion job.
+   *
+   * Get a submitted ingestion job.
+   *
+   * @param getIngestionJobOptions the {@link GetIngestionJobOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link IngestionJob}
+   */
+  public ServiceCall<IngestionJob> getIngestionJob(GetIngestionJobOptions getIngestionJobOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(getIngestionJobOptions,
+      "getIngestionJobOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("job_id", getIngestionJobOptions.jobId());
+    RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/ingestion_jobs/{job_id}", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("watsonx_data", "v2", "getIngestionJob");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    builder.header("AuthInstanceId", getIngestionJobOptions.authInstanceId());
+    ResponseConverter<IngestionJob> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<IngestionJob>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Delete an ingestion job.
+   *
+   * Delete an ingestion job.
+   *
+   * @param deleteIngestionJobsOptions the {@link DeleteIngestionJobsOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a void result
+   */
+  public ServiceCall<Void> deleteIngestionJobs(DeleteIngestionJobsOptions deleteIngestionJobsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(deleteIngestionJobsOptions,
+      "deleteIngestionJobsOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("job_id", deleteIngestionJobsOptions.jobId());
+    RequestBuilder builder = RequestBuilder.delete(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/ingestion_jobs/{job_id}", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("watsonx_data", "v2", "deleteIngestionJobs");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("AuthInstanceId", deleteIngestionJobsOptions.authInstanceId());
+    ResponseConverter<Void> responseConverter = ResponseConverterUtils.getVoid();
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Generate a preview of source file(s).
+   *
+   * Generate a preview of source file(s).
+   *
+   * @param createPreviewIngestionFileOptions the {@link CreatePreviewIngestionFileOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link PreviewIngestionFile}
+   */
+  public ServiceCall<PreviewIngestionFile> createPreviewIngestionFile(CreatePreviewIngestionFileOptions createPreviewIngestionFileOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(createPreviewIngestionFileOptions,
+      "createPreviewIngestionFileOptions cannot be null");
+    RequestBuilder builder = RequestBuilder.post(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/preview_ingestion_file"));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("watsonx_data", "v2", "createPreviewIngestionFile");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    builder.header("AuthInstanceId", createPreviewIngestionFileOptions.authInstanceId());
+    final JsonObject contentJson = new JsonObject();
+    contentJson.addProperty("source_data_files", createPreviewIngestionFileOptions.sourceDataFiles());
+    if (createPreviewIngestionFileOptions.csvProperty() != null) {
+      contentJson.add("csv_property", com.ibm.cloud.sdk.core.util.GsonSingleton.getGson().toJsonTree(createPreviewIngestionFileOptions.csvProperty()));
+    }
+    if (createPreviewIngestionFileOptions.sourceFileType() != null) {
+      contentJson.addProperty("source_file_type", createPreviewIngestionFileOptions.sourceFileType());
+    }
+    builder.bodyJson(contentJson);
+    ResponseConverter<PreviewIngestionFile> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<PreviewIngestionFile>() { }.getType());
     return createServiceCall(builder.build(), responseConverter);
   }
 

@@ -17,7 +17,7 @@ import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.service.exception.ServiceResponseException;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import com.ibm.cloud.sdk.core.util.CredentialUtils;
-import com.ibm.cloud.watsonxdata.test.SdkIntegrationTestBase;
+import com.ibm.cloud.watsonx_data.test.SdkIntegrationTestBase;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.AddPrestissimoEngineCatalogsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.AddPrestoEngineCatalogsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.AddSparkEngineCatalogsOptions;
@@ -42,11 +42,14 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEnginePauseCreatedB
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEngineRestartCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEngineResumeCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEngineScaleCreatedBody;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateIngestionJobsLocalFilesOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateIngestionJobsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateMilvusServiceOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateNetezzaEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateOtherEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePrestissimoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePrestoEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePreviewIngestionFileOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSchemaCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSchemaOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSparkEngineApplicationOptions;
@@ -72,6 +75,7 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDatabaseCatalogOpti
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDb2EngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDeactivateBucketOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteIngestionJobsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteMilvusServiceOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteNetezzaEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteOtherEngineOptions;
@@ -94,6 +98,7 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnginePropertiesOaiGenCon
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetBucketRegistrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetCatalogOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetDatabaseOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetIngestionJobOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetMilvusServiceOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetPrestissimoEngineCatalogOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetPrestissimoEngineOptions;
@@ -109,7 +114,8 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobCollectionPage;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobCsvProperty;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobExecuteConfig;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobsPager;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobPrototypeCsvProperty;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobPrototypeExecuteConfig;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListBucketObjectsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListBucketRegistrationsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListCatalogsOptions;
@@ -166,6 +172,9 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePatch;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePatchRemoveEngineProperties;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePropertiesCatalog;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePropertiesGlobal;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PreviewIngestionFile;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PreviewIngestionFilePrototypeCsvProperty;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PreviewIngestionFileRows;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEngineProperties;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesConfiguration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesOaiGenConfiguration;
@@ -226,7 +235,6 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateSyncCatalogOKBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateSyncCatalogOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.utils.TestUtilities;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -2526,7 +2534,7 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
     try {
       ListIngestionJobsOptions listIngestionJobsOptions = new ListIngestionJobsOptions.Builder()
         .authInstanceId("testString")
-        .start("1")
+        .page(Long.valueOf("1"))
         .jobsPerPage(Long.valueOf("1"))
         .build();
 
@@ -2546,38 +2554,145 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
   }
 
   @Test(dependsOnMethods = { "testListIngestionJobs" })
-  public void testListIngestionJobsWithPager() throws Exception {
+  public void testCreateIngestionJobs() throws Exception {
     try {
-      ListIngestionJobsOptions options = new ListIngestionJobsOptions.Builder()
-        .authInstanceId("testString")
-        .jobsPerPage(Long.valueOf("1"))
+      IngestionJobPrototypeCsvProperty ingestionJobPrototypeCsvPropertyModel = new IngestionJobPrototypeCsvProperty.Builder()
+        .encoding("utf-8")
+        .escapeCharacter("\\\\")
+        .fieldDelimiter(",")
+        .header(true)
+        .lineDelimiter("\\n")
         .build();
 
-      // Test getNext().
-      List<IngestionJob> allResults = new ArrayList<>();
-      IngestionJobsPager pager = new IngestionJobsPager(service, options);
-      while (pager.hasNext()) {
-        List<IngestionJob> nextPage = pager.getNext();
-        assertNotNull(nextPage);
-        allResults.addAll(nextPage);
-      }
-      assertFalse(allResults.isEmpty());
+      IngestionJobPrototypeExecuteConfig ingestionJobPrototypeExecuteConfigModel = new IngestionJobPrototypeExecuteConfig.Builder()
+        .driverCores(Long.valueOf("1"))
+        .driverMemory("2G")
+        .executorCores(Long.valueOf("1"))
+        .executorMemory("2G")
+        .numExecutors(Long.valueOf("1"))
+        .build();
 
-      // Test getAll();
-      pager = new IngestionJobsPager(service, options);
-      List<IngestionJob> allItems = pager.getAll();
-      assertNotNull(allItems);
-      assertFalse(allItems.isEmpty());
+      CreateIngestionJobsOptions createIngestionJobsOptions = new CreateIngestionJobsOptions.Builder()
+        .authInstanceId("testString")
+        .jobId("ingestion-1699459946935")
+        .sourceDataFiles("s3://demobucket/data/yellow_tripdata_2022-01.parquet")
+        .targetTable("demodb.test.targettable")
+        .username("user1")
+        .createIfNotExist(false)
+        .csvProperty(ingestionJobPrototypeCsvPropertyModel)
+        .engineId("spark123")
+        .executeConfig(ingestionJobPrototypeExecuteConfigModel)
+        .partitionBy("col1, col2")
+        .schema("{\"type\":\"struct\",\"schema-id\":0,\"fields\":[{\"id\":1,\"name\":\"ID\",\"required\":true,\"type\":\"int\"},{\"id\":2,\"name\":\"Name\",\"required\":true,\"type\":\"string\"}]}")
+        .sourceFileType("csv")
+        .validateCsvHeader(false)
+        .build();
 
-      assertEquals(allItems.size(), allResults.size());
-      System.out.println(String.format("Retrieved a total of %d item(s) with pagination.", allResults.size()));
+      // Invoke operation
+      Response<IngestionJob> response = service.createIngestionJobs(createIngestionJobsOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 202);
+
+      IngestionJob ingestionJobResult = response.getResult();
+      assertNotNull(ingestionJobResult);
+
     } catch (ServiceResponseException e) {
         fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }
 
-  @Test(dependsOnMethods = { "testListIngestionJobs" })
+  @Test(dependsOnMethods = { "testCreateIngestionJobs" })
+  public void testCreateIngestionJobsLocalFiles() throws Exception {
+    try {
+      CreateIngestionJobsLocalFilesOptions createIngestionJobsLocalFilesOptions = new CreateIngestionJobsLocalFilesOptions.Builder()
+        .authInstanceId("testString")
+        .sourceDataFile(TestUtilities.createMockStream("This is a mock file."))
+        .targetTable("testString")
+        .jobId("testString")
+        .username("testString")
+        .sourceDataFileContentType("testString")
+        .sourceFileType("csv")
+        .csvProperty("testString")
+        .createIfNotExist(false)
+        .validateCsvHeader(false)
+        .executeConfig("testString")
+        .engineId("testString")
+        .build();
+
+      // Invoke operation
+      Response<IngestionJob> response = service.createIngestionJobsLocalFiles(createIngestionJobsLocalFilesOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 202);
+
+      IngestionJob ingestionJobResult = response.getResult();
+      assertNotNull(ingestionJobResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testCreateIngestionJobsLocalFiles" })
+  public void testGetIngestionJob() throws Exception {
+    try {
+      GetIngestionJobOptions getIngestionJobOptions = new GetIngestionJobOptions.Builder()
+        .jobId("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<IngestionJob> response = service.getIngestionJob(getIngestionJobOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      IngestionJob ingestionJobResult = response.getResult();
+      assertNotNull(ingestionJobResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testGetIngestionJob" })
+  public void testCreatePreviewIngestionFile() throws Exception {
+    try {
+      PreviewIngestionFilePrototypeCsvProperty previewIngestionFilePrototypeCsvPropertyModel = new PreviewIngestionFilePrototypeCsvProperty.Builder()
+        .encoding("utf-8")
+        .escapeCharacter("\\\\")
+        .fieldDelimiter(",")
+        .header(true)
+        .lineDelimiter("\\n")
+        .build();
+
+      CreatePreviewIngestionFileOptions createPreviewIngestionFileOptions = new CreatePreviewIngestionFileOptions.Builder()
+        .authInstanceId("testString")
+        .sourceDataFiles("s3://demobucket/data/yellow_tripdata_2022-01.parquet")
+        .csvProperty(previewIngestionFilePrototypeCsvPropertyModel)
+        .sourceFileType("csv")
+        .build();
+
+      // Invoke operation
+      Response<PreviewIngestionFile> response = service.createPreviewIngestionFile(createPreviewIngestionFileOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 201);
+
+      PreviewIngestionFile previewIngestionFileResult = response.getResult();
+      assertNotNull(previewIngestionFileResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testCreatePreviewIngestionFile" })
   public void testDeregisterBucket() throws Exception {
     try {
       DeregisterBucketOptions deregisterBucketOptions = new DeregisterBucketOptions.Builder()
@@ -2924,6 +3039,25 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
 
       // Invoke operation
       Response<Void> response = service.deleteMilvusService(deleteMilvusServiceOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 204);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testDeleteMilvusService" })
+  public void testDeleteIngestionJobs() throws Exception {
+    try {
+      DeleteIngestionJobsOptions deleteIngestionJobsOptions = new DeleteIngestionJobsOptions.Builder()
+        .jobId("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<Void> response = service.deleteIngestionJobs(deleteIngestionJobsOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 204);

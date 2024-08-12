@@ -14,7 +14,7 @@
 package com.ibm.cloud.watsonxdata.watsonx_data.v2.model;
 
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListIngestionJobsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PreviewIngestionFileRows;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.utils.TestUtilities;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -23,27 +23,24 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the ListIngestionJobsOptions model.
+ * Unit test class for the PreviewIngestionFileRows model.
  */
-public class ListIngestionJobsOptionsTest {
+public class PreviewIngestionFileRowsTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testListIngestionJobsOptions() throws Throwable {
-    ListIngestionJobsOptions listIngestionJobsOptionsModel = new ListIngestionJobsOptions.Builder()
-      .authInstanceId("testString")
-      .page(Long.valueOf("1"))
-      .jobsPerPage(Long.valueOf("1"))
-      .build();
-    assertEquals(listIngestionJobsOptionsModel.authInstanceId(), "testString");
-    assertEquals(listIngestionJobsOptionsModel.page(), Long.valueOf("1"));
-    assertEquals(listIngestionJobsOptionsModel.jobsPerPage(), Long.valueOf("1"));
+  public void testPreviewIngestionFileRows() throws Throwable {
+    PreviewIngestionFileRows previewIngestionFileRowsModel = new PreviewIngestionFileRows();
+    assertNull(previewIngestionFileRowsModel.getRowEight());
+    assertNull(previewIngestionFileRowsModel.getRowFive());
+    assertNull(previewIngestionFileRowsModel.getRowFour());
+    assertNull(previewIngestionFileRowsModel.getRowNine());
+    assertNull(previewIngestionFileRowsModel.getRowOne());
+    assertNull(previewIngestionFileRowsModel.getRowSeven());
+    assertNull(previewIngestionFileRowsModel.getRowSix());
+    assertNull(previewIngestionFileRowsModel.getRowTen());
+    assertNull(previewIngestionFileRowsModel.getRowThree());
+    assertNull(previewIngestionFileRowsModel.getRowTwo());
   }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testListIngestionJobsOptionsError() throws Throwable {
-    new ListIngestionJobsOptions.Builder().build();
-  }
-
 }

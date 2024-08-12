@@ -21,7 +21,7 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
 public class ListIngestionJobsOptions extends GenericModel {
 
   protected String authInstanceId;
-  protected String start;
+  protected Long page;
   protected Long jobsPerPage;
 
   /**
@@ -29,7 +29,7 @@ public class ListIngestionJobsOptions extends GenericModel {
    */
   public static class Builder {
     private String authInstanceId;
-    private String start;
+    private Long page;
     private Long jobsPerPage;
 
     /**
@@ -39,7 +39,7 @@ public class ListIngestionJobsOptions extends GenericModel {
      */
     private Builder(ListIngestionJobsOptions listIngestionJobsOptions) {
       this.authInstanceId = listIngestionJobsOptions.authInstanceId;
-      this.start = listIngestionJobsOptions.start;
+      this.page = listIngestionJobsOptions.page;
       this.jobsPerPage = listIngestionJobsOptions.jobsPerPage;
     }
 
@@ -79,13 +79,13 @@ public class ListIngestionJobsOptions extends GenericModel {
     }
 
     /**
-     * Set the start.
+     * Set the page.
      *
-     * @param start the start
+     * @param page the page
      * @return the ListIngestionJobsOptions builder
      */
-    public Builder start(String start) {
-      this.start = start;
+    public Builder page(long page) {
+      this.page = page;
       return this;
     }
 
@@ -107,7 +107,7 @@ public class ListIngestionJobsOptions extends GenericModel {
     com.ibm.cloud.sdk.core.util.Validator.notNull(builder.authInstanceId,
       "authInstanceId cannot be null");
     authInstanceId = builder.authInstanceId;
-    start = builder.start;
+    page = builder.page;
     jobsPerPage = builder.jobsPerPage;
   }
 
@@ -132,14 +132,14 @@ public class ListIngestionJobsOptions extends GenericModel {
   }
 
   /**
-   * Gets the start.
+   * Gets the page.
    *
    * Page number of requested ingestion jobs.
    *
-   * @return the start
+   * @return the page
    */
-  public String start() {
-    return start;
+  public Long page() {
+    return page;
   }
 
   /**

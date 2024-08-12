@@ -14,7 +14,7 @@
 package com.ibm.cloud.watsonxdata.watsonx_data.v2.model;
 
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListIngestionJobsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteIngestionJobsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.utils.TestUtilities;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -23,27 +23,25 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the ListIngestionJobsOptions model.
+ * Unit test class for the DeleteIngestionJobsOptions model.
  */
-public class ListIngestionJobsOptionsTest {
+public class DeleteIngestionJobsOptionsTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testListIngestionJobsOptions() throws Throwable {
-    ListIngestionJobsOptions listIngestionJobsOptionsModel = new ListIngestionJobsOptions.Builder()
+  public void testDeleteIngestionJobsOptions() throws Throwable {
+    DeleteIngestionJobsOptions deleteIngestionJobsOptionsModel = new DeleteIngestionJobsOptions.Builder()
+      .jobId("testString")
       .authInstanceId("testString")
-      .page(Long.valueOf("1"))
-      .jobsPerPage(Long.valueOf("1"))
       .build();
-    assertEquals(listIngestionJobsOptionsModel.authInstanceId(), "testString");
-    assertEquals(listIngestionJobsOptionsModel.page(), Long.valueOf("1"));
-    assertEquals(listIngestionJobsOptionsModel.jobsPerPage(), Long.valueOf("1"));
+    assertEquals(deleteIngestionJobsOptionsModel.jobId(), "testString");
+    assertEquals(deleteIngestionJobsOptionsModel.authInstanceId(), "testString");
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testListIngestionJobsOptionsError() throws Throwable {
-    new ListIngestionJobsOptions.Builder().build();
+  public void testDeleteIngestionJobsOptionsError() throws Throwable {
+    new DeleteIngestionJobsOptions.Builder().build();
   }
 
 }

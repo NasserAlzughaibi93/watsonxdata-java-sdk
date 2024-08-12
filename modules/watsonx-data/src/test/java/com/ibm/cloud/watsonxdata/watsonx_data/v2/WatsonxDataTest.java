@@ -43,11 +43,14 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEnginePauseCreatedB
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEngineRestartCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEngineResumeCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEngineScaleCreatedBody;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateIngestionJobsLocalFilesOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateIngestionJobsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateMilvusServiceOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateNetezzaEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateOtherEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePrestissimoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePrestoEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePreviewIngestionFileOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSchemaCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSchemaOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSparkEngineApplicationOptions;
@@ -73,6 +76,7 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDatabaseCatalogOpti
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDb2EngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDeactivateBucketOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteIngestionJobsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteMilvusServiceOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteNetezzaEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteOtherEngineOptions;
@@ -95,6 +99,7 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnginePropertiesOaiGenCon
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetBucketRegistrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetCatalogOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetDatabaseOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetIngestionJobOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetMilvusServiceOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetPrestissimoEngineCatalogOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetPrestissimoEngineOptions;
@@ -110,7 +115,8 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobCollectionPage;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobCsvProperty;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobExecuteConfig;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobsPager;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobPrototypeCsvProperty;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobPrototypeExecuteConfig;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListBucketObjectsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListBucketRegistrationsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListCatalogsOptions;
@@ -167,6 +173,9 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePatch;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePatchRemoveEngineProperties;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePropertiesCatalog;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePropertiesGlobal;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PreviewIngestionFile;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PreviewIngestionFilePrototypeCsvProperty;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PreviewIngestionFileRows;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEngineProperties;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesConfiguration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesOaiGenConfiguration;
@@ -228,7 +237,6 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateSyncCatalogOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.utils.TestUtilities;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -5683,7 +5691,7 @@ public class WatsonxDataTest {
     // Construct an instance of the ListIngestionJobsOptions model
     ListIngestionJobsOptions listIngestionJobsOptionsModel = new ListIngestionJobsOptions.Builder()
       .authInstanceId("testString")
-      .start("1")
+      .page(Long.valueOf("1"))
       .jobsPerPage(Long.valueOf("1"))
       .build();
 
@@ -5705,7 +5713,7 @@ public class WatsonxDataTest {
     // Verify query params
     Map<String, String> query = TestUtilities.parseQueryString(request);
     assertNotNull(query);
-    assertEquals(query.get("start"), "1");
+    assertEquals(Long.valueOf(query.get("page")), Long.valueOf("1"));
     assertEquals(Long.valueOf(query.get("jobs_per_page")), Long.valueOf("1"));
   }
 
@@ -5726,70 +5734,325 @@ public class WatsonxDataTest {
     watsonxDataService.listIngestionJobs(null).execute();
   }
 
-  // Test the listIngestionJobs operation using the IngestionJobsPager.getNext() method
+  // Test the createIngestionJobs operation with a valid options model parameter
   @Test
-  public void testListIngestionJobsWithPagerGetNext() throws Throwable {
-    // Set up the two-page mock response.
-    String mockResponsePage1 = "{\"next\":{\"href\":\"https://myhost.com/somePath?start=1\"},\"total_count\":2,\"limit\":1,\"ingestion_jobs\":[{\"create_if_not_exist\":false,\"csv_property\":{\"encoding\":\"utf-8\",\"escape_character\":\"|\",\"field_delimiter\":\",\",\"header\":true,\"line_delimiter\":\"\n\"},\"details\":\"Path does not exist 'demobucket/data/yellow_tripdata_2022-01.parquet'. Detail: [errno 2] No such file or directory\",\"end_timestamp\":\"1685088775\",\"engine_id\":\"spark123\",\"engine_name\":\"sparkdemo\",\"execute_config\":{\"driver_cores\":1,\"driver_memory\":\"2G\",\"executor_cores\":1,\"executor_memory\":\"2G\",\"num_executors\":1},\"instance_id\":\"1684432229673971\",\"job_id\":\"ingestion-1699459946935\",\"partition_by\":\"col1, col2\",\"schema\":\"{\\\"type\\\":\\\"struct\\\",\\\"schema-id\\\":0,\\\"fields\\\":[{\\\"id\\\":1,\\\"name\\\":\\\"ID\\\",\\\"required\\\":true,\\\"type\\\":\\\"int\\\"},{\\\"id\\\":2,\\\"name\\\":\\\"Name\\\",\\\"required\\\":true,\\\"type\\\":\\\"string\\\"}]}\",\"source_data_files\":\"s3://demobucket/data/yellow_tripdata_2022-01.parquet\",\"source_file_type\":\"csv\",\"start_timestamp\":\"1685084455\",\"status\":\"running\",\"target_table\":\"demodb.test.targettable\",\"username\":\"ibmlhadmin\",\"validate_csv_header\":false}]}";
-    String mockResponsePage2 = "{\"total_count\":2,\"limit\":1,\"ingestion_jobs\":[{\"create_if_not_exist\":false,\"csv_property\":{\"encoding\":\"utf-8\",\"escape_character\":\"|\",\"field_delimiter\":\",\",\"header\":true,\"line_delimiter\":\"\n\"},\"details\":\"Path does not exist 'demobucket/data/yellow_tripdata_2022-01.parquet'. Detail: [errno 2] No such file or directory\",\"end_timestamp\":\"1685088775\",\"engine_id\":\"spark123\",\"engine_name\":\"sparkdemo\",\"execute_config\":{\"driver_cores\":1,\"driver_memory\":\"2G\",\"executor_cores\":1,\"executor_memory\":\"2G\",\"num_executors\":1},\"instance_id\":\"1684432229673971\",\"job_id\":\"ingestion-1699459946935\",\"partition_by\":\"col1, col2\",\"schema\":\"{\\\"type\\\":\\\"struct\\\",\\\"schema-id\\\":0,\\\"fields\\\":[{\\\"id\\\":1,\\\"name\\\":\\\"ID\\\",\\\"required\\\":true,\\\"type\\\":\\\"int\\\"},{\\\"id\\\":2,\\\"name\\\":\\\"Name\\\",\\\"required\\\":true,\\\"type\\\":\\\"string\\\"}]}\",\"source_data_files\":\"s3://demobucket/data/yellow_tripdata_2022-01.parquet\",\"source_file_type\":\"csv\",\"start_timestamp\":\"1685084455\",\"status\":\"running\",\"target_table\":\"demodb.test.targettable\",\"username\":\"ibmlhadmin\",\"validate_csv_header\":false}]}";
+  public void testCreateIngestionJobsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"create_if_not_exist\": false, \"csv_property\": {\"encoding\": \"utf-8\", \"escape_character\": \"|\", \"field_delimiter\": \",\", \"header\": true, \"line_delimiter\": \"\n\"}, \"details\": \"Path does not exist 'demobucket/data/yellow_tripdata_2022-01.parquet'. Detail: [errno 2] No such file or directory\", \"end_timestamp\": \"1685088775\", \"engine_id\": \"spark123\", \"engine_name\": \"sparkdemo\", \"execute_config\": {\"driver_cores\": 1, \"driver_memory\": \"2G\", \"executor_cores\": 1, \"executor_memory\": \"2G\", \"num_executors\": 1}, \"instance_id\": \"1684432229673971\", \"job_id\": \"ingestion-1699459946935\", \"partition_by\": \"col1, col2\", \"schema\": \"{\\\"type\\\":\\\"struct\\\",\\\"schema-id\\\":0,\\\"fields\\\":[{\\\"id\\\":1,\\\"name\\\":\\\"ID\\\",\\\"required\\\":true,\\\"type\\\":\\\"int\\\"},{\\\"id\\\":2,\\\"name\\\":\\\"Name\\\",\\\"required\\\":true,\\\"type\\\":\\\"string\\\"}]}\", \"source_data_files\": \"s3://demobucket/data/yellow_tripdata_2022-01.parquet\", \"source_file_type\": \"csv\", \"start_timestamp\": \"1685084455\", \"status\": \"running\", \"target_table\": \"demodb.test.targettable\", \"username\": \"ibmlhadmin\", \"validate_csv_header\": false}";
+    String createIngestionJobsPath = "/ingestion_jobs";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
-      .setResponseCode(200)
-      .setBody(mockResponsePage1));
-    server.enqueue(new MockResponse()
-      .setHeader("Content-type", "application/json")
-      .setResponseCode(200)
-      .setBody(mockResponsePage2));
-    server.enqueue(new MockResponse()
-      .setHeader("Content-type", "application/json")
-      .setResponseCode(400)
-      .setBody("{\"message\": \"No more results available!\"}"));
+      .setResponseCode(202)
+      .setBody(mockResponseBody));
 
-    ListIngestionJobsOptions listIngestionJobsOptions = new ListIngestionJobsOptions.Builder()
-      .authInstanceId("testString")
-      .jobsPerPage(Long.valueOf("1"))
+    // Construct an instance of the IngestionJobPrototypeCsvProperty model
+    IngestionJobPrototypeCsvProperty ingestionJobPrototypeCsvPropertyModel = new IngestionJobPrototypeCsvProperty.Builder()
+      .encoding("utf-8")
+      .escapeCharacter("\\\\")
+      .fieldDelimiter(",")
+      .header(true)
+      .lineDelimiter("\\n")
       .build();
 
-    List<IngestionJob> allResults = new ArrayList<>();
-    IngestionJobsPager pager = new IngestionJobsPager(watsonxDataService, listIngestionJobsOptions);
-    while (pager.hasNext()) {
-      List<IngestionJob> nextPage = pager.getNext();
-      assertNotNull(nextPage);
-      allResults.addAll(nextPage);
-    }
-    assertEquals(allResults.size(), 2);
-  }
-  
-  // Test the listIngestionJobs operation using the IngestionJobsPager.getAll() method
-  @Test
-  public void testListIngestionJobsWithPagerGetAll() throws Throwable {
-    // Set up the two-page mock response.
-    String mockResponsePage1 = "{\"next\":{\"href\":\"https://myhost.com/somePath?start=1\"},\"total_count\":2,\"limit\":1,\"ingestion_jobs\":[{\"create_if_not_exist\":false,\"csv_property\":{\"encoding\":\"utf-8\",\"escape_character\":\"|\",\"field_delimiter\":\",\",\"header\":true,\"line_delimiter\":\"\n\"},\"details\":\"Path does not exist 'demobucket/data/yellow_tripdata_2022-01.parquet'. Detail: [errno 2] No such file or directory\",\"end_timestamp\":\"1685088775\",\"engine_id\":\"spark123\",\"engine_name\":\"sparkdemo\",\"execute_config\":{\"driver_cores\":1,\"driver_memory\":\"2G\",\"executor_cores\":1,\"executor_memory\":\"2G\",\"num_executors\":1},\"instance_id\":\"1684432229673971\",\"job_id\":\"ingestion-1699459946935\",\"partition_by\":\"col1, col2\",\"schema\":\"{\\\"type\\\":\\\"struct\\\",\\\"schema-id\\\":0,\\\"fields\\\":[{\\\"id\\\":1,\\\"name\\\":\\\"ID\\\",\\\"required\\\":true,\\\"type\\\":\\\"int\\\"},{\\\"id\\\":2,\\\"name\\\":\\\"Name\\\",\\\"required\\\":true,\\\"type\\\":\\\"string\\\"}]}\",\"source_data_files\":\"s3://demobucket/data/yellow_tripdata_2022-01.parquet\",\"source_file_type\":\"csv\",\"start_timestamp\":\"1685084455\",\"status\":\"running\",\"target_table\":\"demodb.test.targettable\",\"username\":\"ibmlhadmin\",\"validate_csv_header\":false}]}";
-    String mockResponsePage2 = "{\"total_count\":2,\"limit\":1,\"ingestion_jobs\":[{\"create_if_not_exist\":false,\"csv_property\":{\"encoding\":\"utf-8\",\"escape_character\":\"|\",\"field_delimiter\":\",\",\"header\":true,\"line_delimiter\":\"\n\"},\"details\":\"Path does not exist 'demobucket/data/yellow_tripdata_2022-01.parquet'. Detail: [errno 2] No such file or directory\",\"end_timestamp\":\"1685088775\",\"engine_id\":\"spark123\",\"engine_name\":\"sparkdemo\",\"execute_config\":{\"driver_cores\":1,\"driver_memory\":\"2G\",\"executor_cores\":1,\"executor_memory\":\"2G\",\"num_executors\":1},\"instance_id\":\"1684432229673971\",\"job_id\":\"ingestion-1699459946935\",\"partition_by\":\"col1, col2\",\"schema\":\"{\\\"type\\\":\\\"struct\\\",\\\"schema-id\\\":0,\\\"fields\\\":[{\\\"id\\\":1,\\\"name\\\":\\\"ID\\\",\\\"required\\\":true,\\\"type\\\":\\\"int\\\"},{\\\"id\\\":2,\\\"name\\\":\\\"Name\\\",\\\"required\\\":true,\\\"type\\\":\\\"string\\\"}]}\",\"source_data_files\":\"s3://demobucket/data/yellow_tripdata_2022-01.parquet\",\"source_file_type\":\"csv\",\"start_timestamp\":\"1685084455\",\"status\":\"running\",\"target_table\":\"demodb.test.targettable\",\"username\":\"ibmlhadmin\",\"validate_csv_header\":false}]}";
-    server.enqueue(new MockResponse()
-      .setHeader("Content-type", "application/json")
-      .setResponseCode(200)
-      .setBody(mockResponsePage1));
-    server.enqueue(new MockResponse()
-      .setHeader("Content-type", "application/json")
-      .setResponseCode(200)
-      .setBody(mockResponsePage2));
-    server.enqueue(new MockResponse()
-      .setHeader("Content-type", "application/json")
-      .setResponseCode(400)
-      .setBody("{\"message\": \"No more results available!\"}"));
-
-    ListIngestionJobsOptions listIngestionJobsOptions = new ListIngestionJobsOptions.Builder()
-      .authInstanceId("testString")
-      .jobsPerPage(Long.valueOf("1"))
+    // Construct an instance of the IngestionJobPrototypeExecuteConfig model
+    IngestionJobPrototypeExecuteConfig ingestionJobPrototypeExecuteConfigModel = new IngestionJobPrototypeExecuteConfig.Builder()
+      .driverCores(Long.valueOf("1"))
+      .driverMemory("2G")
+      .executorCores(Long.valueOf("1"))
+      .executorMemory("2G")
+      .numExecutors(Long.valueOf("1"))
       .build();
 
-    IngestionJobsPager pager = new IngestionJobsPager(watsonxDataService, listIngestionJobsOptions);
-    List<IngestionJob> allResults = pager.getAll();
-    assertNotNull(allResults);
-    assertEquals(allResults.size(), 2);
+    // Construct an instance of the CreateIngestionJobsOptions model
+    CreateIngestionJobsOptions createIngestionJobsOptionsModel = new CreateIngestionJobsOptions.Builder()
+      .authInstanceId("testString")
+      .jobId("ingestion-1699459946935")
+      .sourceDataFiles("s3://demobucket/data/yellow_tripdata_2022-01.parquet")
+      .targetTable("demodb.test.targettable")
+      .username("user1")
+      .createIfNotExist(false)
+      .csvProperty(ingestionJobPrototypeCsvPropertyModel)
+      .engineId("spark123")
+      .executeConfig(ingestionJobPrototypeExecuteConfigModel)
+      .partitionBy("col1, col2")
+      .schema("{\"type\":\"struct\",\"schema-id\":0,\"fields\":[{\"id\":1,\"name\":\"ID\",\"required\":true,\"type\":\"int\"},{\"id\":2,\"name\":\"Name\",\"required\":true,\"type\":\"string\"}]}")
+      .sourceFileType("csv")
+      .validateCsvHeader(false)
+      .build();
+
+    // Invoke createIngestionJobs() with a valid options model and verify the result
+    Response<IngestionJob> response = watsonxDataService.createIngestionJobs(createIngestionJobsOptionsModel).execute();
+    assertNotNull(response);
+    IngestionJob responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, createIngestionJobsPath);
+    // Verify header parameters
+    assertEquals(request.getHeader("Authinstanceid"), "testString");
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
   }
-  
+
+  // Test the createIngestionJobs operation with and without retries enabled
+  @Test
+  public void testCreateIngestionJobsWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testCreateIngestionJobsWOptions();
+
+    watsonxDataService.disableRetries();
+    testCreateIngestionJobsWOptions();
+  }
+
+  // Test the createIngestionJobs operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testCreateIngestionJobsNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.createIngestionJobs(null).execute();
+  }
+
+  // Test the createIngestionJobsLocalFiles operation with a valid options model parameter
+  @Test
+  public void testCreateIngestionJobsLocalFilesWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"create_if_not_exist\": false, \"csv_property\": {\"encoding\": \"utf-8\", \"escape_character\": \"|\", \"field_delimiter\": \",\", \"header\": true, \"line_delimiter\": \"\n\"}, \"details\": \"Path does not exist 'demobucket/data/yellow_tripdata_2022-01.parquet'. Detail: [errno 2] No such file or directory\", \"end_timestamp\": \"1685088775\", \"engine_id\": \"spark123\", \"engine_name\": \"sparkdemo\", \"execute_config\": {\"driver_cores\": 1, \"driver_memory\": \"2G\", \"executor_cores\": 1, \"executor_memory\": \"2G\", \"num_executors\": 1}, \"instance_id\": \"1684432229673971\", \"job_id\": \"ingestion-1699459946935\", \"partition_by\": \"col1, col2\", \"schema\": \"{\\\"type\\\":\\\"struct\\\",\\\"schema-id\\\":0,\\\"fields\\\":[{\\\"id\\\":1,\\\"name\\\":\\\"ID\\\",\\\"required\\\":true,\\\"type\\\":\\\"int\\\"},{\\\"id\\\":2,\\\"name\\\":\\\"Name\\\",\\\"required\\\":true,\\\"type\\\":\\\"string\\\"}]}\", \"source_data_files\": \"s3://demobucket/data/yellow_tripdata_2022-01.parquet\", \"source_file_type\": \"csv\", \"start_timestamp\": \"1685084455\", \"status\": \"running\", \"target_table\": \"demodb.test.targettable\", \"username\": \"ibmlhadmin\", \"validate_csv_header\": false}";
+    String createIngestionJobsLocalFilesPath = "/ingestion_jobs_local_files";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(202)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the CreateIngestionJobsLocalFilesOptions model
+    CreateIngestionJobsLocalFilesOptions createIngestionJobsLocalFilesOptionsModel = new CreateIngestionJobsLocalFilesOptions.Builder()
+      .authInstanceId("testString")
+      .sourceDataFile(TestUtilities.createMockStream("This is a mock file."))
+      .targetTable("testString")
+      .jobId("testString")
+      .username("testString")
+      .sourceDataFileContentType("testString")
+      .sourceFileType("csv")
+      .csvProperty("testString")
+      .createIfNotExist(false)
+      .validateCsvHeader(false)
+      .executeConfig("testString")
+      .engineId("testString")
+      .build();
+
+    // Invoke createIngestionJobsLocalFiles() with a valid options model and verify the result
+    Response<IngestionJob> response = watsonxDataService.createIngestionJobsLocalFiles(createIngestionJobsLocalFilesOptionsModel).execute();
+    assertNotNull(response);
+    IngestionJob responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, createIngestionJobsLocalFilesPath);
+    // Verify header parameters
+    assertEquals(request.getHeader("Authinstanceid"), "testString");
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the createIngestionJobsLocalFiles operation with and without retries enabled
+  @Test
+  public void testCreateIngestionJobsLocalFilesWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testCreateIngestionJobsLocalFilesWOptions();
+
+    watsonxDataService.disableRetries();
+    testCreateIngestionJobsLocalFilesWOptions();
+  }
+
+  // Test the createIngestionJobsLocalFiles operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testCreateIngestionJobsLocalFilesNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.createIngestionJobsLocalFiles(null).execute();
+  }
+
+  // Test the getIngestionJob operation with a valid options model parameter
+  @Test
+  public void testGetIngestionJobWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"create_if_not_exist\": false, \"csv_property\": {\"encoding\": \"utf-8\", \"escape_character\": \"|\", \"field_delimiter\": \",\", \"header\": true, \"line_delimiter\": \"\n\"}, \"details\": \"Path does not exist 'demobucket/data/yellow_tripdata_2022-01.parquet'. Detail: [errno 2] No such file or directory\", \"end_timestamp\": \"1685088775\", \"engine_id\": \"spark123\", \"engine_name\": \"sparkdemo\", \"execute_config\": {\"driver_cores\": 1, \"driver_memory\": \"2G\", \"executor_cores\": 1, \"executor_memory\": \"2G\", \"num_executors\": 1}, \"instance_id\": \"1684432229673971\", \"job_id\": \"ingestion-1699459946935\", \"partition_by\": \"col1, col2\", \"schema\": \"{\\\"type\\\":\\\"struct\\\",\\\"schema-id\\\":0,\\\"fields\\\":[{\\\"id\\\":1,\\\"name\\\":\\\"ID\\\",\\\"required\\\":true,\\\"type\\\":\\\"int\\\"},{\\\"id\\\":2,\\\"name\\\":\\\"Name\\\",\\\"required\\\":true,\\\"type\\\":\\\"string\\\"}]}\", \"source_data_files\": \"s3://demobucket/data/yellow_tripdata_2022-01.parquet\", \"source_file_type\": \"csv\", \"start_timestamp\": \"1685084455\", \"status\": \"running\", \"target_table\": \"demodb.test.targettable\", \"username\": \"ibmlhadmin\", \"validate_csv_header\": false}";
+    String getIngestionJobPath = "/ingestion_jobs/testString";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetIngestionJobOptions model
+    GetIngestionJobOptions getIngestionJobOptionsModel = new GetIngestionJobOptions.Builder()
+      .jobId("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke getIngestionJob() with a valid options model and verify the result
+    Response<IngestionJob> response = watsonxDataService.getIngestionJob(getIngestionJobOptionsModel).execute();
+    assertNotNull(response);
+    IngestionJob responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getIngestionJobPath);
+    // Verify header parameters
+    assertEquals(request.getHeader("Authinstanceid"), "testString");
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the getIngestionJob operation with and without retries enabled
+  @Test
+  public void testGetIngestionJobWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testGetIngestionJobWOptions();
+
+    watsonxDataService.disableRetries();
+    testGetIngestionJobWOptions();
+  }
+
+  // Test the getIngestionJob operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetIngestionJobNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.getIngestionJob(null).execute();
+  }
+
+  // Test the deleteIngestionJobs operation with a valid options model parameter
+  @Test
+  public void testDeleteIngestionJobsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "";
+    String deleteIngestionJobsPath = "/ingestion_jobs/testString";
+    server.enqueue(new MockResponse()
+      .setResponseCode(204)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the DeleteIngestionJobsOptions model
+    DeleteIngestionJobsOptions deleteIngestionJobsOptionsModel = new DeleteIngestionJobsOptions.Builder()
+      .jobId("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke deleteIngestionJobs() with a valid options model and verify the result
+    Response<Void> response = watsonxDataService.deleteIngestionJobs(deleteIngestionJobsOptionsModel).execute();
+    assertNotNull(response);
+    Void responseObj = response.getResult();
+    assertNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "DELETE");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, deleteIngestionJobsPath);
+    // Verify header parameters
+    assertEquals(request.getHeader("Authinstanceid"), "testString");
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the deleteIngestionJobs operation with and without retries enabled
+  @Test
+  public void testDeleteIngestionJobsWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testDeleteIngestionJobsWOptions();
+
+    watsonxDataService.disableRetries();
+    testDeleteIngestionJobsWOptions();
+  }
+
+  // Test the deleteIngestionJobs operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testDeleteIngestionJobsNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.deleteIngestionJobs(null).execute();
+  }
+
+  // Test the createPreviewIngestionFile operation with a valid options model parameter
+  @Test
+  public void testCreatePreviewIngestionFileWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"column_names\": [\"col1\"], \"column_types\": [\"int\"], \"file_name\": \"s3://demobucket/data/yellow_tripdata_2022-01.parquet\", \"rows\": {\"row_eight\": [\"Jane Doe\"], \"row_five\": [\"Jane Doe\"], \"row_four\": [\"Jane Doe\"], \"row_nine\": [\"Jane Doe\"], \"row_one\": [\"Jane Doe\"], \"row_seven\": [\"Jane Doe\"], \"row_six\": [\"Jane Doe\"], \"row_ten\": [\"Jane Doe\"], \"row_three\": [\"Jane Doe\"], \"row_two\": [\"Jane Doe\"]}}";
+    String createPreviewIngestionFilePath = "/preview_ingestion_file";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(201)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the PreviewIngestionFilePrototypeCsvProperty model
+    PreviewIngestionFilePrototypeCsvProperty previewIngestionFilePrototypeCsvPropertyModel = new PreviewIngestionFilePrototypeCsvProperty.Builder()
+      .encoding("utf-8")
+      .escapeCharacter("\\\\")
+      .fieldDelimiter(",")
+      .header(true)
+      .lineDelimiter("\\n")
+      .build();
+
+    // Construct an instance of the CreatePreviewIngestionFileOptions model
+    CreatePreviewIngestionFileOptions createPreviewIngestionFileOptionsModel = new CreatePreviewIngestionFileOptions.Builder()
+      .authInstanceId("testString")
+      .sourceDataFiles("s3://demobucket/data/yellow_tripdata_2022-01.parquet")
+      .csvProperty(previewIngestionFilePrototypeCsvPropertyModel)
+      .sourceFileType("csv")
+      .build();
+
+    // Invoke createPreviewIngestionFile() with a valid options model and verify the result
+    Response<PreviewIngestionFile> response = watsonxDataService.createPreviewIngestionFile(createPreviewIngestionFileOptionsModel).execute();
+    assertNotNull(response);
+    PreviewIngestionFile responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, createPreviewIngestionFilePath);
+    // Verify header parameters
+    assertEquals(request.getHeader("Authinstanceid"), "testString");
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the createPreviewIngestionFile operation with and without retries enabled
+  @Test
+  public void testCreatePreviewIngestionFileWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testCreatePreviewIngestionFileWOptions();
+
+    watsonxDataService.disableRetries();
+    testCreatePreviewIngestionFileWOptions();
+  }
+
+  // Test the createPreviewIngestionFile operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testCreatePreviewIngestionFileNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.createPreviewIngestionFile(null).execute();
+  }
+
   // Perform setup needed before each test method
   @BeforeMethod
   public void beforeEachTest() {
