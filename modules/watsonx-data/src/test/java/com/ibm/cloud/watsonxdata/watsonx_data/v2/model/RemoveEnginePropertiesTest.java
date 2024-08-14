@@ -17,6 +17,7 @@ import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestissimoEnginePropertiesCatalog;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEngineProperties;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesConfiguration;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesPrestissimoOaiGenJvm;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.utils.TestUtilities;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -45,15 +46,20 @@ public class RemoveEnginePropertiesTest {
     assertEquals(removeEnginePropertiesConfigurationModel.coordinator(), java.util.Arrays.asList("testString"));
     assertEquals(removeEnginePropertiesConfigurationModel.worker(), java.util.Arrays.asList("testString"));
 
+    RemoveEnginePropertiesPrestissimoOaiGenJvm removeEnginePropertiesPrestissimoOaiGenJvmModel = new RemoveEnginePropertiesPrestissimoOaiGenJvm.Builder()
+      .coordinator(java.util.Arrays.asList("testString"))
+      .build();
+    assertEquals(removeEnginePropertiesPrestissimoOaiGenJvmModel.coordinator(), java.util.Arrays.asList("testString"));
+
     RemoveEngineProperties removeEnginePropertiesModel = new RemoveEngineProperties.Builder()
       .catalog(prestissimoEnginePropertiesCatalogModel)
       .configuration(removeEnginePropertiesConfigurationModel)
-      .jvm(removeEnginePropertiesConfigurationModel)
+      .jvm(removeEnginePropertiesPrestissimoOaiGenJvmModel)
       .velox(java.util.Arrays.asList("testString"))
       .build();
     assertEquals(removeEnginePropertiesModel.catalog(), prestissimoEnginePropertiesCatalogModel);
     assertEquals(removeEnginePropertiesModel.configuration(), removeEnginePropertiesConfigurationModel);
-    assertEquals(removeEnginePropertiesModel.jvm(), removeEnginePropertiesConfigurationModel);
+    assertEquals(removeEnginePropertiesModel.jvm(), removeEnginePropertiesPrestissimoOaiGenJvmModel);
     assertEquals(removeEnginePropertiesModel.velox(), java.util.Arrays.asList("testString"));
 
     String json = TestUtilities.serialize(removeEnginePropertiesModel);
@@ -62,6 +68,6 @@ public class RemoveEnginePropertiesTest {
     assertTrue(removeEnginePropertiesModelNew instanceof RemoveEngineProperties);
     assertEquals(removeEnginePropertiesModelNew.catalog().toString(), prestissimoEnginePropertiesCatalogModel.toString());
     assertEquals(removeEnginePropertiesModelNew.configuration().toString(), removeEnginePropertiesConfigurationModel.toString());
-    assertEquals(removeEnginePropertiesModelNew.jvm().toString(), removeEnginePropertiesConfigurationModel.toString());
+    assertEquals(removeEnginePropertiesModelNew.jvm().toString(), removeEnginePropertiesPrestissimoOaiGenJvmModel.toString());
   }
 }

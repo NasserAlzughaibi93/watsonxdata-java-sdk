@@ -24,6 +24,7 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestissimoEngineProperti
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestissimoNodeDescriptionBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEngineProperties;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesConfiguration;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesPrestissimoOaiGenJvm;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.utils.TestUtilities;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -95,15 +96,20 @@ public class PrestissimoEnginePatchTest {
     assertEquals(removeEnginePropertiesConfigurationModel.coordinator(), java.util.Arrays.asList("testString"));
     assertEquals(removeEnginePropertiesConfigurationModel.worker(), java.util.Arrays.asList("testString"));
 
+    RemoveEnginePropertiesPrestissimoOaiGenJvm removeEnginePropertiesPrestissimoOaiGenJvmModel = new RemoveEnginePropertiesPrestissimoOaiGenJvm.Builder()
+      .coordinator(java.util.Arrays.asList("testString"))
+      .build();
+    assertEquals(removeEnginePropertiesPrestissimoOaiGenJvmModel.coordinator(), java.util.Arrays.asList("testString"));
+
     RemoveEngineProperties removeEnginePropertiesModel = new RemoveEngineProperties.Builder()
       .catalog(prestissimoEnginePropertiesCatalogModel)
       .configuration(removeEnginePropertiesConfigurationModel)
-      .jvm(removeEnginePropertiesConfigurationModel)
+      .jvm(removeEnginePropertiesPrestissimoOaiGenJvmModel)
       .velox(java.util.Arrays.asList("testString"))
       .build();
     assertEquals(removeEnginePropertiesModel.catalog(), prestissimoEnginePropertiesCatalogModel);
     assertEquals(removeEnginePropertiesModel.configuration(), removeEnginePropertiesConfigurationModel);
-    assertEquals(removeEnginePropertiesModel.jvm(), removeEnginePropertiesConfigurationModel);
+    assertEquals(removeEnginePropertiesModel.jvm(), removeEnginePropertiesPrestissimoOaiGenJvmModel);
     assertEquals(removeEnginePropertiesModel.velox(), java.util.Arrays.asList("testString"));
 
     PrestissimoEnginePatch prestissimoEnginePatchModel = new PrestissimoEnginePatch.Builder()
@@ -172,10 +178,14 @@ public class PrestissimoEnginePatchTest {
       .worker(java.util.Arrays.asList("testString"))
       .build();
 
+    RemoveEnginePropertiesPrestissimoOaiGenJvm removeEnginePropertiesPrestissimoOaiGenJvmModel = new RemoveEnginePropertiesPrestissimoOaiGenJvm.Builder()
+      .coordinator(java.util.Arrays.asList("testString"))
+      .build();
+
     RemoveEngineProperties removeEnginePropertiesModel = new RemoveEngineProperties.Builder()
       .catalog(prestissimoEnginePropertiesCatalogModel)
       .configuration(removeEnginePropertiesConfigurationModel)
-      .jvm(removeEnginePropertiesConfigurationModel)
+      .jvm(removeEnginePropertiesPrestissimoOaiGenJvmModel)
       .velox(java.util.Arrays.asList("testString"))
       .build();
 

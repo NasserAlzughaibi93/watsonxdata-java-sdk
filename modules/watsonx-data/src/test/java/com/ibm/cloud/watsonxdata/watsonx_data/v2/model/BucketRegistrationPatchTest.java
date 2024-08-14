@@ -34,15 +34,21 @@ public class BucketRegistrationPatchTest {
   @Test
   public void testBucketRegistrationPatch() throws Throwable {
     BucketDetails bucketDetailsModel = new BucketDetails.Builder()
-      .accessKey("b9cbf248ea5c4c96947e64407108559j")
+      .accessKey("<access_key>")
       .bucketName("sample-bucket")
       .endpoint("https://s3.<region>.cloud-object-storage.appdomain.cloud/")
-      .secretKey("13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87")
+      .keyFile("key_file")
+      .provider("ibm_cos")
+      .region("us-south")
+      .secretKey("secret_key")
       .build();
-    assertEquals(bucketDetailsModel.accessKey(), "b9cbf248ea5c4c96947e64407108559j");
+    assertEquals(bucketDetailsModel.accessKey(), "<access_key>");
     assertEquals(bucketDetailsModel.bucketName(), "sample-bucket");
     assertEquals(bucketDetailsModel.endpoint(), "https://s3.<region>.cloud-object-storage.appdomain.cloud/");
-    assertEquals(bucketDetailsModel.secretKey(), "13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87");
+    assertEquals(bucketDetailsModel.keyFile(), "key_file");
+    assertEquals(bucketDetailsModel.provider(), "ibm_cos");
+    assertEquals(bucketDetailsModel.region(), "us-south");
+    assertEquals(bucketDetailsModel.secretKey(), "secret_key");
 
     BucketRegistrationPatch bucketRegistrationPatchModel = new BucketRegistrationPatch.Builder()
       .bucketDetails(bucketDetailsModel)
@@ -66,10 +72,13 @@ public class BucketRegistrationPatchTest {
   @Test
   public void testBucketRegistrationPatchAsPatch() throws Throwable {
     BucketDetails bucketDetailsModel = new BucketDetails.Builder()
-      .accessKey("b9cbf248ea5c4c96947e64407108559j")
+      .accessKey("<access_key>")
       .bucketName("sample-bucket")
       .endpoint("https://s3.<region>.cloud-object-storage.appdomain.cloud/")
-      .secretKey("13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87")
+      .keyFile("key_file")
+      .provider("ibm_cos")
+      .region("us-south")
+      .secretKey("secret_key")
       .build();
 
     BucketRegistrationPatch bucketRegistrationPatchModel = new BucketRegistrationPatch.Builder()

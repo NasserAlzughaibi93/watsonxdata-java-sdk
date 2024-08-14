@@ -35,12 +35,19 @@ public class MilvusService extends GenericModel {
     String STOPPED = "stopped";
   }
 
+  @SerializedName("access_key")
+  protected String accessKey;
   protected List<String> actions;
+  @SerializedName("bucket_name")
+  protected String bucketName;
+  @SerializedName("bucket_type")
+  protected String bucketType;
   @SerializedName("created_by")
   protected String createdBy;
   @SerializedName("created_on")
   protected Long createdOn;
   protected String description;
+  protected String endpoint;
   @SerializedName("grpc_host")
   protected String grpcHost;
   @SerializedName("grpc_port")
@@ -52,6 +59,10 @@ public class MilvusService extends GenericModel {
   @SerializedName("https_port")
   protected Long httpsPort;
   protected String origin;
+  @SerializedName("root_path")
+  protected String rootPath;
+  @SerializedName("secret_key")
+  protected String secretKey;
   @SerializedName("service_display_name")
   protected String serviceDisplayName;
   @SerializedName("service_id")
@@ -60,9 +71,22 @@ public class MilvusService extends GenericModel {
   @SerializedName("status_code")
   protected Long statusCode;
   protected List<String> tags;
+  @SerializedName("tshirt_size")
+  protected String tshirtSize;
   protected String type;
 
   protected MilvusService() { }
+
+  /**
+   * Gets the accessKey.
+   *
+   * bucket access key.
+   *
+   * @return the accessKey
+   */
+  public String getAccessKey() {
+    return accessKey;
+  }
 
   /**
    * Gets the actions.
@@ -76,9 +100,31 @@ public class MilvusService extends GenericModel {
   }
 
   /**
+   * Gets the bucketName.
+   *
+   * bucket name.
+   *
+   * @return the bucketName
+   */
+  public String getBucketName() {
+    return bucketName;
+  }
+
+  /**
+   * Gets the bucketType.
+   *
+   * bucket type.
+   *
+   * @return the bucketType
+   */
+  public String getBucketType() {
+    return bucketType;
+  }
+
+  /**
    * Gets the createdBy.
    *
-   * Created user name.
+   * Username of the user who created the watsonx.data instance.
    *
    * @return the createdBy
    */
@@ -106,6 +152,17 @@ public class MilvusService extends GenericModel {
    */
   public String getDescription() {
     return description;
+  }
+
+  /**
+   * Gets the endpoint.
+   *
+   * bucket endpoint.
+   *
+   * @return the endpoint
+   */
+  public String getEndpoint() {
+    return endpoint;
   }
 
   /**
@@ -175,6 +232,28 @@ public class MilvusService extends GenericModel {
   }
 
   /**
+   * Gets the rootPath.
+   *
+   * root path.
+   *
+   * @return the rootPath
+   */
+  public String getRootPath() {
+    return rootPath;
+  }
+
+  /**
+   * Gets the secretKey.
+   *
+   * bucket secret access key.
+   *
+   * @return the secretKey
+   */
+  public String getSecretKey() {
+    return secretKey;
+  }
+
+  /**
    * Gets the serviceDisplayName.
    *
    * Service display name.
@@ -227,6 +306,17 @@ public class MilvusService extends GenericModel {
    */
   public List<String> getTags() {
     return tags;
+  }
+
+  /**
+   * Gets the tshirtSize.
+   *
+   * tshirt size.
+   *
+   * @return the tshirtSize
+   */
+  public String getTshirtSize() {
+    return tshirtSize;
   }
 
   /**

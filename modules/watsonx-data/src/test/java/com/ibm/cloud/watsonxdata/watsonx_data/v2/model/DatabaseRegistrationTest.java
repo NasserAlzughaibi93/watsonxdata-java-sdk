@@ -18,6 +18,7 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseCatalog;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseDetails;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationDatabasePropertiesItems;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationTopicsItems;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.utils.TestUtilities;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -47,5 +48,6 @@ public class DatabaseRegistrationTest {
     assertNull(databaseRegistrationModel.getDatabaseType());
     assertNull(databaseRegistrationModel.getDescription());
     assertNull(databaseRegistrationModel.getTags());
+    assertNull(databaseRegistrationModel.getTopics());
   }
 }

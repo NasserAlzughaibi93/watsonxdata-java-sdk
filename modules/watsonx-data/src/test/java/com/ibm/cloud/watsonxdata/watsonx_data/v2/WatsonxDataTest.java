@@ -19,14 +19,13 @@ import com.ibm.cloud.sdk.core.security.NoAuthAuthenticator;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import com.ibm.cloud.sdk.core.util.RequestUtils;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.WatsonxData;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.AddPrestissimoEngineCatalogsOptions;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.AddPrestoEngineCatalogsOptions;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.AddSparkEngineCatalogsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.BucketCatalog;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.BucketDetails;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.BucketObjectProperties;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.BucketRegistration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.BucketRegistrationCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.BucketRegistrationObjectCollection;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.BucketRegistrationObjectSizeCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.BucketRegistrationPatch;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Catalog;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CatalogCollection;
@@ -39,25 +38,37 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateBucketRegistrationO
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateColumnsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateDatabaseRegistrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateDb2EngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateDriverRegistrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEnginePauseCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEngineRestartCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEngineResumeCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEngineScaleCreatedBody;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateExecuteQueryOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateHdfsStorageOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateIngestionJobsLocalFilesOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateIngestionJobsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateIntegrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateMilvusServiceOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateMilvusServicePauseOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateMilvusServiceResumeOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateMilvusServiceScaleOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateNetezzaEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateOtherEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePrestissimoEngineCatalogsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePrestissimoEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePrestoEngineCatalogsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePrestoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePreviewIngestionFileOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSalIntegrationEnrichmentGlobalSettingsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSalIntegrationEnrichmentOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSalIntegrationEnrichmentSettingsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSalIntegrationOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSalIntegrationUploadGlossaryOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSchemaCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSchemaOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSparkEngineApplicationOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSparkEngineCatalogsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSparkEngineOptions;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSparkEnginePauseOptions;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSparkEngineResumeOptions;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSparkEngineScaleOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseCatalog;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseDetails;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistration;
@@ -65,51 +76,84 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationColle
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationDatabasePropertiesItems;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationPatch;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationPatchDatabaseDetails;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationPatchTopicsItems;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationPrototypeDatabasePropertiesItems;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationTopicsItems;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Db2Engine;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Db2EngineCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Db2EngineDetails;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Db2EngineDetailsBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Db2EnginePatch;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteBucketRegistrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteColumnOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDatabaseCatalogOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDb2EngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDeactivateBucketOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDriverEnginesOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDriverRegistrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteIngestionJobsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteIntegrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteMilvusServiceOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteNetezzaEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteOtherEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeletePrestissimoEngineCatalogsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeletePrestissimoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeletePrestoEngineCatalogsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteSalIntegrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteSchemaOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteSparkEngineApplicationsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteSparkEngineCatalogsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteSparkEngineHistoryServerOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteSparkEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteTableOptions;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeregisterBucketOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DisplayNameInfoResponse;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Driver;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DriverRegistration;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DriverRegistrationCollection;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DriverRegistrationEngine;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DriverRegistrationEnginePrototype;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Endpoint;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EndpointCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EngineDetailsBody;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnginePropertiesLogConfiguration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnginePropertiesOaiGen1Configuration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnginePropertiesOaiGen1Jvm;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnginePropertiesOaiGenConfiguration;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnrichmentAsset;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnrichmentObj;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ErrorObj;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ExecuteQueryCreatedBody;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetBucketObjectPropertiesOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetBucketRegistrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetCatalogOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetDatabaseOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetEndpointsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetIngestionJobOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetIntegrationsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetMilvusServiceOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetPrestissimoEngineCatalogOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetPrestissimoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetPrestoEngineCatalogOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetPrestoEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationEnrichmentAssetsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationEnrichmentDataAssetOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationEnrichmentGlobalSettingsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationEnrichmentJobRunLogsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationEnrichmentJobRunsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationEnrichmentJobsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationEnrichmentSettingsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationGlossaryTermsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationMappingsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationUploadGlossaryStatusOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSparkEngineApplicationStatusOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSparkEngineCatalogOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSparkEngineHistoryServerOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSparkEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetTableOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GlossaryObject;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.HdfsStorageRegistration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJob;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobCollectionPage;
@@ -117,13 +161,21 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobCsvProperty;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobExecuteConfig;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobPrototypeCsvProperty;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobPrototypeExecuteConfig;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobsPager;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Integration;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IntegrationCollection;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IntegrationPatch;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListAllIntegrationsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListBucketObjectsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListBucketRegistrationsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListCatalogsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListColumnsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListDatabaseRegistrationsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListDb2EnginesOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListDriverRegistrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListIngestionJobsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListMilvusDatabaseCollectionsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListMilvusServiceDatabasesOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListMilvusServicesOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListNetezzaEnginesOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListOtherEnginesOptions;
@@ -140,9 +192,12 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListSparkVersionsOKBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListSparkVersionsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListTableSnapshotsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListTablesOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.MilvusDatabaseCollections;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.MilvusService;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.MilvusServiceCollection;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.MilvusServiceDatabases;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.MilvusServicePatch;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Milvusdbcollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.NetezzaEngine;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.NetezzaEngineCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.NetezzaEngineDetails;
@@ -154,8 +209,10 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.OtherEngine;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.OtherEngineCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.OtherEngineDetails;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.OtherEngineDetailsBody;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Path;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PausePrestissimoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PausePrestoEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PauseSparkEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestissimoEndpoints;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestissimoEngine;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestissimoEngineCollection;
@@ -172,6 +229,7 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEngineEnginePropert
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePatch;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePatchRemoveEngineProperties;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePropertiesCatalog;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePropertiesEventListener;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePropertiesGlobal;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PreviewIngestionFile;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PreviewIngestionFilePrototypeCsvProperty;
@@ -180,14 +238,16 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEngineProperties;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesConfiguration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesOaiGenConfiguration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesOaiGenJvm;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RenameTableOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesPrestissimoOaiGenJvm;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ReplaceSnapshotCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RestartPrestissimoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RestartPrestoEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ResultExecuteQuery;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ResultPrestissimoExplainStatement;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ResultRunPrestissimoExplainAnalyzeStatement;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ResumePrestissimoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ResumePrestoEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ResumeSparkEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RollbackTableOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RunExplainAnalyzeStatementOKBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RunExplainAnalyzeStatementOptions;
@@ -195,8 +255,33 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RunExplainStatementOKBody
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RunExplainStatementOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RunPrestissimoExplainAnalyzeStatementOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RunPrestissimoExplainStatementOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegration;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentAssets;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentDataAsset;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobRun;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobRunLogs;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobs;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobsProperties;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobsResultItem;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobsResultItemEntity;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobsResultItemEntityJob;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobsResultItemEntityJobConfiguration;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobsResultItemEntityTaskCredentialsSupport;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobsResultItemMetadata;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentSettings;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentSettingsSemanticExpansion;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfiguration;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfiguration;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentSettingsTermAssignment;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationGlossaryTerms;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationMappings;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationPatch;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationUploadGlossary;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationUploadGlossaryStatus;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ScalePrestissimoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ScalePrestoEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ScaleSparkEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ScheduleInfo;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SparkApplicationConfig;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SparkApplicationDetails;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SparkApplicationEnv;
@@ -214,6 +299,7 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SparkHistoryServer;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SparkScaleConfig;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SparkVolumeDetails;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.StartSparkEngineHistoryServerOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.StorageDetails;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SuccessResponse;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SyncCatalogs;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Table;
@@ -225,18 +311,23 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateBucketRegistrationO
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateColumnOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateDatabaseOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateDb2EngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateDriverEnginesOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateIntegrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateMilvusServiceOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateNetezzaEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdatePrestissimoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdatePrestoEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateSalIntegrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateSparkEngineBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateSparkEngineBodyEngineDetails;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateSparkEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateSyncCatalogOKBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateSyncCatalogOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateTableOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.utils.TestUtilities;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -270,7 +361,7 @@ public class WatsonxDataTest {
   @Test
   public void testListBucketRegistrationsWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"bucket_registrations\": [{\"actions\": [\"actions\"], \"associated_catalog\": {\"catalog_name\": \"sampleCatalog\", \"catalog_tags\": [\"catalogTags\"], \"catalog_type\": \"iceberg\"}, \"bucket_details\": {\"access_key\": \"b9cbf248ea5c4c96947e64407108559j\", \"bucket_name\": \"sample-bucket\", \"endpoint\": \"https://s3.<region>.cloud-object-storage.appdomain.cloud/\", \"secret_key\": \"13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87\"}, \"bucket_display_name\": \"sample-bucket-displayname\", \"bucket_id\": \"samplebucket123\", \"bucket_type\": \"ibm_cos\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": \"1686120645\", \"description\": \"COS bucket for customer data\", \"managed_by\": \"ibm\", \"region\": \"us-south\", \"state\": \"active\", \"tags\": [\"tags\"]}]}";
+    String mockResponseBody = "{\"bucket_registrations\": [{\"actions\": [\"actions\"], \"associated_catalog\": {\"catalog_name\": \"sampleCatalog\", \"catalog_tags\": [\"catalogTags\"], \"catalog_type\": \"iceberg\"}, \"bucket_details\": {\"access_key\": \"b9cbf248ea5c4c96947e64407108559j\", \"bucket_name\": \"sample-bucket\", \"endpoint\": \"https://s3.<region>.cloud-object-storage.appdomain.cloud/\", \"key_file\": \"key_file\", \"provider\": \"ibm_cos\", \"region\": \"us-south\", \"secret_key\": \"13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87\"}, \"bucket_display_name\": \"sample-bucket-displayname\", \"bucket_id\": \"samplebucket123\", \"bucket_type\": \"ibm_cos\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": \"1686120645\", \"description\": \"COS bucket for customer data\", \"managed_by\": \"ibm\", \"region\": \"us-south\", \"state\": \"active\", \"storage_details\": {\"access_key\": \"<access_key>\", \"application_id\": \"<application_id>\", \"auth_mode\": \"<account_key/sas/service_principle>\", \"container_name\": \"sample-container\", \"directory_id\": \"<directory_id>\", \"endpoint\": \"abfss://<container_name>@<storage_account_name>.dfs.core.windows.net/\", \"sas_token\": \"<sas_token>\", \"secret_key\": \"secret_key\", \"storage_account_name\": \"sample-storage\"}, \"tags\": [\"tags\"]}]}";
     String listBucketRegistrationsPath = "/bucket_registrations";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -314,20 +405,12 @@ public class WatsonxDataTest {
   @Test
   public void testCreateBucketRegistrationWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalog\": {\"catalog_name\": \"sampleCatalog\", \"catalog_tags\": [\"catalogTags\"], \"catalog_type\": \"iceberg\"}, \"bucket_details\": {\"access_key\": \"b9cbf248ea5c4c96947e64407108559j\", \"bucket_name\": \"sample-bucket\", \"endpoint\": \"https://s3.<region>.cloud-object-storage.appdomain.cloud/\", \"secret_key\": \"13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87\"}, \"bucket_display_name\": \"sample-bucket-displayname\", \"bucket_id\": \"samplebucket123\", \"bucket_type\": \"ibm_cos\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": \"1686120645\", \"description\": \"COS bucket for customer data\", \"managed_by\": \"ibm\", \"region\": \"us-south\", \"state\": \"active\", \"tags\": [\"tags\"]}";
+    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalog\": {\"catalog_name\": \"sampleCatalog\", \"catalog_tags\": [\"catalogTags\"], \"catalog_type\": \"iceberg\"}, \"bucket_details\": {\"access_key\": \"b9cbf248ea5c4c96947e64407108559j\", \"bucket_name\": \"sample-bucket\", \"endpoint\": \"https://s3.<region>.cloud-object-storage.appdomain.cloud/\", \"key_file\": \"key_file\", \"provider\": \"ibm_cos\", \"region\": \"us-south\", \"secret_key\": \"13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87\"}, \"bucket_display_name\": \"sample-bucket-displayname\", \"bucket_id\": \"samplebucket123\", \"bucket_type\": \"ibm_cos\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": \"1686120645\", \"description\": \"COS bucket for customer data\", \"managed_by\": \"ibm\", \"region\": \"us-south\", \"state\": \"active\", \"storage_details\": {\"access_key\": \"<access_key>\", \"application_id\": \"<application_id>\", \"auth_mode\": \"<account_key/sas/service_principle>\", \"container_name\": \"sample-container\", \"directory_id\": \"<directory_id>\", \"endpoint\": \"abfss://<container_name>@<storage_account_name>.dfs.core.windows.net/\", \"sas_token\": \"<sas_token>\", \"secret_key\": \"secret_key\", \"storage_account_name\": \"sample-storage\"}, \"tags\": [\"tags\"]}";
     String createBucketRegistrationPath = "/bucket_registrations";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
       .setResponseCode(201)
       .setBody(mockResponseBody));
-
-    // Construct an instance of the BucketDetails model
-    BucketDetails bucketDetailsModel = new BucketDetails.Builder()
-      .accessKey("b9cbf248ea5c4c96947e64407108559j")
-      .bucketName("sample-bucket")
-      .endpoint("https://s3.<region>.cloud-object-storage.appdomain.cloud/")
-      .secretKey("13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87")
-      .build();
 
     // Construct an instance of the BucketCatalog model
     BucketCatalog bucketCatalogModel = new BucketCatalog.Builder()
@@ -336,15 +419,40 @@ public class WatsonxDataTest {
       .catalogType("iceberg")
       .build();
 
+    // Construct an instance of the BucketDetails model
+    BucketDetails bucketDetailsModel = new BucketDetails.Builder()
+      .accessKey("b9cbf248ea5c4c96947e64407108559j")
+      .bucketName("sample-bucket")
+      .endpoint("https://s3.<region>.cloud-object-storage.appdomain.cloud/")
+      .keyFile("key_file")
+      .provider("ibm_cos")
+      .region("us-south")
+      .secretKey("13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87")
+      .build();
+
+    // Construct an instance of the StorageDetails model
+    StorageDetails storageDetailsModel = new StorageDetails.Builder()
+      .accessKey("<access_key>")
+      .applicationId("<application_id>")
+      .authMode("<account_key/sas/service_principle>")
+      .containerName("sample-container")
+      .directoryId("<directory_id>")
+      .endpoint("abfss://<container_name>@<storage_account_name>.dfs.core.windows.net/")
+      .sasToken("<sas_token>")
+      .secretKey("secret_key")
+      .storageAccountName("sample-storage")
+      .build();
+
     // Construct an instance of the CreateBucketRegistrationOptions model
     CreateBucketRegistrationOptions createBucketRegistrationOptionsModel = new CreateBucketRegistrationOptions.Builder()
-      .bucketDetails(bucketDetailsModel)
       .bucketType("ibm_cos")
       .description("COS bucket for customer data")
       .managedBy("ibm")
       .associatedCatalog(bucketCatalogModel)
+      .bucketDetails(bucketDetailsModel)
       .bucketDisplayName("sample-bucket-displayname")
       .region("us-south")
+      .storageDetails(storageDetailsModel)
       .tags(java.util.Arrays.asList("bucket-tag1", "bucket-tag2"))
       .authInstanceId("testString")
       .build();
@@ -388,7 +496,7 @@ public class WatsonxDataTest {
   @Test
   public void testGetBucketRegistrationWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalog\": {\"catalog_name\": \"sampleCatalog\", \"catalog_tags\": [\"catalogTags\"], \"catalog_type\": \"iceberg\"}, \"bucket_details\": {\"access_key\": \"b9cbf248ea5c4c96947e64407108559j\", \"bucket_name\": \"sample-bucket\", \"endpoint\": \"https://s3.<region>.cloud-object-storage.appdomain.cloud/\", \"secret_key\": \"13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87\"}, \"bucket_display_name\": \"sample-bucket-displayname\", \"bucket_id\": \"samplebucket123\", \"bucket_type\": \"ibm_cos\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": \"1686120645\", \"description\": \"COS bucket for customer data\", \"managed_by\": \"ibm\", \"region\": \"us-south\", \"state\": \"active\", \"tags\": [\"tags\"]}";
+    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalog\": {\"catalog_name\": \"sampleCatalog\", \"catalog_tags\": [\"catalogTags\"], \"catalog_type\": \"iceberg\"}, \"bucket_details\": {\"access_key\": \"b9cbf248ea5c4c96947e64407108559j\", \"bucket_name\": \"sample-bucket\", \"endpoint\": \"https://s3.<region>.cloud-object-storage.appdomain.cloud/\", \"key_file\": \"key_file\", \"provider\": \"ibm_cos\", \"region\": \"us-south\", \"secret_key\": \"13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87\"}, \"bucket_display_name\": \"sample-bucket-displayname\", \"bucket_id\": \"samplebucket123\", \"bucket_type\": \"ibm_cos\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": \"1686120645\", \"description\": \"COS bucket for customer data\", \"managed_by\": \"ibm\", \"region\": \"us-south\", \"state\": \"active\", \"storage_details\": {\"access_key\": \"<access_key>\", \"application_id\": \"<application_id>\", \"auth_mode\": \"<account_key/sas/service_principle>\", \"container_name\": \"sample-container\", \"directory_id\": \"<directory_id>\", \"endpoint\": \"abfss://<container_name>@<storage_account_name>.dfs.core.windows.net/\", \"sas_token\": \"<sas_token>\", \"secret_key\": \"secret_key\", \"storage_account_name\": \"sample-storage\"}, \"tags\": [\"tags\"]}";
     String getBucketRegistrationPath = "/bucket_registrations/testString";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -436,24 +544,24 @@ public class WatsonxDataTest {
     watsonxDataService.getBucketRegistration(null).execute();
   }
 
-  // Test the deregisterBucket operation with a valid options model parameter
+  // Test the deleteBucketRegistration operation with a valid options model parameter
   @Test
-  public void testDeregisterBucketWOptions() throws Throwable {
+  public void testDeleteBucketRegistrationWOptions() throws Throwable {
     // Register a mock response
     String mockResponseBody = "";
-    String deregisterBucketPath = "/bucket_registrations/testString";
+    String deleteBucketRegistrationPath = "/bucket_registrations/testString";
     server.enqueue(new MockResponse()
       .setResponseCode(204)
       .setBody(mockResponseBody));
 
-    // Construct an instance of the DeregisterBucketOptions model
-    DeregisterBucketOptions deregisterBucketOptionsModel = new DeregisterBucketOptions.Builder()
+    // Construct an instance of the DeleteBucketRegistrationOptions model
+    DeleteBucketRegistrationOptions deleteBucketRegistrationOptionsModel = new DeleteBucketRegistrationOptions.Builder()
       .bucketId("testString")
       .authInstanceId("testString")
       .build();
 
-    // Invoke deregisterBucket() with a valid options model and verify the result
-    Response<Void> response = watsonxDataService.deregisterBucket(deregisterBucketOptionsModel).execute();
+    // Invoke deleteBucketRegistration() with a valid options model and verify the result
+    Response<Void> response = watsonxDataService.deleteBucketRegistration(deleteBucketRegistrationOptionsModel).execute();
     assertNotNull(response);
     Void responseObj = response.getResult();
     assertNull(responseObj);
@@ -464,34 +572,34 @@ public class WatsonxDataTest {
     assertEquals(request.getMethod(), "DELETE");
     // Verify request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, deregisterBucketPath);
+    assertEquals(parsedPath, deleteBucketRegistrationPath);
     // Verify that there is no query string
     Map<String, String> query = TestUtilities.parseQueryString(request);
     assertNull(query);
   }
 
-  // Test the deregisterBucket operation with and without retries enabled
+  // Test the deleteBucketRegistration operation with and without retries enabled
   @Test
-  public void testDeregisterBucketWRetries() throws Throwable {
+  public void testDeleteBucketRegistrationWRetries() throws Throwable {
     watsonxDataService.enableRetries(4, 30);
-    testDeregisterBucketWOptions();
+    testDeleteBucketRegistrationWOptions();
 
     watsonxDataService.disableRetries();
-    testDeregisterBucketWOptions();
+    testDeleteBucketRegistrationWOptions();
   }
 
-  // Test the deregisterBucket operation with a null options model (negative test)
+  // Test the deleteBucketRegistration operation with a null options model (negative test)
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testDeregisterBucketNoOptions() throws Throwable {
+  public void testDeleteBucketRegistrationNoOptions() throws Throwable {
     server.enqueue(new MockResponse());
-    watsonxDataService.deregisterBucket(null).execute();
+    watsonxDataService.deleteBucketRegistration(null).execute();
   }
 
   // Test the updateBucketRegistration operation with a valid options model parameter
   @Test
   public void testUpdateBucketRegistrationWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalog\": {\"catalog_name\": \"sampleCatalog\", \"catalog_tags\": [\"catalogTags\"], \"catalog_type\": \"iceberg\"}, \"bucket_details\": {\"access_key\": \"b9cbf248ea5c4c96947e64407108559j\", \"bucket_name\": \"sample-bucket\", \"endpoint\": \"https://s3.<region>.cloud-object-storage.appdomain.cloud/\", \"secret_key\": \"13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87\"}, \"bucket_display_name\": \"sample-bucket-displayname\", \"bucket_id\": \"samplebucket123\", \"bucket_type\": \"ibm_cos\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": \"1686120645\", \"description\": \"COS bucket for customer data\", \"managed_by\": \"ibm\", \"region\": \"us-south\", \"state\": \"active\", \"tags\": [\"tags\"]}";
+    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalog\": {\"catalog_name\": \"sampleCatalog\", \"catalog_tags\": [\"catalogTags\"], \"catalog_type\": \"iceberg\"}, \"bucket_details\": {\"access_key\": \"b9cbf248ea5c4c96947e64407108559j\", \"bucket_name\": \"sample-bucket\", \"endpoint\": \"https://s3.<region>.cloud-object-storage.appdomain.cloud/\", \"key_file\": \"key_file\", \"provider\": \"ibm_cos\", \"region\": \"us-south\", \"secret_key\": \"13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87\"}, \"bucket_display_name\": \"sample-bucket-displayname\", \"bucket_id\": \"samplebucket123\", \"bucket_type\": \"ibm_cos\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": \"1686120645\", \"description\": \"COS bucket for customer data\", \"managed_by\": \"ibm\", \"region\": \"us-south\", \"state\": \"active\", \"storage_details\": {\"access_key\": \"<access_key>\", \"application_id\": \"<application_id>\", \"auth_mode\": \"<account_key/sas/service_principle>\", \"container_name\": \"sample-container\", \"directory_id\": \"<directory_id>\", \"endpoint\": \"abfss://<container_name>@<storage_account_name>.dfs.core.windows.net/\", \"sas_token\": \"<sas_token>\", \"secret_key\": \"secret_key\", \"storage_account_name\": \"sample-storage\"}, \"tags\": [\"tags\"]}";
     String updateBucketRegistrationPath = "/bucket_registrations/testString";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -503,6 +611,9 @@ public class WatsonxDataTest {
       .accessKey("b9cbf248ea5c4c96947e64407108559j")
       .bucketName("sample-bucket")
       .endpoint("https://s3.<region>.cloud-object-storage.appdomain.cloud/")
+      .keyFile("key_file")
+      .provider("ibm_cos")
+      .region("us-south")
       .secretKey("13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87")
       .build();
 
@@ -675,6 +786,7 @@ public class WatsonxDataTest {
     ListBucketObjectsOptions listBucketObjectsOptionsModel = new ListBucketObjectsOptions.Builder()
       .bucketId("testString")
       .authInstanceId("testString")
+      .path("testString")
       .build();
 
     // Invoke listBucketObjects() with a valid options model and verify the result
@@ -690,9 +802,10 @@ public class WatsonxDataTest {
     // Verify request path
     String parsedPath = TestUtilities.parseReqPath(request);
     assertEquals(parsedPath, listBucketObjectsPath);
-    // Verify that there is no query string
+    // Verify query params
     Map<String, String> query = TestUtilities.parseQueryString(request);
-    assertNull(query);
+    assertNotNull(query);
+    assertEquals(query.get("path"), "testString");
   }
 
   // Test the listBucketObjects operation with and without retries enabled
@@ -712,11 +825,139 @@ public class WatsonxDataTest {
     watsonxDataService.listBucketObjects(null).execute();
   }
 
+  // Test the getBucketObjectProperties operation with a valid options model parameter
+  @Test
+  public void testGetBucketObjectPropertiesWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"object_properties\": [{\"content_type\": \"string\", \"file_type\": \"string\", \"last_modified\": \"utc-2014-07\", \"metadata\": {\"mapKey\": \"inner\"}, \"path\": \"abc/abc/data\", \"size\": \"1024\"}]}";
+    String getBucketObjectPropertiesPath = "/bucket_registrations/testString/object_properties";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(201)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the Path model
+    Path pathModel = new Path.Builder()
+      .path("string")
+      .build();
+
+    // Construct an instance of the GetBucketObjectPropertiesOptions model
+    GetBucketObjectPropertiesOptions getBucketObjectPropertiesOptionsModel = new GetBucketObjectPropertiesOptions.Builder()
+      .bucketId("testString")
+      .paths(java.util.Arrays.asList(pathModel))
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke getBucketObjectProperties() with a valid options model and verify the result
+    Response<BucketObjectProperties> response = watsonxDataService.getBucketObjectProperties(getBucketObjectPropertiesOptionsModel).execute();
+    assertNotNull(response);
+    BucketObjectProperties responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getBucketObjectPropertiesPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the getBucketObjectProperties operation with and without retries enabled
+  @Test
+  public void testGetBucketObjectPropertiesWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testGetBucketObjectPropertiesWOptions();
+
+    watsonxDataService.disableRetries();
+    testGetBucketObjectPropertiesWOptions();
+  }
+
+  // Test the getBucketObjectProperties operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetBucketObjectPropertiesNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.getBucketObjectProperties(null).execute();
+  }
+
+  // Test the createHdfsStorage operation with a valid options model parameter
+  @Test
+  public void testCreateHdfsStorageWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalog\": {\"catalog_name\": \"sampleCatalog\", \"catalog_tags\": [\"catalogTags\"], \"catalog_type\": \"iceberg\"}, \"bucket_display_name\": \"sample hdfs displayname\", \"bucket_id\": \"hdfs123\", \"bucket_type\": \"hdfs\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": \"1686120645\", \"description\": \"HDFS description for storage\", \"managed_by\": \"customer\", \"state\": \"active\", \"tags\": [\"tags\"]}";
+    String createHdfsStoragePath = "/storage_hdfs_registrations";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(201)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the CreateHdfsStorageOptions model
+    CreateHdfsStorageOptions createHdfsStorageOptionsModel = new CreateHdfsStorageOptions.Builder()
+      .bucketDisplayName("testString")
+      .bucketType("testString")
+      .hmsThriftUri("testString")
+      .hmsThriftPort(Long.valueOf("1"))
+      .coreSite("testString")
+      .hdfsSite("testString")
+      .kerberos("testString")
+      .catalogName("testString")
+      .catalogType("testString")
+      .krb5Config("testString")
+      .hiveKeytab(TestUtilities.createMockStream("This is a mock file."))
+      .hiveKeytabContentType("testString")
+      .hdfsKeytab(TestUtilities.createMockStream("This is a mock file."))
+      .hdfsKeytabContentType("testString")
+      .hiveServerPrincipal("testString")
+      .hiveClientPrincipal("testString")
+      .hdfsPrincipal("testString")
+      .description("testString")
+      .createdOn("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke createHdfsStorage() with a valid options model and verify the result
+    Response<HdfsStorageRegistration> response = watsonxDataService.createHdfsStorage(createHdfsStorageOptionsModel).execute();
+    assertNotNull(response);
+    HdfsStorageRegistration responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, createHdfsStoragePath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the createHdfsStorage operation with and without retries enabled
+  @Test
+  public void testCreateHdfsStorageWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testCreateHdfsStorageWOptions();
+
+    watsonxDataService.disableRetries();
+    testCreateHdfsStorageWOptions();
+  }
+
+  // Test the createHdfsStorage operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testCreateHdfsStorageNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.createHdfsStorage(null).execute();
+  }
+
   // Test the listDatabaseRegistrations operation with a valid options model parameter
   @Test
   public void testListDatabaseRegistrationsWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"database_registrations\": [{\"actions\": [\"actions\"], \"associated_catalog\": {\"catalog_name\": \"sampleCatalog\", \"catalog_tags\": [\"catalogTags\"], \"catalog_type\": \"iceberg\"}, \"catalog_name\": \"sampleCatalog\", \"created_by\": \"user1@bim.com\", \"created_on\": \"1686792721\", \"database_details\": {\"certificate\": \"contents of a pem/crt file\", \"certificate_extension\": \"pem/crt\", \"database_name\": \"new_database\", \"hostname\": \"db2@<hostname>.com\", \"hostname_in_certificate\": \"samplehostname\", \"hosts\": \"abc.com:1234,xyz.com:4321\", \"password\": \"samplepassword\", \"port\": 4553, \"sasl\": true, \"ssl\": true, \"tables\": \"kafka_table_name\", \"username\": \"sampleuser\", \"validate_server_certificate\": true}, \"database_display_name\": \"new_database\", \"database_id\": \"new_database_id\", \"database_properties\": [{\"encrypt\": true, \"key\": \"hive.metastore\", \"value\": \"glue\"}], \"database_type\": \"netezza\", \"description\": \"Description of the external Database\", \"tags\": [\"tags\"]}]}";
+    String mockResponseBody = "{\"database_registrations\": [{\"actions\": [\"actions\"], \"associated_catalog\": {\"catalog_name\": \"sampleCatalog\", \"catalog_tags\": [\"catalogTags\"], \"catalog_type\": \"iceberg\"}, \"catalog_name\": \"sampleCatalog\", \"created_by\": \"user1@bim.com\", \"created_on\": \"1686792721\", \"database_details\": {\"authentication_type\": \"LDAP\", \"broker_authentication_password\": \"samplepassword\", \"broker_authentication_type\": \"PASSWORD\", \"broker_authentication_user\": \"sampleuser\", \"certificate\": \"contents of a pem/crt file\", \"certificate_extension\": \"pem/crt\", \"connection_method\": \"basic, apikey\", \"connection_mode\": \"service_name\", \"connection_mode_value\": \"orclpdb\", \"connection_type\": \"JDBC, Arrow flight\", \"controller_authentication_password\": \"samplepassword\", \"controller_authentication_type\": \"PASSWORD\", \"controller_authentication_user\": \"sampleuser\", \"cpd_hostname\": \"samplecpdhostname\", \"credentials_key\": \"eyJ0eXBlIjoic2VydmljZV9hY2NvdW50IiwicHJvamVjdF9pZCI6ImNvbm9wcy1iaWdxdWVyeSIsInByaXZhdGVfa2V5X2lkIjoiMGY3......\", \"database_name\": \"new_database\", \"hostname\": \"db2@<hostname>.com\", \"hostname_in_certificate\": \"samplehostname\", \"hosts\": \"abc.com:1234,xyz.com:4321\", \"informix_server\": \"ol_informix1410\", \"password\": \"samplepassword\", \"port\": 4553, \"project_id\": \"conops-bigquery\", \"sasl\": true, \"service_api_key\": \"sampleapikey\", \"service_hostname\": \"api.dataplatform.dev.cloud.ibm.com\", \"service_password\": \"samplepassword\", \"service_port\": 443, \"service_ssl\": true, \"service_token_url\": \"sampletoakenurl\", \"service_username\": \"sampleusername\", \"ssl\": true, \"tables\": \"kafka_table_name\", \"username\": \"sampleuser\", \"validate_server_certificate\": true, \"verify_host_name\": true}, \"database_display_name\": \"new_database\", \"database_id\": \"new_database_id\", \"database_properties\": [{\"encrypt\": true, \"key\": \"hive.metastore\", \"value\": \"glue\"}], \"database_type\": \"netezza\", \"description\": \"Description of the external database\", \"tags\": [\"tags\"], \"topics\": [{\"created_on\": \"1686792721\", \"file_contents\": \"sample file content\", \"file_name\": \"sample file name\", \"topic_name\": \"customer\"}]}]}";
     String listDatabaseRegistrationsPath = "/database_registrations";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -760,7 +1001,7 @@ public class WatsonxDataTest {
   @Test
   public void testCreateDatabaseRegistrationWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalog\": {\"catalog_name\": \"sampleCatalog\", \"catalog_tags\": [\"catalogTags\"], \"catalog_type\": \"iceberg\"}, \"catalog_name\": \"sampleCatalog\", \"created_by\": \"user1@bim.com\", \"created_on\": \"1686792721\", \"database_details\": {\"certificate\": \"contents of a pem/crt file\", \"certificate_extension\": \"pem/crt\", \"database_name\": \"new_database\", \"hostname\": \"db2@<hostname>.com\", \"hostname_in_certificate\": \"samplehostname\", \"hosts\": \"abc.com:1234,xyz.com:4321\", \"password\": \"samplepassword\", \"port\": 4553, \"sasl\": true, \"ssl\": true, \"tables\": \"kafka_table_name\", \"username\": \"sampleuser\", \"validate_server_certificate\": true}, \"database_display_name\": \"new_database\", \"database_id\": \"new_database_id\", \"database_properties\": [{\"encrypt\": true, \"key\": \"hive.metastore\", \"value\": \"glue\"}], \"database_type\": \"netezza\", \"description\": \"Description of the external Database\", \"tags\": [\"tags\"]}";
+    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalog\": {\"catalog_name\": \"sampleCatalog\", \"catalog_tags\": [\"catalogTags\"], \"catalog_type\": \"iceberg\"}, \"catalog_name\": \"sampleCatalog\", \"created_by\": \"user1@bim.com\", \"created_on\": \"1686792721\", \"database_details\": {\"authentication_type\": \"LDAP\", \"broker_authentication_password\": \"samplepassword\", \"broker_authentication_type\": \"PASSWORD\", \"broker_authentication_user\": \"sampleuser\", \"certificate\": \"contents of a pem/crt file\", \"certificate_extension\": \"pem/crt\", \"connection_method\": \"basic, apikey\", \"connection_mode\": \"service_name\", \"connection_mode_value\": \"orclpdb\", \"connection_type\": \"JDBC, Arrow flight\", \"controller_authentication_password\": \"samplepassword\", \"controller_authentication_type\": \"PASSWORD\", \"controller_authentication_user\": \"sampleuser\", \"cpd_hostname\": \"samplecpdhostname\", \"credentials_key\": \"eyJ0eXBlIjoic2VydmljZV9hY2NvdW50IiwicHJvamVjdF9pZCI6ImNvbm9wcy1iaWdxdWVyeSIsInByaXZhdGVfa2V5X2lkIjoiMGY3......\", \"database_name\": \"new_database\", \"hostname\": \"db2@<hostname>.com\", \"hostname_in_certificate\": \"samplehostname\", \"hosts\": \"abc.com:1234,xyz.com:4321\", \"informix_server\": \"ol_informix1410\", \"password\": \"samplepassword\", \"port\": 4553, \"project_id\": \"conops-bigquery\", \"sasl\": true, \"service_api_key\": \"sampleapikey\", \"service_hostname\": \"api.dataplatform.dev.cloud.ibm.com\", \"service_password\": \"samplepassword\", \"service_port\": 443, \"service_ssl\": true, \"service_token_url\": \"sampletoakenurl\", \"service_username\": \"sampleusername\", \"ssl\": true, \"tables\": \"kafka_table_name\", \"username\": \"sampleuser\", \"validate_server_certificate\": true, \"verify_host_name\": true}, \"database_display_name\": \"new_database\", \"database_id\": \"new_database_id\", \"database_properties\": [{\"encrypt\": true, \"key\": \"hive.metastore\", \"value\": \"glue\"}], \"database_type\": \"netezza\", \"description\": \"Description of the external database\", \"tags\": [\"tags\"], \"topics\": [{\"created_on\": \"1686792721\", \"file_contents\": \"sample file content\", \"file_name\": \"sample file name\", \"topic_name\": \"customer\"}]}";
     String createDatabaseRegistrationPath = "/database_registrations";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -776,19 +1017,42 @@ public class WatsonxDataTest {
 
     // Construct an instance of the DatabaseDetails model
     DatabaseDetails databaseDetailsModel = new DatabaseDetails.Builder()
+      .authenticationType("LDAP")
+      .brokerAuthenticationPassword("samplepassword")
+      .brokerAuthenticationType("PASSWORD")
+      .brokerAuthenticationUser("sampleuser")
       .certificate("contents of a pem/crt file")
       .certificateExtension("pem/crt")
+      .connectionMethod("basic, apikey")
+      .connectionMode("service_name")
+      .connectionModeValue("orclpdb")
+      .connectionType("JDBC, Arrow flight")
+      .controllerAuthenticationPassword("samplepassword")
+      .controllerAuthenticationType("PASSWORD")
+      .controllerAuthenticationUser("sampleuser")
+      .cpdHostname("samplecpdhostname")
+      .credentialsKey("eyJ0eXBlIjoic2VydmljZV9hY2NvdW50IiwicHJvamVjdF9pZCI6ImNvbm9wcy1iaWdxdWVyeSIsInByaXZhdGVfa2V5X2lkIjoiMGY3......")
       .databaseName("new_database")
       .hostname("db2@<hostname>.com")
       .hostnameInCertificate("samplehostname")
       .hosts("abc.com:1234,xyz.com:4321")
+      .informixServer("ol_informix1410")
       .password("samplepassword")
       .port(Long.valueOf("4553"))
+      .projectId("conops-bigquery")
       .sasl(true)
+      .serviceApiKey("sampleapikey")
+      .serviceHostname("api.dataplatform.dev.cloud.ibm.com")
+      .servicePassword("samplepassword")
+      .servicePort(Long.valueOf("443"))
+      .serviceSsl(true)
+      .serviceTokenUrl("sampletoakenurl")
+      .serviceUsername("sampleusername")
       .ssl(true)
       .tables("kafka_table_name")
       .username("sampleuser")
       .validateServerCertificate(true)
+      .verifyHostName(true)
       .build();
 
     // Construct an instance of the DatabaseRegistrationPrototypeDatabasePropertiesItems model
@@ -850,7 +1114,7 @@ public class WatsonxDataTest {
   @Test
   public void testGetDatabaseWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalog\": {\"catalog_name\": \"sampleCatalog\", \"catalog_tags\": [\"catalogTags\"], \"catalog_type\": \"iceberg\"}, \"catalog_name\": \"sampleCatalog\", \"created_by\": \"user1@bim.com\", \"created_on\": \"1686792721\", \"database_details\": {\"certificate\": \"contents of a pem/crt file\", \"certificate_extension\": \"pem/crt\", \"database_name\": \"new_database\", \"hostname\": \"db2@<hostname>.com\", \"hostname_in_certificate\": \"samplehostname\", \"hosts\": \"abc.com:1234,xyz.com:4321\", \"password\": \"samplepassword\", \"port\": 4553, \"sasl\": true, \"ssl\": true, \"tables\": \"kafka_table_name\", \"username\": \"sampleuser\", \"validate_server_certificate\": true}, \"database_display_name\": \"new_database\", \"database_id\": \"new_database_id\", \"database_properties\": [{\"encrypt\": true, \"key\": \"hive.metastore\", \"value\": \"glue\"}], \"database_type\": \"netezza\", \"description\": \"Description of the external Database\", \"tags\": [\"tags\"]}";
+    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalog\": {\"catalog_name\": \"sampleCatalog\", \"catalog_tags\": [\"catalogTags\"], \"catalog_type\": \"iceberg\"}, \"catalog_name\": \"sampleCatalog\", \"created_by\": \"user1@bim.com\", \"created_on\": \"1686792721\", \"database_details\": {\"authentication_type\": \"LDAP\", \"broker_authentication_password\": \"samplepassword\", \"broker_authentication_type\": \"PASSWORD\", \"broker_authentication_user\": \"sampleuser\", \"certificate\": \"contents of a pem/crt file\", \"certificate_extension\": \"pem/crt\", \"connection_method\": \"basic, apikey\", \"connection_mode\": \"service_name\", \"connection_mode_value\": \"orclpdb\", \"connection_type\": \"JDBC, Arrow flight\", \"controller_authentication_password\": \"samplepassword\", \"controller_authentication_type\": \"PASSWORD\", \"controller_authentication_user\": \"sampleuser\", \"cpd_hostname\": \"samplecpdhostname\", \"credentials_key\": \"eyJ0eXBlIjoic2VydmljZV9hY2NvdW50IiwicHJvamVjdF9pZCI6ImNvbm9wcy1iaWdxdWVyeSIsInByaXZhdGVfa2V5X2lkIjoiMGY3......\", \"database_name\": \"new_database\", \"hostname\": \"db2@<hostname>.com\", \"hostname_in_certificate\": \"samplehostname\", \"hosts\": \"abc.com:1234,xyz.com:4321\", \"informix_server\": \"ol_informix1410\", \"password\": \"samplepassword\", \"port\": 4553, \"project_id\": \"conops-bigquery\", \"sasl\": true, \"service_api_key\": \"sampleapikey\", \"service_hostname\": \"api.dataplatform.dev.cloud.ibm.com\", \"service_password\": \"samplepassword\", \"service_port\": 443, \"service_ssl\": true, \"service_token_url\": \"sampletoakenurl\", \"service_username\": \"sampleusername\", \"ssl\": true, \"tables\": \"kafka_table_name\", \"username\": \"sampleuser\", \"validate_server_certificate\": true, \"verify_host_name\": true}, \"database_display_name\": \"new_database\", \"database_id\": \"new_database_id\", \"database_properties\": [{\"encrypt\": true, \"key\": \"hive.metastore\", \"value\": \"glue\"}], \"database_type\": \"netezza\", \"description\": \"Description of the external database\", \"tags\": [\"tags\"], \"topics\": [{\"created_on\": \"1686792721\", \"file_contents\": \"sample file content\", \"file_name\": \"sample file name\", \"topic_name\": \"customer\"}]}";
     String getDatabasePath = "/database_registrations/testString";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -953,7 +1217,7 @@ public class WatsonxDataTest {
   @Test
   public void testUpdateDatabaseWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalog\": {\"catalog_name\": \"sampleCatalog\", \"catalog_tags\": [\"catalogTags\"], \"catalog_type\": \"iceberg\"}, \"catalog_name\": \"sampleCatalog\", \"created_by\": \"user1@bim.com\", \"created_on\": \"1686792721\", \"database_details\": {\"certificate\": \"contents of a pem/crt file\", \"certificate_extension\": \"pem/crt\", \"database_name\": \"new_database\", \"hostname\": \"db2@<hostname>.com\", \"hostname_in_certificate\": \"samplehostname\", \"hosts\": \"abc.com:1234,xyz.com:4321\", \"password\": \"samplepassword\", \"port\": 4553, \"sasl\": true, \"ssl\": true, \"tables\": \"kafka_table_name\", \"username\": \"sampleuser\", \"validate_server_certificate\": true}, \"database_display_name\": \"new_database\", \"database_id\": \"new_database_id\", \"database_properties\": [{\"encrypt\": true, \"key\": \"hive.metastore\", \"value\": \"glue\"}], \"database_type\": \"netezza\", \"description\": \"Description of the external Database\", \"tags\": [\"tags\"]}";
+    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalog\": {\"catalog_name\": \"sampleCatalog\", \"catalog_tags\": [\"catalogTags\"], \"catalog_type\": \"iceberg\"}, \"catalog_name\": \"sampleCatalog\", \"created_by\": \"user1@bim.com\", \"created_on\": \"1686792721\", \"database_details\": {\"authentication_type\": \"LDAP\", \"broker_authentication_password\": \"samplepassword\", \"broker_authentication_type\": \"PASSWORD\", \"broker_authentication_user\": \"sampleuser\", \"certificate\": \"contents of a pem/crt file\", \"certificate_extension\": \"pem/crt\", \"connection_method\": \"basic, apikey\", \"connection_mode\": \"service_name\", \"connection_mode_value\": \"orclpdb\", \"connection_type\": \"JDBC, Arrow flight\", \"controller_authentication_password\": \"samplepassword\", \"controller_authentication_type\": \"PASSWORD\", \"controller_authentication_user\": \"sampleuser\", \"cpd_hostname\": \"samplecpdhostname\", \"credentials_key\": \"eyJ0eXBlIjoic2VydmljZV9hY2NvdW50IiwicHJvamVjdF9pZCI6ImNvbm9wcy1iaWdxdWVyeSIsInByaXZhdGVfa2V5X2lkIjoiMGY3......\", \"database_name\": \"new_database\", \"hostname\": \"db2@<hostname>.com\", \"hostname_in_certificate\": \"samplehostname\", \"hosts\": \"abc.com:1234,xyz.com:4321\", \"informix_server\": \"ol_informix1410\", \"password\": \"samplepassword\", \"port\": 4553, \"project_id\": \"conops-bigquery\", \"sasl\": true, \"service_api_key\": \"sampleapikey\", \"service_hostname\": \"api.dataplatform.dev.cloud.ibm.com\", \"service_password\": \"samplepassword\", \"service_port\": 443, \"service_ssl\": true, \"service_token_url\": \"sampletoakenurl\", \"service_username\": \"sampleusername\", \"ssl\": true, \"tables\": \"kafka_table_name\", \"username\": \"sampleuser\", \"validate_server_certificate\": true, \"verify_host_name\": true}, \"database_display_name\": \"new_database\", \"database_id\": \"new_database_id\", \"database_properties\": [{\"encrypt\": true, \"key\": \"hive.metastore\", \"value\": \"glue\"}], \"database_type\": \"netezza\", \"description\": \"Description of the external database\", \"tags\": [\"tags\"], \"topics\": [{\"created_on\": \"1686792721\", \"file_contents\": \"sample file content\", \"file_name\": \"sample file name\", \"topic_name\": \"customer\"}]}";
     String updateDatabasePath = "/database_registrations/testString";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -966,12 +1230,21 @@ public class WatsonxDataTest {
       .username("sampleuser")
       .build();
 
+    // Construct an instance of the DatabaseRegistrationPatchTopicsItems model
+    DatabaseRegistrationPatchTopicsItems databaseRegistrationPatchTopicsItemsModel = new DatabaseRegistrationPatchTopicsItems.Builder()
+      .createdOn("1686792721")
+      .fileContents("sample file contents")
+      .fileName("sample file name")
+      .topicName("customer")
+      .build();
+
     // Construct an instance of the DatabaseRegistrationPatch model
     DatabaseRegistrationPatch databaseRegistrationPatchModel = new DatabaseRegistrationPatch.Builder()
       .databaseDetails(databaseRegistrationPatchDatabaseDetailsModel)
       .databaseDisplayName("new_database")
       .description("External database description")
       .tags(java.util.Arrays.asList("testdatabase", "userdatabase"))
+      .topics(java.util.Arrays.asList(databaseRegistrationPatchTopicsItemsModel))
       .build();
     Map<String, Object> databaseRegistrationPatchModelAsPatch = databaseRegistrationPatchModel.asPatch();
 
@@ -1015,6 +1288,269 @@ public class WatsonxDataTest {
   public void testUpdateDatabaseNoOptions() throws Throwable {
     server.enqueue(new MockResponse());
     watsonxDataService.updateDatabase(null).execute();
+  }
+
+  // Test the listDriverRegistration operation with a valid options model parameter
+  @Test
+  public void testListDriverRegistrationWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"driver_registrations\": [{\"associated_engines\": [\"associatedEngines\"], \"connection_type\": \"connection-type\", \"driver_id\": \"sample-driver-123\", \"driver_name\": \"sample-driver-name\", \"modified_at\": \"1686792721\", \"modified_by\": \"user1@bim.com\", \"status\": \"validating\", \"version\": \"123-dev\"}]}";
+    String listDriverRegistrationPath = "/driver_registrations";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the ListDriverRegistrationOptions model
+    ListDriverRegistrationOptions listDriverRegistrationOptionsModel = new ListDriverRegistrationOptions.Builder()
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke listDriverRegistration() with a valid options model and verify the result
+    Response<DriverRegistrationCollection> response = watsonxDataService.listDriverRegistration(listDriverRegistrationOptionsModel).execute();
+    assertNotNull(response);
+    DriverRegistrationCollection responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, listDriverRegistrationPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the listDriverRegistration operation with and without retries enabled
+  @Test
+  public void testListDriverRegistrationWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testListDriverRegistrationWOptions();
+
+    watsonxDataService.disableRetries();
+    testListDriverRegistrationWOptions();
+  }
+
+  // Test the createDriverRegistration operation with a valid options model parameter
+  @Test
+  public void testCreateDriverRegistrationWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"associated_engines\": [\"associatedEngines\"], \"connection_type\": \"connection-type\", \"driver_id\": \"sample-driver-123\", \"driver_name\": \"sample-driver-name\", \"modified_at\": \"1686792721\", \"modified_by\": \"user1@bim.com\", \"status\": \"validating\", \"version\": \"123-dev\"}";
+    String createDriverRegistrationPath = "/driver_registrations";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(201)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the CreateDriverRegistrationOptions model
+    CreateDriverRegistrationOptions createDriverRegistrationOptionsModel = new CreateDriverRegistrationOptions.Builder()
+      .driver(TestUtilities.createMockStream("This is a mock file."))
+      .driverName("testString")
+      .connectionType("testString")
+      .driverContentType("testString")
+      .version("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke createDriverRegistration() with a valid options model and verify the result
+    Response<DriverRegistration> response = watsonxDataService.createDriverRegistration(createDriverRegistrationOptionsModel).execute();
+    assertNotNull(response);
+    DriverRegistration responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, createDriverRegistrationPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the createDriverRegistration operation with and without retries enabled
+  @Test
+  public void testCreateDriverRegistrationWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testCreateDriverRegistrationWOptions();
+
+    watsonxDataService.disableRetries();
+    testCreateDriverRegistrationWOptions();
+  }
+
+  // Test the createDriverRegistration operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testCreateDriverRegistrationNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.createDriverRegistration(null).execute();
+  }
+
+  // Test the deleteDriverRegistration operation with a valid options model parameter
+  @Test
+  public void testDeleteDriverRegistrationWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "";
+    String deleteDriverRegistrationPath = "/driver_registrations/testString";
+    server.enqueue(new MockResponse()
+      .setResponseCode(204)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the DeleteDriverRegistrationOptions model
+    DeleteDriverRegistrationOptions deleteDriverRegistrationOptionsModel = new DeleteDriverRegistrationOptions.Builder()
+      .driverId("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke deleteDriverRegistration() with a valid options model and verify the result
+    Response<Void> response = watsonxDataService.deleteDriverRegistration(deleteDriverRegistrationOptionsModel).execute();
+    assertNotNull(response);
+    Void responseObj = response.getResult();
+    assertNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "DELETE");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, deleteDriverRegistrationPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the deleteDriverRegistration operation with and without retries enabled
+  @Test
+  public void testDeleteDriverRegistrationWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testDeleteDriverRegistrationWOptions();
+
+    watsonxDataService.disableRetries();
+    testDeleteDriverRegistrationWOptions();
+  }
+
+  // Test the deleteDriverRegistration operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testDeleteDriverRegistrationNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.deleteDriverRegistration(null).execute();
+  }
+
+  // Test the deleteDriverEngines operation with a valid options model parameter
+  @Test
+  public void testDeleteDriverEnginesWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "";
+    String deleteDriverEnginesPath = "/driver_registrations/testString/engines";
+    server.enqueue(new MockResponse()
+      .setResponseCode(204)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the DeleteDriverEnginesOptions model
+    DeleteDriverEnginesOptions deleteDriverEnginesOptionsModel = new DeleteDriverEnginesOptions.Builder()
+      .driverId("testString")
+      .engineIds("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke deleteDriverEngines() with a valid options model and verify the result
+    Response<Void> response = watsonxDataService.deleteDriverEngines(deleteDriverEnginesOptionsModel).execute();
+    assertNotNull(response);
+    Void responseObj = response.getResult();
+    assertNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "DELETE");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, deleteDriverEnginesPath);
+    // Verify query params
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    assertEquals(query.get("engine_ids"), "testString");
+  }
+
+  // Test the deleteDriverEngines operation with and without retries enabled
+  @Test
+  public void testDeleteDriverEnginesWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testDeleteDriverEnginesWOptions();
+
+    watsonxDataService.disableRetries();
+    testDeleteDriverEnginesWOptions();
+  }
+
+  // Test the deleteDriverEngines operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testDeleteDriverEnginesNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.deleteDriverEngines(null).execute();
+  }
+
+  // Test the updateDriverEngines operation with a valid options model parameter
+  @Test
+  public void testUpdateDriverEnginesWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"engines\": [\"engines\"]}";
+    String updateDriverEnginesPath = "/driver_registrations/testString/engines";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the DriverRegistrationEnginePrototype model
+    DriverRegistrationEnginePrototype driverRegistrationEnginePrototypeModel = new DriverRegistrationEnginePrototype.Builder()
+      .engines(java.util.Arrays.asList("testString"))
+      .build();
+    Map<String, Object> driverRegistrationEnginePrototypeModelAsPatch = driverRegistrationEnginePrototypeModel.asPatch();
+
+    // Construct an instance of the UpdateDriverEnginesOptions model
+    UpdateDriverEnginesOptions updateDriverEnginesOptionsModel = new UpdateDriverEnginesOptions.Builder()
+      .driverId("testString")
+      .body(driverRegistrationEnginePrototypeModelAsPatch)
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke updateDriverEngines() with a valid options model and verify the result
+    Response<DriverRegistrationEngine> response = watsonxDataService.updateDriverEngines(updateDriverEnginesOptionsModel).execute();
+    assertNotNull(response);
+    DriverRegistrationEngine responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "PATCH");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, updateDriverEnginesPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the updateDriverEngines operation with and without retries enabled
+  @Test
+  public void testUpdateDriverEnginesWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testUpdateDriverEnginesWOptions();
+
+    watsonxDataService.disableRetries();
+    testUpdateDriverEnginesWOptions();
+  }
+
+  // Test the updateDriverEngines operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testUpdateDriverEnginesNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.updateDriverEngines(null).execute();
   }
 
   // Test the listOtherEngines operation with a valid options model parameter
@@ -1085,7 +1621,6 @@ public class WatsonxDataTest {
       .description("external engine description")
       .origin("external")
       .tags(java.util.Arrays.asList("tag1", "tag2"))
-      .type("netezza")
       .authInstanceId("testString")
       .build();
 
@@ -1173,6 +1708,276 @@ public class WatsonxDataTest {
   public void testDeleteOtherEngineNoOptions() throws Throwable {
     server.enqueue(new MockResponse());
     watsonxDataService.deleteOtherEngine(null).execute();
+  }
+
+  // Test the listAllIntegrations operation with a valid options model parameter
+  @Test
+  public void testListAllIntegrationsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"integrations\": [{\"apikey\": \"apikey\", \"config_properties\": \"ikc-env.password=ibmlhenc__0001__uMkFATDDZNnxJ7z6BA/QqA==\nikc-env.url=ikc\nikc-enabled-catalogs=\nikc-username=\nlh-unique-identifier=1711796957622126\nlh-crn=1711796957622126\", \"enable_data_policy_within_wxd\": false, \"governance_properties\": \"query-governance.name=external\", \"integration_id\": \"presto01\", \"modified_at\": 10, \"modified_by\": \"<username>@<domain>.com\", \"password\": \"password\", \"resource\": \"presto01\", \"service_type\": \"ikc\", \"state\": \"active\", \"storage_catalogs\": [\"storageCatalogs\"], \"url\": \"ikc.url\", \"username\": \"username@email.com\"}]}";
+    String listAllIntegrationsPath = "/integrations";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the ListAllIntegrationsOptions model
+    ListAllIntegrationsOptions listAllIntegrationsOptionsModel = new ListAllIntegrationsOptions.Builder()
+      .authInstanceId("testString")
+      .secret("testString")
+      .serviceType("testString")
+      .state(java.util.Arrays.asList("testString"))
+      .build();
+
+    // Invoke listAllIntegrations() with a valid options model and verify the result
+    Response<IntegrationCollection> response = watsonxDataService.listAllIntegrations(listAllIntegrationsOptionsModel).execute();
+    assertNotNull(response);
+    IntegrationCollection responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, listAllIntegrationsPath);
+    // Verify query params
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    assertEquals(query.get("service_type"), "testString");
+    assertEquals(query.get("state"), RequestUtils.join(java.util.Arrays.asList("testString"), ","));
+  }
+
+  // Test the listAllIntegrations operation with and without retries enabled
+  @Test
+  public void testListAllIntegrationsWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testListAllIntegrationsWOptions();
+
+    watsonxDataService.disableRetries();
+    testListAllIntegrationsWOptions();
+  }
+
+  // Test the createIntegration operation with a valid options model parameter
+  @Test
+  public void testCreateIntegrationWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"apikey\": \"apikey\", \"config_properties\": \"ikc-env.password=ibmlhenc__0001__uMkFATDDZNnxJ7z6BA/QqA==\nikc-env.url=ikc\nikc-enabled-catalogs=\nikc-username=\nlh-unique-identifier=1711796957622126\nlh-crn=1711796957622126\", \"enable_data_policy_within_wxd\": false, \"governance_properties\": \"query-governance.name=external\", \"integration_id\": \"presto01\", \"modified_at\": 10, \"modified_by\": \"<username>@<domain>.com\", \"password\": \"password\", \"resource\": \"presto01\", \"service_type\": \"ikc\", \"state\": \"active\", \"storage_catalogs\": [\"storageCatalogs\"], \"url\": \"ikc.url\", \"username\": \"username@email.com\"}";
+    String createIntegrationPath = "/integrations";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(201)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the CreateIntegrationOptions model
+    CreateIntegrationOptions createIntegrationOptionsModel = new CreateIntegrationOptions.Builder()
+      .apikey("testString")
+      .enableDataPolicyWithinWxd(false)
+      .password("password")
+      .resource("resource_name")
+      .serviceType("ranger")
+      .storageCatalogs(java.util.Arrays.asList("testString"))
+      .url("http://abcd.efgh.com:9876/")
+      .username("username")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke createIntegration() with a valid options model and verify the result
+    Response<Integration> response = watsonxDataService.createIntegration(createIntegrationOptionsModel).execute();
+    assertNotNull(response);
+    Integration responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, createIntegrationPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the createIntegration operation with and without retries enabled
+  @Test
+  public void testCreateIntegrationWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testCreateIntegrationWOptions();
+
+    watsonxDataService.disableRetries();
+    testCreateIntegrationWOptions();
+  }
+
+  // Test the getIntegrations operation with a valid options model parameter
+  @Test
+  public void testGetIntegrationsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"apikey\": \"apikey\", \"config_properties\": \"ikc-env.password=ibmlhenc__0001__uMkFATDDZNnxJ7z6BA/QqA==\nikc-env.url=ikc\nikc-enabled-catalogs=\nikc-username=\nlh-unique-identifier=1711796957622126\nlh-crn=1711796957622126\", \"enable_data_policy_within_wxd\": false, \"governance_properties\": \"query-governance.name=external\", \"integration_id\": \"presto01\", \"modified_at\": 10, \"modified_by\": \"<username>@<domain>.com\", \"password\": \"password\", \"resource\": \"presto01\", \"service_type\": \"ikc\", \"state\": \"active\", \"storage_catalogs\": [\"storageCatalogs\"], \"url\": \"ikc.url\", \"username\": \"username@email.com\"}";
+    String getIntegrationsPath = "/integrations/testString";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetIntegrationsOptions model
+    GetIntegrationsOptions getIntegrationsOptionsModel = new GetIntegrationsOptions.Builder()
+      .integrationId("testString")
+      .authInstanceId("testString")
+      .secret("testString")
+      .build();
+
+    // Invoke getIntegrations() with a valid options model and verify the result
+    Response<Integration> response = watsonxDataService.getIntegrations(getIntegrationsOptionsModel).execute();
+    assertNotNull(response);
+    Integration responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getIntegrationsPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the getIntegrations operation with and without retries enabled
+  @Test
+  public void testGetIntegrationsWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testGetIntegrationsWOptions();
+
+    watsonxDataService.disableRetries();
+    testGetIntegrationsWOptions();
+  }
+
+  // Test the getIntegrations operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetIntegrationsNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.getIntegrations(null).execute();
+  }
+
+  // Test the deleteIntegration operation with a valid options model parameter
+  @Test
+  public void testDeleteIntegrationWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "";
+    String deleteIntegrationPath = "/integrations/testString";
+    server.enqueue(new MockResponse()
+      .setResponseCode(204)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the DeleteIntegrationOptions model
+    DeleteIntegrationOptions deleteIntegrationOptionsModel = new DeleteIntegrationOptions.Builder()
+      .integrationId("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke deleteIntegration() with a valid options model and verify the result
+    Response<Void> response = watsonxDataService.deleteIntegration(deleteIntegrationOptionsModel).execute();
+    assertNotNull(response);
+    Void responseObj = response.getResult();
+    assertNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "DELETE");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, deleteIntegrationPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the deleteIntegration operation with and without retries enabled
+  @Test
+  public void testDeleteIntegrationWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testDeleteIntegrationWOptions();
+
+    watsonxDataService.disableRetries();
+    testDeleteIntegrationWOptions();
+  }
+
+  // Test the deleteIntegration operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testDeleteIntegrationNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.deleteIntegration(null).execute();
+  }
+
+  // Test the updateIntegration operation with a valid options model parameter
+  @Test
+  public void testUpdateIntegrationWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"apikey\": \"apikey\", \"config_properties\": \"ikc-env.password=ibmlhenc__0001__uMkFATDDZNnxJ7z6BA/QqA==\nikc-env.url=ikc\nikc-enabled-catalogs=\nikc-username=\nlh-unique-identifier=1711796957622126\nlh-crn=1711796957622126\", \"enable_data_policy_within_wxd\": false, \"governance_properties\": \"query-governance.name=external\", \"integration_id\": \"presto01\", \"modified_at\": 10, \"modified_by\": \"<username>@<domain>.com\", \"password\": \"password\", \"resource\": \"presto01\", \"service_type\": \"ikc\", \"state\": \"active\", \"storage_catalogs\": [\"storageCatalogs\"], \"url\": \"ikc.url\", \"username\": \"username@email.com\"}";
+    String updateIntegrationPath = "/integrations/testString";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the IntegrationPatch model
+    IntegrationPatch integrationPatchModel = new IntegrationPatch.Builder()
+      .apikey("apikey")
+      .enableDataPolicyWithinWxd(true)
+      .password("password")
+      .resource("resource_name")
+      .storageCatalogs(java.util.Arrays.asList("iceberg_data", "hive_data"))
+      .url("http://abcd.efgh.com:9876/")
+      .username("username")
+      .build();
+    Map<String, Object> integrationPatchModelAsPatch = integrationPatchModel.asPatch();
+
+    // Construct an instance of the UpdateIntegrationOptions model
+    UpdateIntegrationOptions updateIntegrationOptionsModel = new UpdateIntegrationOptions.Builder()
+      .integrationId("testString")
+      .integrationPatch(integrationPatchModelAsPatch)
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke updateIntegration() with a valid options model and verify the result
+    Response<Integration> response = watsonxDataService.updateIntegration(updateIntegrationOptionsModel).execute();
+    assertNotNull(response);
+    Integration responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "PATCH");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, updateIntegrationPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the updateIntegration operation with and without retries enabled
+  @Test
+  public void testUpdateIntegrationWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testUpdateIntegrationWOptions();
+
+    watsonxDataService.disableRetries();
+    testUpdateIntegrationWOptions();
+  }
+
+  // Test the updateIntegration operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testUpdateIntegrationNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.updateIntegration(null).execute();
   }
 
   // Test the listDb2Engines operation with a valid options model parameter
@@ -1609,11 +2414,66 @@ public class WatsonxDataTest {
     watsonxDataService.updateNetezzaEngine(null).execute();
   }
 
+  // Test the createExecuteQuery operation with a valid options model parameter
+  @Test
+  public void testCreateExecuteQueryWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"response\": {\"result\": [{\"mapKey\": \"inner\"}]}}";
+    String createExecuteQueryPath = "/queries/execute/testString";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(201)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the CreateExecuteQueryOptions model
+    CreateExecuteQueryOptions createExecuteQueryOptionsModel = new CreateExecuteQueryOptions.Builder()
+      .engineId("testString")
+      .sqlString("select expenses from expenditure")
+      .catalogName("sampleCatalog")
+      .schemaName("SampleSchema1")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke createExecuteQuery() with a valid options model and verify the result
+    Response<ExecuteQueryCreatedBody> response = watsonxDataService.createExecuteQuery(createExecuteQueryOptionsModel).execute();
+    assertNotNull(response);
+    ExecuteQueryCreatedBody responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, createExecuteQueryPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the createExecuteQuery operation with and without retries enabled
+  @Test
+  public void testCreateExecuteQueryWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testCreateExecuteQueryWOptions();
+
+    watsonxDataService.disableRetries();
+    testCreateExecuteQueryWOptions();
+  }
+
+  // Test the createExecuteQuery operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testCreateExecuteQueryNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.createExecuteQuery(null).execute();
+  }
+
   // Test the listPrestissimoEngines operation with a valid options model parameter
   @Test
   public void testListPrestissimoEnginesWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"prestissimo_engines\": [{\"actions\": [\"actions\"], \"associated_catalogs\": [\"associatedCatalogs\"], \"build_version\": \"1.0.3.0.0\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"prestissimo engine for running sql queries\", \"engine_details\": {\"api_key\": \"<api_key>\", \"connection_string\": \"1.2.3.4\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"endpoints\": {\"applications_api\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_applications/<application_id>\", \"history_server_endpoint\": \"$HOST/v2/spark/v3/instances/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_history_server\", \"spark_access_endpoint\": \"$HOST/analytics-engine/details/spark-<instance_id>\", \"spark_jobs_v4_endpoint\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_applications\", \"spark_kernel_endpoint\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/jkg/api/kernels\", \"view_history_server\": \"viewHistoryServer\", \"wxd_application_endpoint\": \"$HOST/v1/1698311655308796/engines/spark817/applications\"}, \"instance_id\": \"instance_id\", \"managed_by\": \"fully/self\", \"metastore_host\": \"1.2.3.4\", \"size_config\": \"starter\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"engine_display_name\": \"sampleEngine\", \"engine_id\": \"sampleEngine123\", \"engine_properties\": {\"catalog\": {\"catalog_name\": [\"catalogName\"]}, \"configuration\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"velox\": {\"velox_property\": [\"veloxProperty\"]}, \"jvm\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}}}, \"engine_restart\": \"force\", \"external_host_name\": \"your-hostname.apps.your-domain.com\", \"group_id\": \"new_group_id\", \"host_name\": \"xyz-prestissimo-01-prestissimo-svc\", \"origin\": \"native\", \"port\": 4, \"region\": \"us-south\", \"remove_engine_properties\": {\"catalog\": {\"catalog_name\": [\"catalogName\"]}, \"configuration\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"jvm\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"velox\": [\"velox\"]}, \"size_config\": \"starter\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"prestissimo\", \"version\": \"1.2.0\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}]}";
+    String mockResponseBody = "{\"prestissimo_engines\": [{\"actions\": [\"actions\"], \"associated_catalogs\": [\"associatedCatalogs\"], \"build_version\": \"1.0.3.0.0\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"prestissimo engine for running sql queries\", \"engine_details\": {\"api_key\": \"<api_key>\", \"connection_string\": \"1.2.3.4\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"endpoints\": {\"applications_api\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_applications/<application_id>\", \"history_server_endpoint\": \"$HOST/v2/spark/v3/instances/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_history_server\", \"spark_access_endpoint\": \"$HOST/analytics-engine/details/spark-<instance_id>\", \"spark_jobs_v4_endpoint\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_applications\", \"spark_kernel_endpoint\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/jkg/api/kernels\", \"view_history_server\": \"viewHistoryServer\", \"wxd_application_endpoint\": \"$HOST/v1/1698311655308796/engines/spark817/applications\"}, \"instance_id\": \"instance_id\", \"managed_by\": \"fully/self\", \"metastore_host\": \"1.2.3.4\", \"size_config\": \"starter\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"engine_display_name\": \"sampleEngine\", \"engine_id\": \"sampleEngine123\", \"engine_properties\": {\"catalog\": {\"catalog_name\": [\"catalogName\"]}, \"configuration\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"velox\": {\"velox_property\": [\"veloxProperty\"]}, \"jvm\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}}}, \"engine_restart\": \"force\", \"external_host_name\": \"your-hostname.apps.your-domain.com\", \"group_id\": \"new_group_id\", \"host_name\": \"xyz-prestissimo-01-prestissimo-svc\", \"origin\": \"native\", \"port\": 4, \"region\": \"us-south\", \"remove_engine_properties\": {\"catalog\": {\"catalog_name\": [\"catalogName\"]}, \"configuration\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"jvm\": {\"coordinator\": [\"coordinator\"]}, \"velox\": [\"velox\"]}, \"size_config\": \"starter\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"prestissimo\", \"version\": \"1.2.0\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}]}";
     String listPrestissimoEnginesPath = "/prestissimo_engines";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -1657,7 +2517,7 @@ public class WatsonxDataTest {
   @Test
   public void testCreatePrestissimoEngineWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalogs\": [\"associatedCatalogs\"], \"build_version\": \"1.0.3.0.0\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"prestissimo engine for running sql queries\", \"engine_details\": {\"api_key\": \"<api_key>\", \"connection_string\": \"1.2.3.4\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"endpoints\": {\"applications_api\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_applications/<application_id>\", \"history_server_endpoint\": \"$HOST/v2/spark/v3/instances/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_history_server\", \"spark_access_endpoint\": \"$HOST/analytics-engine/details/spark-<instance_id>\", \"spark_jobs_v4_endpoint\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_applications\", \"spark_kernel_endpoint\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/jkg/api/kernels\", \"view_history_server\": \"viewHistoryServer\", \"wxd_application_endpoint\": \"$HOST/v1/1698311655308796/engines/spark817/applications\"}, \"instance_id\": \"instance_id\", \"managed_by\": \"fully/self\", \"metastore_host\": \"1.2.3.4\", \"size_config\": \"starter\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"engine_display_name\": \"sampleEngine\", \"engine_id\": \"sampleEngine123\", \"engine_properties\": {\"catalog\": {\"catalog_name\": [\"catalogName\"]}, \"configuration\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"velox\": {\"velox_property\": [\"veloxProperty\"]}, \"jvm\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}}}, \"engine_restart\": \"force\", \"external_host_name\": \"your-hostname.apps.your-domain.com\", \"group_id\": \"new_group_id\", \"host_name\": \"xyz-prestissimo-01-prestissimo-svc\", \"origin\": \"native\", \"port\": 4, \"region\": \"us-south\", \"remove_engine_properties\": {\"catalog\": {\"catalog_name\": [\"catalogName\"]}, \"configuration\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"jvm\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"velox\": [\"velox\"]}, \"size_config\": \"starter\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"prestissimo\", \"version\": \"1.2.0\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}";
+    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalogs\": [\"associatedCatalogs\"], \"build_version\": \"1.0.3.0.0\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"prestissimo engine for running sql queries\", \"engine_details\": {\"api_key\": \"<api_key>\", \"connection_string\": \"1.2.3.4\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"endpoints\": {\"applications_api\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_applications/<application_id>\", \"history_server_endpoint\": \"$HOST/v2/spark/v3/instances/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_history_server\", \"spark_access_endpoint\": \"$HOST/analytics-engine/details/spark-<instance_id>\", \"spark_jobs_v4_endpoint\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_applications\", \"spark_kernel_endpoint\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/jkg/api/kernels\", \"view_history_server\": \"viewHistoryServer\", \"wxd_application_endpoint\": \"$HOST/v1/1698311655308796/engines/spark817/applications\"}, \"instance_id\": \"instance_id\", \"managed_by\": \"fully/self\", \"metastore_host\": \"1.2.3.4\", \"size_config\": \"starter\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"engine_display_name\": \"sampleEngine\", \"engine_id\": \"sampleEngine123\", \"engine_properties\": {\"catalog\": {\"catalog_name\": [\"catalogName\"]}, \"configuration\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"velox\": {\"velox_property\": [\"veloxProperty\"]}, \"jvm\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}}}, \"engine_restart\": \"force\", \"external_host_name\": \"your-hostname.apps.your-domain.com\", \"group_id\": \"new_group_id\", \"host_name\": \"xyz-prestissimo-01-prestissimo-svc\", \"origin\": \"native\", \"port\": 4, \"region\": \"us-south\", \"remove_engine_properties\": {\"catalog\": {\"catalog_name\": [\"catalogName\"]}, \"configuration\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"jvm\": {\"coordinator\": [\"coordinator\"]}, \"velox\": [\"velox\"]}, \"size_config\": \"starter\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"prestissimo\", \"version\": \"1.2.0\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}";
     String createPrestissimoEnginePath = "/prestissimo_engines";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -1746,7 +2606,7 @@ public class WatsonxDataTest {
   @Test
   public void testGetPrestissimoEngineWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalogs\": [\"associatedCatalogs\"], \"build_version\": \"1.0.3.0.0\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"prestissimo engine for running sql queries\", \"engine_details\": {\"api_key\": \"<api_key>\", \"connection_string\": \"1.2.3.4\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"endpoints\": {\"applications_api\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_applications/<application_id>\", \"history_server_endpoint\": \"$HOST/v2/spark/v3/instances/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_history_server\", \"spark_access_endpoint\": \"$HOST/analytics-engine/details/spark-<instance_id>\", \"spark_jobs_v4_endpoint\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_applications\", \"spark_kernel_endpoint\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/jkg/api/kernels\", \"view_history_server\": \"viewHistoryServer\", \"wxd_application_endpoint\": \"$HOST/v1/1698311655308796/engines/spark817/applications\"}, \"instance_id\": \"instance_id\", \"managed_by\": \"fully/self\", \"metastore_host\": \"1.2.3.4\", \"size_config\": \"starter\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"engine_display_name\": \"sampleEngine\", \"engine_id\": \"sampleEngine123\", \"engine_properties\": {\"catalog\": {\"catalog_name\": [\"catalogName\"]}, \"configuration\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"velox\": {\"velox_property\": [\"veloxProperty\"]}, \"jvm\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}}}, \"engine_restart\": \"force\", \"external_host_name\": \"your-hostname.apps.your-domain.com\", \"group_id\": \"new_group_id\", \"host_name\": \"xyz-prestissimo-01-prestissimo-svc\", \"origin\": \"native\", \"port\": 4, \"region\": \"us-south\", \"remove_engine_properties\": {\"catalog\": {\"catalog_name\": [\"catalogName\"]}, \"configuration\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"jvm\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"velox\": [\"velox\"]}, \"size_config\": \"starter\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"prestissimo\", \"version\": \"1.2.0\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}";
+    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalogs\": [\"associatedCatalogs\"], \"build_version\": \"1.0.3.0.0\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"prestissimo engine for running sql queries\", \"engine_details\": {\"api_key\": \"<api_key>\", \"connection_string\": \"1.2.3.4\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"endpoints\": {\"applications_api\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_applications/<application_id>\", \"history_server_endpoint\": \"$HOST/v2/spark/v3/instances/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_history_server\", \"spark_access_endpoint\": \"$HOST/analytics-engine/details/spark-<instance_id>\", \"spark_jobs_v4_endpoint\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_applications\", \"spark_kernel_endpoint\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/jkg/api/kernels\", \"view_history_server\": \"viewHistoryServer\", \"wxd_application_endpoint\": \"$HOST/v1/1698311655308796/engines/spark817/applications\"}, \"instance_id\": \"instance_id\", \"managed_by\": \"fully/self\", \"metastore_host\": \"1.2.3.4\", \"size_config\": \"starter\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"engine_display_name\": \"sampleEngine\", \"engine_id\": \"sampleEngine123\", \"engine_properties\": {\"catalog\": {\"catalog_name\": [\"catalogName\"]}, \"configuration\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"velox\": {\"velox_property\": [\"veloxProperty\"]}, \"jvm\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}}}, \"engine_restart\": \"force\", \"external_host_name\": \"your-hostname.apps.your-domain.com\", \"group_id\": \"new_group_id\", \"host_name\": \"xyz-prestissimo-01-prestissimo-svc\", \"origin\": \"native\", \"port\": 4, \"region\": \"us-south\", \"remove_engine_properties\": {\"catalog\": {\"catalog_name\": [\"catalogName\"]}, \"configuration\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"jvm\": {\"coordinator\": [\"coordinator\"]}, \"velox\": [\"velox\"]}, \"size_config\": \"starter\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"prestissimo\", \"version\": \"1.2.0\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}";
     String getPrestissimoEnginePath = "/prestissimo_engines/testString";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -1849,7 +2709,7 @@ public class WatsonxDataTest {
   @Test
   public void testUpdatePrestissimoEngineWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalogs\": [\"associatedCatalogs\"], \"build_version\": \"1.0.3.0.0\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"prestissimo engine for running sql queries\", \"engine_details\": {\"api_key\": \"<api_key>\", \"connection_string\": \"1.2.3.4\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"endpoints\": {\"applications_api\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_applications/<application_id>\", \"history_server_endpoint\": \"$HOST/v2/spark/v3/instances/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_history_server\", \"spark_access_endpoint\": \"$HOST/analytics-engine/details/spark-<instance_id>\", \"spark_jobs_v4_endpoint\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_applications\", \"spark_kernel_endpoint\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/jkg/api/kernels\", \"view_history_server\": \"viewHistoryServer\", \"wxd_application_endpoint\": \"$HOST/v1/1698311655308796/engines/spark817/applications\"}, \"instance_id\": \"instance_id\", \"managed_by\": \"fully/self\", \"metastore_host\": \"1.2.3.4\", \"size_config\": \"starter\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"engine_display_name\": \"sampleEngine\", \"engine_id\": \"sampleEngine123\", \"engine_properties\": {\"catalog\": {\"catalog_name\": [\"catalogName\"]}, \"configuration\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"velox\": {\"velox_property\": [\"veloxProperty\"]}, \"jvm\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}}}, \"engine_restart\": \"force\", \"external_host_name\": \"your-hostname.apps.your-domain.com\", \"group_id\": \"new_group_id\", \"host_name\": \"xyz-prestissimo-01-prestissimo-svc\", \"origin\": \"native\", \"port\": 4, \"region\": \"us-south\", \"remove_engine_properties\": {\"catalog\": {\"catalog_name\": [\"catalogName\"]}, \"configuration\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"jvm\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"velox\": [\"velox\"]}, \"size_config\": \"starter\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"prestissimo\", \"version\": \"1.2.0\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}";
+    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalogs\": [\"associatedCatalogs\"], \"build_version\": \"1.0.3.0.0\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"prestissimo engine for running sql queries\", \"engine_details\": {\"api_key\": \"<api_key>\", \"connection_string\": \"1.2.3.4\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"endpoints\": {\"applications_api\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_applications/<application_id>\", \"history_server_endpoint\": \"$HOST/v2/spark/v3/instances/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_history_server\", \"spark_access_endpoint\": \"$HOST/analytics-engine/details/spark-<instance_id>\", \"spark_jobs_v4_endpoint\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/spark_applications\", \"spark_kernel_endpoint\": \"$HOST/v4/analytics_engines/c7b3fccf-badb-46b0-b1ef-9b3154424021/jkg/api/kernels\", \"view_history_server\": \"viewHistoryServer\", \"wxd_application_endpoint\": \"$HOST/v1/1698311655308796/engines/spark817/applications\"}, \"instance_id\": \"instance_id\", \"managed_by\": \"fully/self\", \"metastore_host\": \"1.2.3.4\", \"size_config\": \"starter\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"engine_display_name\": \"sampleEngine\", \"engine_id\": \"sampleEngine123\", \"engine_properties\": {\"catalog\": {\"catalog_name\": [\"catalogName\"]}, \"configuration\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"velox\": {\"velox_property\": [\"veloxProperty\"]}, \"jvm\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}}}, \"engine_restart\": \"force\", \"external_host_name\": \"your-hostname.apps.your-domain.com\", \"group_id\": \"new_group_id\", \"host_name\": \"xyz-prestissimo-01-prestissimo-svc\", \"origin\": \"native\", \"port\": 4, \"region\": \"us-south\", \"remove_engine_properties\": {\"catalog\": {\"catalog_name\": [\"catalogName\"]}, \"configuration\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"jvm\": {\"coordinator\": [\"coordinator\"]}, \"velox\": [\"velox\"]}, \"size_config\": \"starter\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"prestissimo\", \"version\": \"1.2.0\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}";
     String updatePrestissimoEnginePath = "/prestissimo_engines/testString";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -1903,11 +2763,16 @@ public class WatsonxDataTest {
       .worker(java.util.Arrays.asList("testString"))
       .build();
 
+    // Construct an instance of the RemoveEnginePropertiesPrestissimoOaiGenJvm model
+    RemoveEnginePropertiesPrestissimoOaiGenJvm removeEnginePropertiesPrestissimoOaiGenJvmModel = new RemoveEnginePropertiesPrestissimoOaiGenJvm.Builder()
+      .coordinator(java.util.Arrays.asList("testString"))
+      .build();
+
     // Construct an instance of the RemoveEngineProperties model
     RemoveEngineProperties removeEnginePropertiesModel = new RemoveEngineProperties.Builder()
       .catalog(prestissimoEnginePropertiesCatalogModel)
       .configuration(removeEnginePropertiesConfigurationModel)
-      .jvm(removeEnginePropertiesConfigurationModel)
+      .jvm(removeEnginePropertiesPrestissimoOaiGenJvmModel)
       .velox(java.util.Arrays.asList("testString"))
       .build();
 
@@ -2016,28 +2881,28 @@ public class WatsonxDataTest {
     watsonxDataService.listPrestissimoEngineCatalogs(null).execute();
   }
 
-  // Test the addPrestissimoEngineCatalogs operation with a valid options model parameter
+  // Test the createPrestissimoEngineCatalogs operation with a valid options model parameter
   @Test
-  public void testAddPrestissimoEngineCatalogsWOptions() throws Throwable {
+  public void testCreatePrestissimoEngineCatalogsWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"catalogs\": [{\"actions\": [\"actions\"], \"associated_buckets\": [\"associatedBuckets\"], \"associated_databases\": [\"associatedDatabases\"], \"associated_engines\": [\"associatedEngines\"], \"catalog_name\": \"sampleCatalog\", \"catalog_type\": \"iceberg\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": \"1602839833\", \"description\": \"Iceberg catalog description\", \"hostname\": \"s3a://samplehost.com\", \"last_sync_at\": \"1602839833\", \"managed_by\": \"ibm\", \"metastore\": \"glue\", \"port\": \"3232\", \"status\": \"running\", \"sync_description\": \"Table registration was successful\", \"sync_exception\": [\"syncException\"], \"sync_status\": \"SUCCESS\", \"tags\": [\"tags\"], \"thrift_uri\": \"thrift://samplehost-catalog:4354\"}]}";
-    String addPrestissimoEngineCatalogsPath = "/prestissimo_engines/testString/catalogs";
+    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_buckets\": [\"associatedBuckets\"], \"associated_databases\": [\"associatedDatabases\"], \"associated_engines\": [\"associatedEngines\"], \"catalog_name\": \"sampleCatalog\", \"catalog_type\": \"iceberg\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": \"1602839833\", \"description\": \"Iceberg catalog description\", \"hostname\": \"s3a://samplehost.com\", \"last_sync_at\": \"1602839833\", \"managed_by\": \"ibm\", \"metastore\": \"glue\", \"port\": \"3232\", \"status\": \"running\", \"sync_description\": \"Table registration was successful\", \"sync_exception\": [\"syncException\"], \"sync_status\": \"SUCCESS\", \"tags\": [\"tags\"], \"thrift_uri\": \"thrift://samplehost-catalog:4354\"}";
+    String createPrestissimoEngineCatalogsPath = "/prestissimo_engines/testString/catalogs";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
       .setResponseCode(201)
       .setBody(mockResponseBody));
 
-    // Construct an instance of the AddPrestissimoEngineCatalogsOptions model
-    AddPrestissimoEngineCatalogsOptions addPrestissimoEngineCatalogsOptionsModel = new AddPrestissimoEngineCatalogsOptions.Builder()
+    // Construct an instance of the CreatePrestissimoEngineCatalogsOptions model
+    CreatePrestissimoEngineCatalogsOptions createPrestissimoEngineCatalogsOptionsModel = new CreatePrestissimoEngineCatalogsOptions.Builder()
       .engineId("testString")
-      .catalogNames("testString")
+      .catalogName("testString")
       .authInstanceId("testString")
       .build();
 
-    // Invoke addPrestissimoEngineCatalogs() with a valid options model and verify the result
-    Response<CatalogCollection> response = watsonxDataService.addPrestissimoEngineCatalogs(addPrestissimoEngineCatalogsOptionsModel).execute();
+    // Invoke createPrestissimoEngineCatalogs() with a valid options model and verify the result
+    Response<Catalog> response = watsonxDataService.createPrestissimoEngineCatalogs(createPrestissimoEngineCatalogsOptionsModel).execute();
     assertNotNull(response);
-    CatalogCollection responseObj = response.getResult();
+    Catalog responseObj = response.getResult();
     assertNotNull(responseObj);
 
     // Verify the contents of the request sent to the mock server
@@ -2046,27 +2911,27 @@ public class WatsonxDataTest {
     assertEquals(request.getMethod(), "POST");
     // Verify request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, addPrestissimoEngineCatalogsPath);
+    assertEquals(parsedPath, createPrestissimoEngineCatalogsPath);
     // Verify that there is no query string
     Map<String, String> query = TestUtilities.parseQueryString(request);
     assertNull(query);
   }
 
-  // Test the addPrestissimoEngineCatalogs operation with and without retries enabled
+  // Test the createPrestissimoEngineCatalogs operation with and without retries enabled
   @Test
-  public void testAddPrestissimoEngineCatalogsWRetries() throws Throwable {
+  public void testCreatePrestissimoEngineCatalogsWRetries() throws Throwable {
     watsonxDataService.enableRetries(4, 30);
-    testAddPrestissimoEngineCatalogsWOptions();
+    testCreatePrestissimoEngineCatalogsWOptions();
 
     watsonxDataService.disableRetries();
-    testAddPrestissimoEngineCatalogsWOptions();
+    testCreatePrestissimoEngineCatalogsWOptions();
   }
 
-  // Test the addPrestissimoEngineCatalogs operation with a null options model (negative test)
+  // Test the createPrestissimoEngineCatalogs operation with a null options model (negative test)
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testAddPrestissimoEngineCatalogsNoOptions() throws Throwable {
+  public void testCreatePrestissimoEngineCatalogsNoOptions() throws Throwable {
     server.enqueue(new MockResponse());
-    watsonxDataService.addPrestissimoEngineCatalogs(null).execute();
+    watsonxDataService.createPrestissimoEngineCatalogs(null).execute();
   }
 
   // Test the deletePrestissimoEngineCatalogs operation with a valid options model parameter
@@ -2504,7 +3369,7 @@ public class WatsonxDataTest {
   @Test
   public void testListPrestoEnginesWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"presto_engines\": [{\"actions\": [\"actions\"], \"associated_catalogs\": [\"associatedCatalogs\"], \"build_version\": \"1.0.3.0.0\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"presto engine for running sql queries\", \"drivers\": [{\"connection_type\": \"saphana\", \"driver_id\": \"saphanadriver123\", \"driver_name\": \"saphanadriver-1.2.3\", \"driver_version\": \"1.2.3\"}], \"engine_details\": {\"api_key\": \"<api_key>\", \"connection_string\": \"1.2.3.4\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"instance_id\": \"instance_id\", \"managed_by\": \"fully/self\", \"size_config\": \"starter\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"engine_display_name\": \"sampleEngine\", \"engine_id\": \"sampleEngine123\", \"engine_properties\": {\"catalog\": {\"catalog_name\": \"catalogName\"}, \"configuration\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"global\": {\"global_property\": \"enable-mixed-case-support:true\"}, \"jvm\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}}, \"engine_restart\": \"force\", \"external_host_name\": \"your-hostname.apps.your-domain.com\", \"group_id\": \"new_group_id\", \"host_name\": \"ibm-lh-lakehouse-presto-01-presto-svc\", \"origin\": \"native\", \"port\": 4, \"region\": \"us-south\", \"remove_engine_properties\": {\"configuration\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"jvm\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"catalog\": {\"catalog_name\": \"catalogName\"}}, \"size_config\": \"starter\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"presto\", \"version\": \"1.2.0\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}]}";
+    String mockResponseBody = "{\"presto_engines\": [{\"actions\": [\"actions\"], \"associated_catalogs\": [\"associatedCatalogs\"], \"build_version\": \"1.0.3.0.0\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"presto engine for running sql queries\", \"drivers\": [{\"connection_type\": \"saphana\", \"driver_id\": \"saphanadriver123\", \"driver_name\": \"saphanadriver-1.2.3\", \"driver_version\": \"1.2.3\"}], \"engine_details\": {\"api_key\": \"<api_key>\", \"connection_string\": \"1.2.3.4\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"instance_id\": \"instance_id\", \"managed_by\": \"fully/self\", \"size_config\": \"starter\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"engine_display_name\": \"sampleEngine\", \"engine_id\": \"sampleEngine123\", \"engine_properties\": {\"catalog\": {\"catalog_name\": \"catalogName\"}, \"configuration\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"event_listener\": {\"event_listener_property\": \"eventListenerProperty\"}, \"global\": {\"global_property\": \"enable-mixed-case-support:true\"}, \"jvm\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"log_config\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}}, \"engine_restart\": \"force\", \"external_host_name\": \"your-hostname.apps.your-domain.com\", \"group_id\": \"new_group_id\", \"host_name\": \"ibm-lh-lakehouse-presto-01-presto-svc\", \"origin\": \"native\", \"port\": 4, \"region\": \"us-south\", \"remove_engine_properties\": {\"catalog\": {\"catalog_name\": \"catalogName\"}, \"configuration\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"jvm\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"event_listener\": [\"eventListener\"]}, \"size_config\": \"starter\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"presto\", \"version\": \"1.2.0\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}]}";
     String listPrestoEnginesPath = "/presto_engines";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -2548,7 +3413,7 @@ public class WatsonxDataTest {
   @Test
   public void testCreatePrestoEngineWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalogs\": [\"associatedCatalogs\"], \"build_version\": \"1.0.3.0.0\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"presto engine for running sql queries\", \"drivers\": [{\"connection_type\": \"saphana\", \"driver_id\": \"saphanadriver123\", \"driver_name\": \"saphanadriver-1.2.3\", \"driver_version\": \"1.2.3\"}], \"engine_details\": {\"api_key\": \"<api_key>\", \"connection_string\": \"1.2.3.4\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"instance_id\": \"instance_id\", \"managed_by\": \"fully/self\", \"size_config\": \"starter\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"engine_display_name\": \"sampleEngine\", \"engine_id\": \"sampleEngine123\", \"engine_properties\": {\"catalog\": {\"catalog_name\": \"catalogName\"}, \"configuration\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"global\": {\"global_property\": \"enable-mixed-case-support:true\"}, \"jvm\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}}, \"engine_restart\": \"force\", \"external_host_name\": \"your-hostname.apps.your-domain.com\", \"group_id\": \"new_group_id\", \"host_name\": \"ibm-lh-lakehouse-presto-01-presto-svc\", \"origin\": \"native\", \"port\": 4, \"region\": \"us-south\", \"remove_engine_properties\": {\"configuration\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"jvm\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"catalog\": {\"catalog_name\": \"catalogName\"}}, \"size_config\": \"starter\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"presto\", \"version\": \"1.2.0\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}";
+    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalogs\": [\"associatedCatalogs\"], \"build_version\": \"1.0.3.0.0\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"presto engine for running sql queries\", \"drivers\": [{\"connection_type\": \"saphana\", \"driver_id\": \"saphanadriver123\", \"driver_name\": \"saphanadriver-1.2.3\", \"driver_version\": \"1.2.3\"}], \"engine_details\": {\"api_key\": \"<api_key>\", \"connection_string\": \"1.2.3.4\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"instance_id\": \"instance_id\", \"managed_by\": \"fully/self\", \"size_config\": \"starter\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"engine_display_name\": \"sampleEngine\", \"engine_id\": \"sampleEngine123\", \"engine_properties\": {\"catalog\": {\"catalog_name\": \"catalogName\"}, \"configuration\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"event_listener\": {\"event_listener_property\": \"eventListenerProperty\"}, \"global\": {\"global_property\": \"enable-mixed-case-support:true\"}, \"jvm\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"log_config\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}}, \"engine_restart\": \"force\", \"external_host_name\": \"your-hostname.apps.your-domain.com\", \"group_id\": \"new_group_id\", \"host_name\": \"ibm-lh-lakehouse-presto-01-presto-svc\", \"origin\": \"native\", \"port\": 4, \"region\": \"us-south\", \"remove_engine_properties\": {\"catalog\": {\"catalog_name\": \"catalogName\"}, \"configuration\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"jvm\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"event_listener\": [\"eventListener\"]}, \"size_config\": \"starter\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"presto\", \"version\": \"1.2.0\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}";
     String createPrestoEnginePath = "/presto_engines";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -2624,7 +3489,7 @@ public class WatsonxDataTest {
   @Test
   public void testGetPrestoEngineWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalogs\": [\"associatedCatalogs\"], \"build_version\": \"1.0.3.0.0\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"presto engine for running sql queries\", \"drivers\": [{\"connection_type\": \"saphana\", \"driver_id\": \"saphanadriver123\", \"driver_name\": \"saphanadriver-1.2.3\", \"driver_version\": \"1.2.3\"}], \"engine_details\": {\"api_key\": \"<api_key>\", \"connection_string\": \"1.2.3.4\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"instance_id\": \"instance_id\", \"managed_by\": \"fully/self\", \"size_config\": \"starter\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"engine_display_name\": \"sampleEngine\", \"engine_id\": \"sampleEngine123\", \"engine_properties\": {\"catalog\": {\"catalog_name\": \"catalogName\"}, \"configuration\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"global\": {\"global_property\": \"enable-mixed-case-support:true\"}, \"jvm\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}}, \"engine_restart\": \"force\", \"external_host_name\": \"your-hostname.apps.your-domain.com\", \"group_id\": \"new_group_id\", \"host_name\": \"ibm-lh-lakehouse-presto-01-presto-svc\", \"origin\": \"native\", \"port\": 4, \"region\": \"us-south\", \"remove_engine_properties\": {\"configuration\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"jvm\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"catalog\": {\"catalog_name\": \"catalogName\"}}, \"size_config\": \"starter\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"presto\", \"version\": \"1.2.0\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}";
+    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalogs\": [\"associatedCatalogs\"], \"build_version\": \"1.0.3.0.0\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"presto engine for running sql queries\", \"drivers\": [{\"connection_type\": \"saphana\", \"driver_id\": \"saphanadriver123\", \"driver_name\": \"saphanadriver-1.2.3\", \"driver_version\": \"1.2.3\"}], \"engine_details\": {\"api_key\": \"<api_key>\", \"connection_string\": \"1.2.3.4\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"instance_id\": \"instance_id\", \"managed_by\": \"fully/self\", \"size_config\": \"starter\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"engine_display_name\": \"sampleEngine\", \"engine_id\": \"sampleEngine123\", \"engine_properties\": {\"catalog\": {\"catalog_name\": \"catalogName\"}, \"configuration\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"event_listener\": {\"event_listener_property\": \"eventListenerProperty\"}, \"global\": {\"global_property\": \"enable-mixed-case-support:true\"}, \"jvm\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"log_config\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}}, \"engine_restart\": \"force\", \"external_host_name\": \"your-hostname.apps.your-domain.com\", \"group_id\": \"new_group_id\", \"host_name\": \"ibm-lh-lakehouse-presto-01-presto-svc\", \"origin\": \"native\", \"port\": 4, \"region\": \"us-south\", \"remove_engine_properties\": {\"catalog\": {\"catalog_name\": \"catalogName\"}, \"configuration\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"jvm\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"event_listener\": [\"eventListener\"]}, \"size_config\": \"starter\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"presto\", \"version\": \"1.2.0\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}";
     String getPrestoEnginePath = "/presto_engines/testString";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -2727,7 +3592,7 @@ public class WatsonxDataTest {
   @Test
   public void testUpdatePrestoEngineWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalogs\": [\"associatedCatalogs\"], \"build_version\": \"1.0.3.0.0\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"presto engine for running sql queries\", \"drivers\": [{\"connection_type\": \"saphana\", \"driver_id\": \"saphanadriver123\", \"driver_name\": \"saphanadriver-1.2.3\", \"driver_version\": \"1.2.3\"}], \"engine_details\": {\"api_key\": \"<api_key>\", \"connection_string\": \"1.2.3.4\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"instance_id\": \"instance_id\", \"managed_by\": \"fully/self\", \"size_config\": \"starter\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"engine_display_name\": \"sampleEngine\", \"engine_id\": \"sampleEngine123\", \"engine_properties\": {\"catalog\": {\"catalog_name\": \"catalogName\"}, \"configuration\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"global\": {\"global_property\": \"enable-mixed-case-support:true\"}, \"jvm\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}}, \"engine_restart\": \"force\", \"external_host_name\": \"your-hostname.apps.your-domain.com\", \"group_id\": \"new_group_id\", \"host_name\": \"ibm-lh-lakehouse-presto-01-presto-svc\", \"origin\": \"native\", \"port\": 4, \"region\": \"us-south\", \"remove_engine_properties\": {\"configuration\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"jvm\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"catalog\": {\"catalog_name\": \"catalogName\"}}, \"size_config\": \"starter\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"presto\", \"version\": \"1.2.0\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}";
+    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_catalogs\": [\"associatedCatalogs\"], \"build_version\": \"1.0.3.0.0\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"presto engine for running sql queries\", \"drivers\": [{\"connection_type\": \"saphana\", \"driver_id\": \"saphanadriver123\", \"driver_name\": \"saphanadriver-1.2.3\", \"driver_version\": \"1.2.3\"}], \"engine_details\": {\"api_key\": \"<api_key>\", \"connection_string\": \"1.2.3.4\", \"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"instance_id\": \"instance_id\", \"managed_by\": \"fully/self\", \"size_config\": \"starter\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"engine_display_name\": \"sampleEngine\", \"engine_id\": \"sampleEngine123\", \"engine_properties\": {\"catalog\": {\"catalog_name\": \"catalogName\"}, \"configuration\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"event_listener\": {\"event_listener_property\": \"eventListenerProperty\"}, \"global\": {\"global_property\": \"enable-mixed-case-support:true\"}, \"jvm\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}, \"log_config\": {\"coordinator\": {\"node_type\": \"worker\", \"quantity\": 8}, \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}}, \"engine_restart\": \"force\", \"external_host_name\": \"your-hostname.apps.your-domain.com\", \"group_id\": \"new_group_id\", \"host_name\": \"ibm-lh-lakehouse-presto-01-presto-svc\", \"origin\": \"native\", \"port\": 4, \"region\": \"us-south\", \"remove_engine_properties\": {\"catalog\": {\"catalog_name\": \"catalogName\"}, \"configuration\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"jvm\": {\"coordinator\": [\"coordinator\"], \"worker\": [\"worker\"]}, \"event_listener\": [\"eventListener\"]}, \"size_config\": \"starter\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"presto\", \"version\": \"1.2.0\", \"worker\": {\"node_type\": \"worker\", \"quantity\": 8}}";
     String updatePrestoEnginePath = "/presto_engines/testString";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -2751,6 +3616,11 @@ public class WatsonxDataTest {
       .worker(nodeDescriptionBodyModel)
       .build();
 
+    // Construct an instance of the PrestoEnginePropertiesEventListener model
+    PrestoEnginePropertiesEventListener prestoEnginePropertiesEventListenerModel = new PrestoEnginePropertiesEventListener.Builder()
+      .eventListenerProperty("testString")
+      .build();
+
     // Construct an instance of the PrestoEnginePropertiesGlobal model
     PrestoEnginePropertiesGlobal prestoEnginePropertiesGlobalModel = new PrestoEnginePropertiesGlobal.Builder()
       .globalProperty("enable-mixed-case-support:true")
@@ -2762,12 +3632,20 @@ public class WatsonxDataTest {
       .worker(nodeDescriptionBodyModel)
       .build();
 
+    // Construct an instance of the EnginePropertiesLogConfiguration model
+    EnginePropertiesLogConfiguration enginePropertiesLogConfigurationModel = new EnginePropertiesLogConfiguration.Builder()
+      .coordinator(nodeDescriptionBodyModel)
+      .worker(nodeDescriptionBodyModel)
+      .build();
+
     // Construct an instance of the PrestoEngineEngineProperties model
     PrestoEngineEngineProperties prestoEngineEnginePropertiesModel = new PrestoEngineEngineProperties.Builder()
       .catalog(prestoEnginePropertiesCatalogModel)
       .configuration(enginePropertiesOaiGen1ConfigurationModel)
+      .eventListener(prestoEnginePropertiesEventListenerModel)
       .global(prestoEnginePropertiesGlobalModel)
       .jvm(enginePropertiesOaiGen1JvmModel)
+      .logConfig(enginePropertiesLogConfigurationModel)
       .build();
 
     // Construct an instance of the RemoveEnginePropertiesOaiGenConfiguration model
@@ -2784,9 +3662,10 @@ public class WatsonxDataTest {
 
     // Construct an instance of the PrestoEnginePatchRemoveEngineProperties model
     PrestoEnginePatchRemoveEngineProperties prestoEnginePatchRemoveEnginePropertiesModel = new PrestoEnginePatchRemoveEngineProperties.Builder()
+      .catalog(prestoEnginePropertiesCatalogModel)
       .configuration(removeEnginePropertiesOaiGenConfigurationModel)
       .jvm(removeEnginePropertiesOaiGenJvmModel)
-      .catalog(prestoEnginePropertiesCatalogModel)
+      .eventListener(java.util.Arrays.asList())
       .build();
 
     // Construct an instance of the PrestoEnginePatch model
@@ -2894,28 +3773,28 @@ public class WatsonxDataTest {
     watsonxDataService.listPrestoEngineCatalogs(null).execute();
   }
 
-  // Test the addPrestoEngineCatalogs operation with a valid options model parameter
+  // Test the createPrestoEngineCatalogs operation with a valid options model parameter
   @Test
-  public void testAddPrestoEngineCatalogsWOptions() throws Throwable {
+  public void testCreatePrestoEngineCatalogsWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"catalogs\": [{\"actions\": [\"actions\"], \"associated_buckets\": [\"associatedBuckets\"], \"associated_databases\": [\"associatedDatabases\"], \"associated_engines\": [\"associatedEngines\"], \"catalog_name\": \"sampleCatalog\", \"catalog_type\": \"iceberg\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": \"1602839833\", \"description\": \"Iceberg catalog description\", \"hostname\": \"s3a://samplehost.com\", \"last_sync_at\": \"1602839833\", \"managed_by\": \"ibm\", \"metastore\": \"glue\", \"port\": \"3232\", \"status\": \"running\", \"sync_description\": \"Table registration was successful\", \"sync_exception\": [\"syncException\"], \"sync_status\": \"SUCCESS\", \"tags\": [\"tags\"], \"thrift_uri\": \"thrift://samplehost-catalog:4354\"}]}";
-    String addPrestoEngineCatalogsPath = "/presto_engines/testString/catalogs";
+    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_buckets\": [\"associatedBuckets\"], \"associated_databases\": [\"associatedDatabases\"], \"associated_engines\": [\"associatedEngines\"], \"catalog_name\": \"sampleCatalog\", \"catalog_type\": \"iceberg\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": \"1602839833\", \"description\": \"Iceberg catalog description\", \"hostname\": \"s3a://samplehost.com\", \"last_sync_at\": \"1602839833\", \"managed_by\": \"ibm\", \"metastore\": \"glue\", \"port\": \"3232\", \"status\": \"running\", \"sync_description\": \"Table registration was successful\", \"sync_exception\": [\"syncException\"], \"sync_status\": \"SUCCESS\", \"tags\": [\"tags\"], \"thrift_uri\": \"thrift://samplehost-catalog:4354\"}";
+    String createPrestoEngineCatalogsPath = "/presto_engines/testString/catalogs";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
       .setResponseCode(201)
       .setBody(mockResponseBody));
 
-    // Construct an instance of the AddPrestoEngineCatalogsOptions model
-    AddPrestoEngineCatalogsOptions addPrestoEngineCatalogsOptionsModel = new AddPrestoEngineCatalogsOptions.Builder()
+    // Construct an instance of the CreatePrestoEngineCatalogsOptions model
+    CreatePrestoEngineCatalogsOptions createPrestoEngineCatalogsOptionsModel = new CreatePrestoEngineCatalogsOptions.Builder()
       .engineId("testString")
-      .catalogNames("testString")
+      .catalogName("testString")
       .authInstanceId("testString")
       .build();
 
-    // Invoke addPrestoEngineCatalogs() with a valid options model and verify the result
-    Response<CatalogCollection> response = watsonxDataService.addPrestoEngineCatalogs(addPrestoEngineCatalogsOptionsModel).execute();
+    // Invoke createPrestoEngineCatalogs() with a valid options model and verify the result
+    Response<Catalog> response = watsonxDataService.createPrestoEngineCatalogs(createPrestoEngineCatalogsOptionsModel).execute();
     assertNotNull(response);
-    CatalogCollection responseObj = response.getResult();
+    Catalog responseObj = response.getResult();
     assertNotNull(responseObj);
 
     // Verify the contents of the request sent to the mock server
@@ -2924,27 +3803,27 @@ public class WatsonxDataTest {
     assertEquals(request.getMethod(), "POST");
     // Verify request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, addPrestoEngineCatalogsPath);
+    assertEquals(parsedPath, createPrestoEngineCatalogsPath);
     // Verify that there is no query string
     Map<String, String> query = TestUtilities.parseQueryString(request);
     assertNull(query);
   }
 
-  // Test the addPrestoEngineCatalogs operation with and without retries enabled
+  // Test the createPrestoEngineCatalogs operation with and without retries enabled
   @Test
-  public void testAddPrestoEngineCatalogsWRetries() throws Throwable {
+  public void testCreatePrestoEngineCatalogsWRetries() throws Throwable {
     watsonxDataService.enableRetries(4, 30);
-    testAddPrestoEngineCatalogsWOptions();
+    testCreatePrestoEngineCatalogsWOptions();
 
     watsonxDataService.disableRetries();
-    testAddPrestoEngineCatalogsWOptions();
+    testCreatePrestoEngineCatalogsWOptions();
   }
 
-  // Test the addPrestoEngineCatalogs operation with a null options model (negative test)
+  // Test the createPrestoEngineCatalogs operation with a null options model (negative test)
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testAddPrestoEngineCatalogsNoOptions() throws Throwable {
+  public void testCreatePrestoEngineCatalogsNoOptions() throws Throwable {
     server.enqueue(new MockResponse());
-    watsonxDataService.addPrestoEngineCatalogs(null).execute();
+    watsonxDataService.createPrestoEngineCatalogs(null).execute();
   }
 
   // Test the deletePrestoEngineCatalogs operation with a valid options model parameter
@@ -3376,6 +4255,943 @@ public class WatsonxDataTest {
   public void testScalePrestoEngineNoOptions() throws Throwable {
     server.enqueue(new MockResponse());
     watsonxDataService.scalePrestoEngine(null).execute();
+  }
+
+  // Test the getSalIntegration operation with a valid options model parameter
+  @Test
+  public void testGetSalIntegrationWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"category_id\": \"10e64285-bf37-4d5d-b759-bc6a46589234\", \"engine_id\": \"presto-01\", \"errors\": [{\"code\": \"unable_to_perform\", \"message\": \"Failed to process integration settings for watsonx.data instance\"}], \"governance_scope_id\": \"10e64285-bf37-4d5d-b759-bc6a46589234\", \"governance_scope_type\": \"category\", \"instance_id\": \"18b49d7a-9519-4539-8db5-ff080623c226\", \"status\": \"provisioning\", \"storage_resource_crn\": \"crn:v1:staging:public:cloud-object-storage:global:a/04e9bc47612523rr19ac22759cb69bebd:asd23df-6ada-45ff-bfe8-4343222\", \"storage_type\": \"bmcos_object_storage\", \"timestamp\": \"1715056266\", \"trial_plan\": false, \"username\": \"xyz@abc.com\"}";
+    String getSalIntegrationPath = "/sal_integrations";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetSalIntegrationOptions model
+    GetSalIntegrationOptions getSalIntegrationOptionsModel = new GetSalIntegrationOptions.Builder()
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke getSalIntegration() with a valid options model and verify the result
+    Response<SalIntegration> response = watsonxDataService.getSalIntegration(getSalIntegrationOptionsModel).execute();
+    assertNotNull(response);
+    SalIntegration responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getSalIntegrationPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the getSalIntegration operation with and without retries enabled
+  @Test
+  public void testGetSalIntegrationWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testGetSalIntegrationWOptions();
+
+    watsonxDataService.disableRetries();
+    testGetSalIntegrationWOptions();
+  }
+
+  // Test the createSalIntegration operation with a valid options model parameter
+  @Test
+  public void testCreateSalIntegrationWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"category_id\": \"10e64285-bf37-4d5d-b759-bc6a46589234\", \"engine_id\": \"presto-01\", \"errors\": [{\"code\": \"unable_to_perform\", \"message\": \"Failed to process integration settings for watsonx.data instance\"}], \"governance_scope_id\": \"10e64285-bf37-4d5d-b759-bc6a46589234\", \"governance_scope_type\": \"category\", \"instance_id\": \"18b49d7a-9519-4539-8db5-ff080623c226\", \"status\": \"provisioning\", \"storage_resource_crn\": \"crn:v1:staging:public:cloud-object-storage:global:a/04e9bc47612523rr19ac22759cb69bebd:asd23df-6ada-45ff-bfe8-4343222\", \"storage_type\": \"bmcos_object_storage\", \"timestamp\": \"1715056266\", \"trial_plan\": false, \"username\": \"xyz@abc.com\"}";
+    String createSalIntegrationPath = "/sal_integrations";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(201)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the CreateSalIntegrationOptions model
+    CreateSalIntegrationOptions createSalIntegrationOptionsModel = new CreateSalIntegrationOptions.Builder()
+      .apikey("12efd3raq")
+      .engineId("presto-01")
+      .storageResourceCrn("crn:v1:staging:public:cloud-object-storage:global:a/a7026b374f39f570d20984c1ac6ecf63:5778e94f-c8c7-46a8-9878-d5eeadb51161")
+      .storageType("bmcos_object_storage")
+      .trialPlan(true)
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke createSalIntegration() with a valid options model and verify the result
+    Response<SalIntegration> response = watsonxDataService.createSalIntegration(createSalIntegrationOptionsModel).execute();
+    assertNotNull(response);
+    SalIntegration responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, createSalIntegrationPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the createSalIntegration operation with and without retries enabled
+  @Test
+  public void testCreateSalIntegrationWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testCreateSalIntegrationWOptions();
+
+    watsonxDataService.disableRetries();
+    testCreateSalIntegrationWOptions();
+  }
+
+  // Test the createSalIntegration operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testCreateSalIntegrationNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.createSalIntegration(null).execute();
+  }
+
+  // Test the deleteSalIntegration operation with a valid options model parameter
+  @Test
+  public void testDeleteSalIntegrationWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "";
+    String deleteSalIntegrationPath = "/sal_integrations";
+    server.enqueue(new MockResponse()
+      .setResponseCode(204)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the DeleteSalIntegrationOptions model
+    DeleteSalIntegrationOptions deleteSalIntegrationOptionsModel = new DeleteSalIntegrationOptions();
+
+    // Invoke deleteSalIntegration() with a valid options model and verify the result
+    Response<Void> response = watsonxDataService.deleteSalIntegration(deleteSalIntegrationOptionsModel).execute();
+    assertNotNull(response);
+    Void responseObj = response.getResult();
+    assertNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "DELETE");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, deleteSalIntegrationPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the deleteSalIntegration operation with and without retries enabled
+  @Test
+  public void testDeleteSalIntegrationWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testDeleteSalIntegrationWOptions();
+
+    watsonxDataService.disableRetries();
+    testDeleteSalIntegrationWOptions();
+  }
+
+  // Test the updateSalIntegration operation with a valid options model parameter
+  @Test
+  public void testUpdateSalIntegrationWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"category_id\": \"10e64285-bf37-4d5d-b759-bc6a46589234\", \"engine_id\": \"presto-01\", \"errors\": [{\"code\": \"unable_to_perform\", \"message\": \"Failed to process integration settings for watsonx.data instance\"}], \"governance_scope_id\": \"10e64285-bf37-4d5d-b759-bc6a46589234\", \"governance_scope_type\": \"category\", \"instance_id\": \"18b49d7a-9519-4539-8db5-ff080623c226\", \"status\": \"provisioning\", \"storage_resource_crn\": \"crn:v1:staging:public:cloud-object-storage:global:a/04e9bc47612523rr19ac22759cb69bebd:asd23df-6ada-45ff-bfe8-4343222\", \"storage_type\": \"bmcos_object_storage\", \"timestamp\": \"1715056266\", \"trial_plan\": false, \"username\": \"xyz@abc.com\"}";
+    String updateSalIntegrationPath = "/sal_integrations";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the SalIntegrationPatch model
+    SalIntegrationPatch salIntegrationPatchModel = new SalIntegrationPatch.Builder()
+      .op("add")
+      .path("storage")
+      .value("new-apikey")
+      .build();
+    Map<String, Object> salIntegrationPatchModelAsPatch = salIntegrationPatchModel.asPatch();
+
+    // Construct an instance of the UpdateSalIntegrationOptions model
+    UpdateSalIntegrationOptions updateSalIntegrationOptionsModel = new UpdateSalIntegrationOptions.Builder()
+      .body(salIntegrationPatchModelAsPatch)
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke updateSalIntegration() with a valid options model and verify the result
+    Response<SalIntegration> response = watsonxDataService.updateSalIntegration(updateSalIntegrationOptionsModel).execute();
+    assertNotNull(response);
+    SalIntegration responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "PATCH");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, updateSalIntegrationPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the updateSalIntegration operation with and without retries enabled
+  @Test
+  public void testUpdateSalIntegrationWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testUpdateSalIntegrationWOptions();
+
+    watsonxDataService.disableRetries();
+    testUpdateSalIntegrationWOptions();
+  }
+
+  // Test the updateSalIntegration operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testUpdateSalIntegrationNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.updateSalIntegration(null).execute();
+  }
+
+  // Test the createSalIntegrationEnrichment operation with a valid options model parameter
+  @Test
+  public void testCreateSalIntegrationEnrichmentWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "";
+    String createSalIntegrationEnrichmentPath = "/sal_integrations/enrichment";
+    server.enqueue(new MockResponse()
+      .setResponseCode(204)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the EnrichmentObj model
+    EnrichmentObj enrichmentObjModel = new EnrichmentObj.Builder()
+      .catalog("iceberg_data")
+      .operation("create")
+      .schema("testString")
+      .tables(java.util.Arrays.asList("testString"))
+      .build();
+
+    // Construct an instance of the CreateSalIntegrationEnrichmentOptions model
+    CreateSalIntegrationEnrichmentOptions createSalIntegrationEnrichmentOptionsModel = new CreateSalIntegrationEnrichmentOptions.Builder()
+      .enrichmentPrototype(enrichmentObjModel)
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke createSalIntegrationEnrichment() with a valid options model and verify the result
+    Response<Void> response = watsonxDataService.createSalIntegrationEnrichment(createSalIntegrationEnrichmentOptionsModel).execute();
+    assertNotNull(response);
+    Void responseObj = response.getResult();
+    assertNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, createSalIntegrationEnrichmentPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the createSalIntegrationEnrichment operation with and without retries enabled
+  @Test
+  public void testCreateSalIntegrationEnrichmentWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testCreateSalIntegrationEnrichmentWOptions();
+
+    watsonxDataService.disableRetries();
+    testCreateSalIntegrationEnrichmentWOptions();
+  }
+
+  // Test the getSalIntegrationEnrichmentAssets operation with a valid options model parameter
+  @Test
+  public void testGetSalIntegrationEnrichmentAssetsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"enrichment_asset\": {\"asset_attributes\": [\"assetAttributes\"], \"asset_id\": \"ee0383b9-dcab-4c1a-b03d-bf521837b6ed\", \"asset_name\": \"newtable\", \"resource_key\": \"0000:0000:0000:0000:0000:FFFF:9EB0:04E2|31134|:/iceberg_data/new_schema/sampletable\", \"schema_name\": \"sampleschema\"}}";
+    String getSalIntegrationEnrichmentAssetsPath = "/sal_integrations/enrichment_assets";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetSalIntegrationEnrichmentAssetsOptions model
+    GetSalIntegrationEnrichmentAssetsOptions getSalIntegrationEnrichmentAssetsOptionsModel = new GetSalIntegrationEnrichmentAssetsOptions.Builder()
+      .projectId("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke getSalIntegrationEnrichmentAssets() with a valid options model and verify the result
+    Response<SalIntegrationEnrichmentAssets> response = watsonxDataService.getSalIntegrationEnrichmentAssets(getSalIntegrationEnrichmentAssetsOptionsModel).execute();
+    assertNotNull(response);
+    SalIntegrationEnrichmentAssets responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getSalIntegrationEnrichmentAssetsPath);
+    // Verify query params
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    assertEquals(query.get("project_id"), "testString");
+  }
+
+  // Test the getSalIntegrationEnrichmentAssets operation with and without retries enabled
+  @Test
+  public void testGetSalIntegrationEnrichmentAssetsWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testGetSalIntegrationEnrichmentAssetsWOptions();
+
+    watsonxDataService.disableRetries();
+    testGetSalIntegrationEnrichmentAssetsWOptions();
+  }
+
+  // Test the getSalIntegrationEnrichmentDataAsset operation with a valid options model parameter
+  @Test
+  public void testGetSalIntegrationEnrichmentDataAssetWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"asset\": \"{}\"}";
+    String getSalIntegrationEnrichmentDataAssetPath = "/sal_integrations/enrichment_data_asset";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetSalIntegrationEnrichmentDataAssetOptions model
+    GetSalIntegrationEnrichmentDataAssetOptions getSalIntegrationEnrichmentDataAssetOptionsModel = new GetSalIntegrationEnrichmentDataAssetOptions.Builder()
+      .projectId("testString")
+      .assetId("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke getSalIntegrationEnrichmentDataAsset() with a valid options model and verify the result
+    Response<SalIntegrationEnrichmentDataAsset> response = watsonxDataService.getSalIntegrationEnrichmentDataAsset(getSalIntegrationEnrichmentDataAssetOptionsModel).execute();
+    assertNotNull(response);
+    SalIntegrationEnrichmentDataAsset responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getSalIntegrationEnrichmentDataAssetPath);
+    // Verify query params
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    assertEquals(query.get("project_id"), "testString");
+    assertEquals(query.get("asset_id"), "testString");
+  }
+
+  // Test the getSalIntegrationEnrichmentDataAsset operation with and without retries enabled
+  @Test
+  public void testGetSalIntegrationEnrichmentDataAssetWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testGetSalIntegrationEnrichmentDataAssetWOptions();
+
+    watsonxDataService.disableRetries();
+    testGetSalIntegrationEnrichmentDataAssetWOptions();
+  }
+
+  // Test the getSalIntegrationEnrichmentJobRunLogs operation with a valid options model parameter
+  @Test
+  public void testGetSalIntegrationEnrichmentJobRunLogsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"results\": [\"results\"], \"total_count\": 12}";
+    String getSalIntegrationEnrichmentJobRunLogsPath = "/sal_integrations/enrichment_job_run_logs";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetSalIntegrationEnrichmentJobRunLogsOptions model
+    GetSalIntegrationEnrichmentJobRunLogsOptions getSalIntegrationEnrichmentJobRunLogsOptionsModel = new GetSalIntegrationEnrichmentJobRunLogsOptions.Builder()
+      .jobId("testString")
+      .jobRunId("testString")
+      .projectId("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke getSalIntegrationEnrichmentJobRunLogs() with a valid options model and verify the result
+    Response<SalIntegrationEnrichmentJobRunLogs> response = watsonxDataService.getSalIntegrationEnrichmentJobRunLogs(getSalIntegrationEnrichmentJobRunLogsOptionsModel).execute();
+    assertNotNull(response);
+    SalIntegrationEnrichmentJobRunLogs responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getSalIntegrationEnrichmentJobRunLogsPath);
+    // Verify query params
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    assertEquals(query.get("job_id"), "testString");
+    assertEquals(query.get("job_run_id"), "testString");
+    assertEquals(query.get("project_id"), "testString");
+  }
+
+  // Test the getSalIntegrationEnrichmentJobRunLogs operation with and without retries enabled
+  @Test
+  public void testGetSalIntegrationEnrichmentJobRunLogsWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testGetSalIntegrationEnrichmentJobRunLogsWOptions();
+
+    watsonxDataService.disableRetries();
+    testGetSalIntegrationEnrichmentJobRunLogsWOptions();
+  }
+
+  // Test the getSalIntegrationEnrichmentJobRuns operation with a valid options model parameter
+  @Test
+  public void testGetSalIntegrationEnrichmentJobRunsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"response\": \"{}\"}";
+    String getSalIntegrationEnrichmentJobRunsPath = "/sal_integrations/enrichment_job_runs";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetSalIntegrationEnrichmentJobRunsOptions model
+    GetSalIntegrationEnrichmentJobRunsOptions getSalIntegrationEnrichmentJobRunsOptionsModel = new GetSalIntegrationEnrichmentJobRunsOptions.Builder()
+      .jobId("testString")
+      .projectId("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke getSalIntegrationEnrichmentJobRuns() with a valid options model and verify the result
+    Response<SalIntegrationEnrichmentJobRun> response = watsonxDataService.getSalIntegrationEnrichmentJobRuns(getSalIntegrationEnrichmentJobRunsOptionsModel).execute();
+    assertNotNull(response);
+    SalIntegrationEnrichmentJobRun responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getSalIntegrationEnrichmentJobRunsPath);
+    // Verify query params
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    assertEquals(query.get("job_id"), "testString");
+    assertEquals(query.get("project_id"), "testString");
+  }
+
+  // Test the getSalIntegrationEnrichmentJobRuns operation with and without retries enabled
+  @Test
+  public void testGetSalIntegrationEnrichmentJobRunsWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testGetSalIntegrationEnrichmentJobRunsWOptions();
+
+    watsonxDataService.disableRetries();
+    testGetSalIntegrationEnrichmentJobRunsWOptions();
+  }
+
+  // Test the getSalIntegrationEnrichmentJobs operation with a valid options model parameter
+  @Test
+  public void testGetSalIntegrationEnrichmentJobsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"jobs\": {\"results\": [{\"entity\": {\"job\": {\"asset_ref\": \"8688a3b6-a946-499e-a93c-b7d099db80dd\", \"asset_ref_type\": \"metadata_enrichment_area\", \"configuration\": {\"env_type\": \"envType\", \"env_variables\": [\"envVariables\"]}, \"enable_notifications\": false, \"future_scheduled_runs\": [\"futureScheduledRuns\"], \"last_run_initiator\": \"deprecated field\", \"last_run_status\": \"deprecated field\", \"last_run_status_timestamp\": 0, \"last_run_time\": \"deprecated field\", \"project_name\": \"SAL Mapping /iceberg_data/new_schema 9aae5be3-87cf-4c31-b17d-9256ab42c14e\", \"schedule_creator_id\": \"scheduleCreatorId\", \"schedule_id\": \"scheduleId\", \"schedule_info\": {\"frequency\": \"frequency\"}, \"task_credentials_support\": {\"account_id\": \"04e9bc4761254b719ac22759cb69bebd\", \"task_credentials_enabled\": true, \"user_id\": \"IBMid-55000832RK\"}}}, \"metadata\": {\"asset_id\": \"ea73ce44-8aa0-4c75-bd69-6ca7074a1030\", \"name\": \"SAL_MDE job\", \"owner_id\": \"IBMid-55000832RK\", \"version\": 0}}], \"total_rows\": 1}}";
+    String getSalIntegrationEnrichmentJobsPath = "/sal_integrations/enrichment_jobs";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetSalIntegrationEnrichmentJobsOptions model
+    GetSalIntegrationEnrichmentJobsOptions getSalIntegrationEnrichmentJobsOptionsModel = new GetSalIntegrationEnrichmentJobsOptions.Builder()
+      .wkcProjectId("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke getSalIntegrationEnrichmentJobs() with a valid options model and verify the result
+    Response<SalIntegrationEnrichmentJobs> response = watsonxDataService.getSalIntegrationEnrichmentJobs(getSalIntegrationEnrichmentJobsOptionsModel).execute();
+    assertNotNull(response);
+    SalIntegrationEnrichmentJobs responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getSalIntegrationEnrichmentJobsPath);
+    // Verify query params
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    assertEquals(query.get("wkc_project_id"), "testString");
+  }
+
+  // Test the getSalIntegrationEnrichmentJobs operation with and without retries enabled
+  @Test
+  public void testGetSalIntegrationEnrichmentJobsWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testGetSalIntegrationEnrichmentJobsWOptions();
+
+    watsonxDataService.disableRetries();
+    testGetSalIntegrationEnrichmentJobsWOptions();
+  }
+
+  // Test the getSalIntegrationGlossaryTerms operation with a valid options model parameter
+  @Test
+  public void testGetSalIntegrationGlossaryTermsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"glossary_term\": {\"description\": \"First Name\", \"name\": \"Name\"}}";
+    String getSalIntegrationGlossaryTermsPath = "/sal_integrations/glossary_terms";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetSalIntegrationGlossaryTermsOptions model
+    GetSalIntegrationGlossaryTermsOptions getSalIntegrationGlossaryTermsOptionsModel = new GetSalIntegrationGlossaryTermsOptions.Builder()
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke getSalIntegrationGlossaryTerms() with a valid options model and verify the result
+    Response<SalIntegrationGlossaryTerms> response = watsonxDataService.getSalIntegrationGlossaryTerms(getSalIntegrationGlossaryTermsOptionsModel).execute();
+    assertNotNull(response);
+    SalIntegrationGlossaryTerms responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getSalIntegrationGlossaryTermsPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the getSalIntegrationGlossaryTerms operation with and without retries enabled
+  @Test
+  public void testGetSalIntegrationGlossaryTermsWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testGetSalIntegrationGlossaryTermsWOptions();
+
+    watsonxDataService.disableRetries();
+    testGetSalIntegrationGlossaryTermsWOptions();
+  }
+
+  // Test the getSalIntegrationMappings operation with a valid options model parameter
+  @Test
+  public void testGetSalIntegrationMappingsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"wkc_catalog_id\": \"iceberg_data\", \"wkc_project_id\": \"create\"}";
+    String getSalIntegrationMappingsPath = "/sal_integrations/mappings";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetSalIntegrationMappingsOptions model
+    GetSalIntegrationMappingsOptions getSalIntegrationMappingsOptionsModel = new GetSalIntegrationMappingsOptions.Builder()
+      .catalogName("testString")
+      .schemaName("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke getSalIntegrationMappings() with a valid options model and verify the result
+    Response<SalIntegrationMappings> response = watsonxDataService.getSalIntegrationMappings(getSalIntegrationMappingsOptionsModel).execute();
+    assertNotNull(response);
+    SalIntegrationMappings responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getSalIntegrationMappingsPath);
+    // Verify query params
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    assertEquals(query.get("catalog_name"), "testString");
+    assertEquals(query.get("schema_name"), "testString");
+  }
+
+  // Test the getSalIntegrationMappings operation with and without retries enabled
+  @Test
+  public void testGetSalIntegrationMappingsWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testGetSalIntegrationMappingsWOptions();
+
+    watsonxDataService.disableRetries();
+    testGetSalIntegrationMappingsWOptions();
+  }
+
+  // Test the getSalIntegrationMappings operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetSalIntegrationMappingsNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.getSalIntegrationMappings(null).execute();
+  }
+
+  // Test the getSalIntegrationEnrichmentGlobalSettings operation with a valid options model parameter
+  @Test
+  public void testGetSalIntegrationEnrichmentGlobalSettingsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"semantic_expansion\": {\"description_generation\": true, \"description_generation_configuration\": {\"assignment_threshold\": 0.14, \"suggestion_threshold\": 0.9}, \"name_expansion\": true, \"name_expansion_configuration\": {\"assignment_threshold\": 0.1, \"suggestion_threshold\": 0.1}}, \"term_assignment\": {\"class_based_assignments\": false, \"evaluate_negative_assignments\": false, \"llm_based_assignments\": false, \"ml_based_assignments_custom\": false, \"ml_based_assignments_default\": false, \"name_matching\": false, \"term_assignment_threshold\": 0.3, \"term_suggestion_threshold\": 0.4}}";
+    String getSalIntegrationEnrichmentGlobalSettingsPath = "/sal_integrations/metadata_enrichment_global_settings";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetSalIntegrationEnrichmentGlobalSettingsOptions model
+    GetSalIntegrationEnrichmentGlobalSettingsOptions getSalIntegrationEnrichmentGlobalSettingsOptionsModel = new GetSalIntegrationEnrichmentGlobalSettingsOptions.Builder()
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke getSalIntegrationEnrichmentGlobalSettings() with a valid options model and verify the result
+    Response<SalIntegrationEnrichmentSettings> response = watsonxDataService.getSalIntegrationEnrichmentGlobalSettings(getSalIntegrationEnrichmentGlobalSettingsOptionsModel).execute();
+    assertNotNull(response);
+    SalIntegrationEnrichmentSettings responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getSalIntegrationEnrichmentGlobalSettingsPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the getSalIntegrationEnrichmentGlobalSettings operation with and without retries enabled
+  @Test
+  public void testGetSalIntegrationEnrichmentGlobalSettingsWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testGetSalIntegrationEnrichmentGlobalSettingsWOptions();
+
+    watsonxDataService.disableRetries();
+    testGetSalIntegrationEnrichmentGlobalSettingsWOptions();
+  }
+
+  // Test the createSalIntegrationEnrichmentGlobalSettings operation with a valid options model parameter
+  @Test
+  public void testCreateSalIntegrationEnrichmentGlobalSettingsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"semantic_expansion\": {\"description_generation\": true, \"description_generation_configuration\": {\"assignment_threshold\": 0.14, \"suggestion_threshold\": 0.9}, \"name_expansion\": true, \"name_expansion_configuration\": {\"assignment_threshold\": 0.1, \"suggestion_threshold\": 0.1}}, \"term_assignment\": {\"class_based_assignments\": false, \"evaluate_negative_assignments\": false, \"llm_based_assignments\": false, \"ml_based_assignments_custom\": false, \"ml_based_assignments_default\": false, \"name_matching\": false, \"term_assignment_threshold\": 0.3, \"term_suggestion_threshold\": 0.4}}";
+    String createSalIntegrationEnrichmentGlobalSettingsPath = "/sal_integrations/metadata_enrichment_global_settings";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(201)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the SalIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfiguration model
+    SalIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfiguration salIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfigurationModel = new SalIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfiguration.Builder()
+      .assignmentThreshold(Double.valueOf("0.14"))
+      .suggestionThreshold(Double.valueOf("0.9"))
+      .build();
+
+    // Construct an instance of the SalIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfiguration model
+    SalIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfiguration salIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfigurationModel = new SalIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfiguration.Builder()
+      .assignmentThreshold(Double.valueOf("0.1"))
+      .suggestionThreshold(Double.valueOf("0.1"))
+      .build();
+
+    // Construct an instance of the SalIntegrationEnrichmentSettingsSemanticExpansion model
+    SalIntegrationEnrichmentSettingsSemanticExpansion salIntegrationEnrichmentSettingsSemanticExpansionModel = new SalIntegrationEnrichmentSettingsSemanticExpansion.Builder()
+      .descriptionGeneration(true)
+      .descriptionGenerationConfiguration(salIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfigurationModel)
+      .nameExpansion(true)
+      .nameExpansionConfiguration(salIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfigurationModel)
+      .build();
+
+    // Construct an instance of the SalIntegrationEnrichmentSettingsTermAssignment model
+    SalIntegrationEnrichmentSettingsTermAssignment salIntegrationEnrichmentSettingsTermAssignmentModel = new SalIntegrationEnrichmentSettingsTermAssignment.Builder()
+      .classBasedAssignments(false)
+      .evaluateNegativeAssignments(false)
+      .llmBasedAssignments(false)
+      .mlBasedAssignmentsCustom(false)
+      .mlBasedAssignmentsDefault(false)
+      .nameMatching(false)
+      .termAssignmentThreshold(Double.valueOf("0.3"))
+      .termSuggestionThreshold(Double.valueOf("0.4"))
+      .build();
+
+    // Construct an instance of the CreateSalIntegrationEnrichmentGlobalSettingsOptions model
+    CreateSalIntegrationEnrichmentGlobalSettingsOptions createSalIntegrationEnrichmentGlobalSettingsOptionsModel = new CreateSalIntegrationEnrichmentGlobalSettingsOptions.Builder()
+      .semanticExpansion(salIntegrationEnrichmentSettingsSemanticExpansionModel)
+      .termAssignment(salIntegrationEnrichmentSettingsTermAssignmentModel)
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke createSalIntegrationEnrichmentGlobalSettings() with a valid options model and verify the result
+    Response<SalIntegrationEnrichmentSettings> response = watsonxDataService.createSalIntegrationEnrichmentGlobalSettings(createSalIntegrationEnrichmentGlobalSettingsOptionsModel).execute();
+    assertNotNull(response);
+    SalIntegrationEnrichmentSettings responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, createSalIntegrationEnrichmentGlobalSettingsPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the createSalIntegrationEnrichmentGlobalSettings operation with and without retries enabled
+  @Test
+  public void testCreateSalIntegrationEnrichmentGlobalSettingsWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testCreateSalIntegrationEnrichmentGlobalSettingsWOptions();
+
+    watsonxDataService.disableRetries();
+    testCreateSalIntegrationEnrichmentGlobalSettingsWOptions();
+  }
+
+  // Test the getSalIntegrationEnrichmentSettings operation with a valid options model parameter
+  @Test
+  public void testGetSalIntegrationEnrichmentSettingsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"semantic_expansion\": {\"description_generation\": true, \"description_generation_configuration\": {\"assignment_threshold\": 0.14, \"suggestion_threshold\": 0.9}, \"name_expansion\": true, \"name_expansion_configuration\": {\"assignment_threshold\": 0.1, \"suggestion_threshold\": 0.1}}, \"term_assignment\": {\"class_based_assignments\": false, \"evaluate_negative_assignments\": false, \"llm_based_assignments\": false, \"ml_based_assignments_custom\": false, \"ml_based_assignments_default\": false, \"name_matching\": false, \"term_assignment_threshold\": 0.3, \"term_suggestion_threshold\": 0.4}}";
+    String getSalIntegrationEnrichmentSettingsPath = "/sal_integrations/metadata_enrichment_settings";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetSalIntegrationEnrichmentSettingsOptions model
+    GetSalIntegrationEnrichmentSettingsOptions getSalIntegrationEnrichmentSettingsOptionsModel = new GetSalIntegrationEnrichmentSettingsOptions.Builder()
+      .projectId("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke getSalIntegrationEnrichmentSettings() with a valid options model and verify the result
+    Response<SalIntegrationEnrichmentSettings> response = watsonxDataService.getSalIntegrationEnrichmentSettings(getSalIntegrationEnrichmentSettingsOptionsModel).execute();
+    assertNotNull(response);
+    SalIntegrationEnrichmentSettings responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getSalIntegrationEnrichmentSettingsPath);
+    // Verify query params
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    assertEquals(query.get("project_id"), "testString");
+  }
+
+  // Test the getSalIntegrationEnrichmentSettings operation with and without retries enabled
+  @Test
+  public void testGetSalIntegrationEnrichmentSettingsWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testGetSalIntegrationEnrichmentSettingsWOptions();
+
+    watsonxDataService.disableRetries();
+    testGetSalIntegrationEnrichmentSettingsWOptions();
+  }
+
+  // Test the createSalIntegrationEnrichmentSettings operation with a valid options model parameter
+  @Test
+  public void testCreateSalIntegrationEnrichmentSettingsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "";
+    String createSalIntegrationEnrichmentSettingsPath = "/sal_integrations/metadata_enrichment_settings";
+    server.enqueue(new MockResponse()
+      .setResponseCode(204)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the SalIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfiguration model
+    SalIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfiguration salIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfigurationModel = new SalIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfiguration.Builder()
+      .assignmentThreshold(Double.valueOf("0.14"))
+      .suggestionThreshold(Double.valueOf("0.9"))
+      .build();
+
+    // Construct an instance of the SalIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfiguration model
+    SalIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfiguration salIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfigurationModel = new SalIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfiguration.Builder()
+      .assignmentThreshold(Double.valueOf("0.1"))
+      .suggestionThreshold(Double.valueOf("0.1"))
+      .build();
+
+    // Construct an instance of the SalIntegrationEnrichmentSettingsSemanticExpansion model
+    SalIntegrationEnrichmentSettingsSemanticExpansion salIntegrationEnrichmentSettingsSemanticExpansionModel = new SalIntegrationEnrichmentSettingsSemanticExpansion.Builder()
+      .descriptionGeneration(true)
+      .descriptionGenerationConfiguration(salIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfigurationModel)
+      .nameExpansion(true)
+      .nameExpansionConfiguration(salIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfigurationModel)
+      .build();
+
+    // Construct an instance of the SalIntegrationEnrichmentSettingsTermAssignment model
+    SalIntegrationEnrichmentSettingsTermAssignment salIntegrationEnrichmentSettingsTermAssignmentModel = new SalIntegrationEnrichmentSettingsTermAssignment.Builder()
+      .classBasedAssignments(false)
+      .evaluateNegativeAssignments(false)
+      .llmBasedAssignments(false)
+      .mlBasedAssignmentsCustom(false)
+      .mlBasedAssignmentsDefault(false)
+      .nameMatching(false)
+      .termAssignmentThreshold(Double.valueOf("0.3"))
+      .termSuggestionThreshold(Double.valueOf("0.4"))
+      .build();
+
+    // Construct an instance of the CreateSalIntegrationEnrichmentSettingsOptions model
+    CreateSalIntegrationEnrichmentSettingsOptions createSalIntegrationEnrichmentSettingsOptionsModel = new CreateSalIntegrationEnrichmentSettingsOptions.Builder()
+      .semanticExpansion(salIntegrationEnrichmentSettingsSemanticExpansionModel)
+      .termAssignment(salIntegrationEnrichmentSettingsTermAssignmentModel)
+      .projectId("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke createSalIntegrationEnrichmentSettings() with a valid options model and verify the result
+    Response<Void> response = watsonxDataService.createSalIntegrationEnrichmentSettings(createSalIntegrationEnrichmentSettingsOptionsModel).execute();
+    assertNotNull(response);
+    Void responseObj = response.getResult();
+    assertNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, createSalIntegrationEnrichmentSettingsPath);
+    // Verify query params
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    assertEquals(query.get("project_id"), "testString");
+  }
+
+  // Test the createSalIntegrationEnrichmentSettings operation with and without retries enabled
+  @Test
+  public void testCreateSalIntegrationEnrichmentSettingsWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testCreateSalIntegrationEnrichmentSettingsWOptions();
+
+    watsonxDataService.disableRetries();
+    testCreateSalIntegrationEnrichmentSettingsWOptions();
+  }
+
+  // Test the createSalIntegrationUploadGlossary operation with a valid options model parameter
+  @Test
+  public void testCreateSalIntegrationUploadGlossaryWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"process_id\": \"18b49d7a-9519-4539-8db5-ff080623c226\"}";
+    String createSalIntegrationUploadGlossaryPath = "/sal_integrations/upload_glossary";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(201)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the CreateSalIntegrationUploadGlossaryOptions model
+    CreateSalIntegrationUploadGlossaryOptions createSalIntegrationUploadGlossaryOptionsModel = new CreateSalIntegrationUploadGlossaryOptions.Builder()
+      .replaceOption("all")
+      .glossaryCsv(TestUtilities.createMockStream("This is a mock file."))
+      .glossaryCsvContentType("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke createSalIntegrationUploadGlossary() with a valid options model and verify the result
+    Response<SalIntegrationUploadGlossary> response = watsonxDataService.createSalIntegrationUploadGlossary(createSalIntegrationUploadGlossaryOptionsModel).execute();
+    assertNotNull(response);
+    SalIntegrationUploadGlossary responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, createSalIntegrationUploadGlossaryPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the createSalIntegrationUploadGlossary operation with and without retries enabled
+  @Test
+  public void testCreateSalIntegrationUploadGlossaryWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testCreateSalIntegrationUploadGlossaryWOptions();
+
+    watsonxDataService.disableRetries();
+    testCreateSalIntegrationUploadGlossaryWOptions();
+  }
+
+  // Test the createSalIntegrationUploadGlossary operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testCreateSalIntegrationUploadGlossaryNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.createSalIntegrationUploadGlossary(null).execute();
+  }
+
+  // Test the getSalIntegrationUploadGlossaryStatus operation with a valid options model parameter
+  @Test
+  public void testGetSalIntegrationUploadGlossaryStatusWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"response\": \"Import status available\"}";
+    String getSalIntegrationUploadGlossaryStatusPath = "/sal_integrations/upload_glossary_status";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetSalIntegrationUploadGlossaryStatusOptions model
+    GetSalIntegrationUploadGlossaryStatusOptions getSalIntegrationUploadGlossaryStatusOptionsModel = new GetSalIntegrationUploadGlossaryStatusOptions.Builder()
+      .processId("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke getSalIntegrationUploadGlossaryStatus() with a valid options model and verify the result
+    Response<SalIntegrationUploadGlossaryStatus> response = watsonxDataService.getSalIntegrationUploadGlossaryStatus(getSalIntegrationUploadGlossaryStatusOptionsModel).execute();
+    assertNotNull(response);
+    SalIntegrationUploadGlossaryStatus responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getSalIntegrationUploadGlossaryStatusPath);
+    // Verify query params
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    assertEquals(query.get("process_id"), "testString");
+  }
+
+  // Test the getSalIntegrationUploadGlossaryStatus operation with and without retries enabled
+  @Test
+  public void testGetSalIntegrationUploadGlossaryStatusWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testGetSalIntegrationUploadGlossaryStatusWOptions();
+
+    watsonxDataService.disableRetries();
+    testGetSalIntegrationUploadGlossaryStatusWOptions();
   }
 
   // Test the listSparkEngines operation with a valid options model parameter
@@ -3991,28 +5807,28 @@ public class WatsonxDataTest {
     watsonxDataService.listSparkEngineCatalogs(null).execute();
   }
 
-  // Test the addSparkEngineCatalogs operation with a valid options model parameter
+  // Test the createSparkEngineCatalogs operation with a valid options model parameter
   @Test
-  public void testAddSparkEngineCatalogsWOptions() throws Throwable {
+  public void testCreateSparkEngineCatalogsWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"catalogs\": [{\"actions\": [\"actions\"], \"associated_buckets\": [\"associatedBuckets\"], \"associated_databases\": [\"associatedDatabases\"], \"associated_engines\": [\"associatedEngines\"], \"catalog_name\": \"sampleCatalog\", \"catalog_type\": \"iceberg\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": \"1602839833\", \"description\": \"Iceberg catalog description\", \"hostname\": \"s3a://samplehost.com\", \"last_sync_at\": \"1602839833\", \"managed_by\": \"ibm\", \"metastore\": \"glue\", \"port\": \"3232\", \"status\": \"running\", \"sync_description\": \"Table registration was successful\", \"sync_exception\": [\"syncException\"], \"sync_status\": \"SUCCESS\", \"tags\": [\"tags\"], \"thrift_uri\": \"thrift://samplehost-catalog:4354\"}]}";
-    String addSparkEngineCatalogsPath = "/spark_engines/testString/catalogs";
+    String mockResponseBody = "{\"actions\": [\"actions\"], \"associated_buckets\": [\"associatedBuckets\"], \"associated_databases\": [\"associatedDatabases\"], \"associated_engines\": [\"associatedEngines\"], \"catalog_name\": \"sampleCatalog\", \"catalog_type\": \"iceberg\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": \"1602839833\", \"description\": \"Iceberg catalog description\", \"hostname\": \"s3a://samplehost.com\", \"last_sync_at\": \"1602839833\", \"managed_by\": \"ibm\", \"metastore\": \"glue\", \"port\": \"3232\", \"status\": \"running\", \"sync_description\": \"Table registration was successful\", \"sync_exception\": [\"syncException\"], \"sync_status\": \"SUCCESS\", \"tags\": [\"tags\"], \"thrift_uri\": \"thrift://samplehost-catalog:4354\"}";
+    String createSparkEngineCatalogsPath = "/spark_engines/testString/catalogs";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
       .setResponseCode(201)
       .setBody(mockResponseBody));
 
-    // Construct an instance of the AddSparkEngineCatalogsOptions model
-    AddSparkEngineCatalogsOptions addSparkEngineCatalogsOptionsModel = new AddSparkEngineCatalogsOptions.Builder()
+    // Construct an instance of the CreateSparkEngineCatalogsOptions model
+    CreateSparkEngineCatalogsOptions createSparkEngineCatalogsOptionsModel = new CreateSparkEngineCatalogsOptions.Builder()
       .engineId("testString")
-      .catalogNames("testString")
+      .catalogName("testString")
       .authInstanceId("testString")
       .build();
 
-    // Invoke addSparkEngineCatalogs() with a valid options model and verify the result
-    Response<CatalogCollection> response = watsonxDataService.addSparkEngineCatalogs(addSparkEngineCatalogsOptionsModel).execute();
+    // Invoke createSparkEngineCatalogs() with a valid options model and verify the result
+    Response<Catalog> response = watsonxDataService.createSparkEngineCatalogs(createSparkEngineCatalogsOptionsModel).execute();
     assertNotNull(response);
-    CatalogCollection responseObj = response.getResult();
+    Catalog responseObj = response.getResult();
     assertNotNull(responseObj);
 
     // Verify the contents of the request sent to the mock server
@@ -4021,27 +5837,27 @@ public class WatsonxDataTest {
     assertEquals(request.getMethod(), "POST");
     // Verify request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, addSparkEngineCatalogsPath);
+    assertEquals(parsedPath, createSparkEngineCatalogsPath);
     // Verify that there is no query string
     Map<String, String> query = TestUtilities.parseQueryString(request);
     assertNull(query);
   }
 
-  // Test the addSparkEngineCatalogs operation with and without retries enabled
+  // Test the createSparkEngineCatalogs operation with and without retries enabled
   @Test
-  public void testAddSparkEngineCatalogsWRetries() throws Throwable {
+  public void testCreateSparkEngineCatalogsWRetries() throws Throwable {
     watsonxDataService.enableRetries(4, 30);
-    testAddSparkEngineCatalogsWOptions();
+    testCreateSparkEngineCatalogsWOptions();
 
     watsonxDataService.disableRetries();
-    testAddSparkEngineCatalogsWOptions();
+    testCreateSparkEngineCatalogsWOptions();
   }
 
-  // Test the addSparkEngineCatalogs operation with a null options model (negative test)
+  // Test the createSparkEngineCatalogs operation with a null options model (negative test)
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testAddSparkEngineCatalogsNoOptions() throws Throwable {
+  public void testCreateSparkEngineCatalogsNoOptions() throws Throwable {
     server.enqueue(new MockResponse());
-    watsonxDataService.addSparkEngineCatalogs(null).execute();
+    watsonxDataService.createSparkEngineCatalogs(null).execute();
   }
 
   // Test the deleteSparkEngineCatalogs operation with a valid options model parameter
@@ -4307,25 +6123,25 @@ public class WatsonxDataTest {
     watsonxDataService.deleteSparkEngineHistoryServer(null).execute();
   }
 
-  // Test the createSparkEnginePause operation with a valid options model parameter
+  // Test the pauseSparkEngine operation with a valid options model parameter
   @Test
-  public void testCreateSparkEnginePauseWOptions() throws Throwable {
+  public void testPauseSparkEngineWOptions() throws Throwable {
     // Register a mock response
     String mockResponseBody = "{\"message\": \"message\", \"message_code\": \"messageCode\"}";
-    String createSparkEnginePausePath = "/spark_engines/testString/pause";
+    String pauseSparkEnginePath = "/spark_engines/testString/pause";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
-      .setResponseCode(201)
+      .setResponseCode(200)
       .setBody(mockResponseBody));
 
-    // Construct an instance of the CreateSparkEnginePauseOptions model
-    CreateSparkEnginePauseOptions createSparkEnginePauseOptionsModel = new CreateSparkEnginePauseOptions.Builder()
+    // Construct an instance of the PauseSparkEngineOptions model
+    PauseSparkEngineOptions pauseSparkEngineOptionsModel = new PauseSparkEngineOptions.Builder()
       .engineId("testString")
       .authInstanceId("testString")
       .build();
 
-    // Invoke createSparkEnginePause() with a valid options model and verify the result
-    Response<SuccessResponse> response = watsonxDataService.createSparkEnginePause(createSparkEnginePauseOptionsModel).execute();
+    // Invoke pauseSparkEngine() with a valid options model and verify the result
+    Response<SuccessResponse> response = watsonxDataService.pauseSparkEngine(pauseSparkEngineOptionsModel).execute();
     assertNotNull(response);
     SuccessResponse responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -4336,48 +6152,48 @@ public class WatsonxDataTest {
     assertEquals(request.getMethod(), "POST");
     // Verify request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, createSparkEnginePausePath);
+    assertEquals(parsedPath, pauseSparkEnginePath);
     // Verify that there is no query string
     Map<String, String> query = TestUtilities.parseQueryString(request);
     assertNull(query);
   }
 
-  // Test the createSparkEnginePause operation with and without retries enabled
+  // Test the pauseSparkEngine operation with and without retries enabled
   @Test
-  public void testCreateSparkEnginePauseWRetries() throws Throwable {
+  public void testPauseSparkEngineWRetries() throws Throwable {
     watsonxDataService.enableRetries(4, 30);
-    testCreateSparkEnginePauseWOptions();
+    testPauseSparkEngineWOptions();
 
     watsonxDataService.disableRetries();
-    testCreateSparkEnginePauseWOptions();
+    testPauseSparkEngineWOptions();
   }
 
-  // Test the createSparkEnginePause operation with a null options model (negative test)
+  // Test the pauseSparkEngine operation with a null options model (negative test)
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testCreateSparkEnginePauseNoOptions() throws Throwable {
+  public void testPauseSparkEngineNoOptions() throws Throwable {
     server.enqueue(new MockResponse());
-    watsonxDataService.createSparkEnginePause(null).execute();
+    watsonxDataService.pauseSparkEngine(null).execute();
   }
 
-  // Test the createSparkEngineResume operation with a valid options model parameter
+  // Test the resumeSparkEngine operation with a valid options model parameter
   @Test
-  public void testCreateSparkEngineResumeWOptions() throws Throwable {
+  public void testResumeSparkEngineWOptions() throws Throwable {
     // Register a mock response
     String mockResponseBody = "{\"message\": \"message\", \"message_code\": \"messageCode\"}";
-    String createSparkEngineResumePath = "/spark_engines/testString/resume";
+    String resumeSparkEnginePath = "/spark_engines/testString/resume";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
-      .setResponseCode(201)
+      .setResponseCode(200)
       .setBody(mockResponseBody));
 
-    // Construct an instance of the CreateSparkEngineResumeOptions model
-    CreateSparkEngineResumeOptions createSparkEngineResumeOptionsModel = new CreateSparkEngineResumeOptions.Builder()
+    // Construct an instance of the ResumeSparkEngineOptions model
+    ResumeSparkEngineOptions resumeSparkEngineOptionsModel = new ResumeSparkEngineOptions.Builder()
       .engineId("testString")
       .authInstanceId("testString")
       .build();
 
-    // Invoke createSparkEngineResume() with a valid options model and verify the result
-    Response<SuccessResponse> response = watsonxDataService.createSparkEngineResume(createSparkEngineResumeOptionsModel).execute();
+    // Invoke resumeSparkEngine() with a valid options model and verify the result
+    Response<SuccessResponse> response = watsonxDataService.resumeSparkEngine(resumeSparkEngineOptionsModel).execute();
     assertNotNull(response);
     SuccessResponse responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -4388,49 +6204,49 @@ public class WatsonxDataTest {
     assertEquals(request.getMethod(), "POST");
     // Verify request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, createSparkEngineResumePath);
+    assertEquals(parsedPath, resumeSparkEnginePath);
     // Verify that there is no query string
     Map<String, String> query = TestUtilities.parseQueryString(request);
     assertNull(query);
   }
 
-  // Test the createSparkEngineResume operation with and without retries enabled
+  // Test the resumeSparkEngine operation with and without retries enabled
   @Test
-  public void testCreateSparkEngineResumeWRetries() throws Throwable {
+  public void testResumeSparkEngineWRetries() throws Throwable {
     watsonxDataService.enableRetries(4, 30);
-    testCreateSparkEngineResumeWOptions();
+    testResumeSparkEngineWOptions();
 
     watsonxDataService.disableRetries();
-    testCreateSparkEngineResumeWOptions();
+    testResumeSparkEngineWOptions();
   }
 
-  // Test the createSparkEngineResume operation with a null options model (negative test)
+  // Test the resumeSparkEngine operation with a null options model (negative test)
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testCreateSparkEngineResumeNoOptions() throws Throwable {
+  public void testResumeSparkEngineNoOptions() throws Throwable {
     server.enqueue(new MockResponse());
-    watsonxDataService.createSparkEngineResume(null).execute();
+    watsonxDataService.resumeSparkEngine(null).execute();
   }
 
-  // Test the createSparkEngineScale operation with a valid options model parameter
+  // Test the scaleSparkEngine operation with a valid options model parameter
   @Test
-  public void testCreateSparkEngineScaleWOptions() throws Throwable {
+  public void testScaleSparkEngineWOptions() throws Throwable {
     // Register a mock response
     String mockResponseBody = "{\"message\": \"message\", \"message_code\": \"messageCode\"}";
-    String createSparkEngineScalePath = "/spark_engines/testString/scale";
+    String scaleSparkEnginePath = "/spark_engines/testString/scale";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
-      .setResponseCode(201)
+      .setResponseCode(202)
       .setBody(mockResponseBody));
 
-    // Construct an instance of the CreateSparkEngineScaleOptions model
-    CreateSparkEngineScaleOptions createSparkEngineScaleOptionsModel = new CreateSparkEngineScaleOptions.Builder()
+    // Construct an instance of the ScaleSparkEngineOptions model
+    ScaleSparkEngineOptions scaleSparkEngineOptionsModel = new ScaleSparkEngineOptions.Builder()
       .engineId("testString")
       .numberOfNodes(Long.valueOf("2"))
       .authInstanceId("testString")
       .build();
 
-    // Invoke createSparkEngineScale() with a valid options model and verify the result
-    Response<SuccessResponse> response = watsonxDataService.createSparkEngineScale(createSparkEngineScaleOptionsModel).execute();
+    // Invoke scaleSparkEngine() with a valid options model and verify the result
+    Response<SuccessResponse> response = watsonxDataService.scaleSparkEngine(scaleSparkEngineOptionsModel).execute();
     assertNotNull(response);
     SuccessResponse responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -4441,27 +6257,27 @@ public class WatsonxDataTest {
     assertEquals(request.getMethod(), "POST");
     // Verify request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, createSparkEngineScalePath);
+    assertEquals(parsedPath, scaleSparkEnginePath);
     // Verify that there is no query string
     Map<String, String> query = TestUtilities.parseQueryString(request);
     assertNull(query);
   }
 
-  // Test the createSparkEngineScale operation with and without retries enabled
+  // Test the scaleSparkEngine operation with and without retries enabled
   @Test
-  public void testCreateSparkEngineScaleWRetries() throws Throwable {
+  public void testScaleSparkEngineWRetries() throws Throwable {
     watsonxDataService.enableRetries(4, 30);
-    testCreateSparkEngineScaleWOptions();
+    testScaleSparkEngineWOptions();
 
     watsonxDataService.disableRetries();
-    testCreateSparkEngineScaleWOptions();
+    testScaleSparkEngineWOptions();
   }
 
-  // Test the createSparkEngineScale operation with a null options model (negative test)
+  // Test the scaleSparkEngine operation with a null options model (negative test)
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testCreateSparkEngineScaleNoOptions() throws Throwable {
+  public void testScaleSparkEngineNoOptions() throws Throwable {
     server.enqueue(new MockResponse());
-    watsonxDataService.createSparkEngineScale(null).execute();
+    watsonxDataService.scaleSparkEngine(null).execute();
   }
 
   // Test the listSparkVersions operation with a valid options model parameter
@@ -4676,6 +6492,8 @@ public class WatsonxDataTest {
       .customPath("sample-path")
       .schemaName("SampleSchema1")
       .bucketName("sample-bucket")
+      .hostname("db2@hostname.com")
+      .port(Long.valueOf("4553"))
       .authInstanceId("testString")
       .build();
 
@@ -4828,7 +6646,7 @@ public class WatsonxDataTest {
   @Test
   public void testGetTableWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"columns\": [{\"column_name\": \"expenses\", \"comment\": \"expenses column\", \"extra\": \"varchar\", \"length\": \"30\", \"scale\": \"2\", \"type\": \"varchar\"}], \"table_name\": \"tableName\"}";
+    String mockResponseBody = "{\"columns\": [{\"column_name\": \"expenses\", \"comment\": \"expenses column\", \"extra\": \"varchar\", \"length\": \"30\", \"scale\": \"2\", \"precision\": \"10\", \"type\": \"varchar\"}], \"table_name\": \"tableName\"}";
     String getTablePath = "/catalogs/testString/schemas/testString/tables/testString";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -4841,6 +6659,7 @@ public class WatsonxDataTest {
       .schemaId("testString")
       .tableId("testString")
       .engineId("testString")
+      .type("testString")
       .authInstanceId("testString")
       .build();
 
@@ -4861,6 +6680,7 @@ public class WatsonxDataTest {
     Map<String, String> query = TestUtilities.parseQueryString(request);
     assertNotNull(query);
     assertEquals(query.get("engine_id"), "testString");
+    assertEquals(query.get("type"), "testString");
   }
 
   // Test the getTable operation with and without retries enabled
@@ -4896,6 +6716,7 @@ public class WatsonxDataTest {
       .schemaId("testString")
       .tableId("testString")
       .engineId("testString")
+      .type("testString")
       .authInstanceId("testString")
       .build();
 
@@ -4916,6 +6737,7 @@ public class WatsonxDataTest {
     Map<String, String> query = TestUtilities.parseQueryString(request);
     assertNotNull(query);
     assertEquals(query.get("engine_id"), "testString");
+    assertEquals(query.get("type"), "testString");
   }
 
   // Test the deleteTable operation with and without retries enabled
@@ -4935,12 +6757,12 @@ public class WatsonxDataTest {
     watsonxDataService.deleteTable(null).execute();
   }
 
-  // Test the renameTable operation with a valid options model parameter
+  // Test the updateTable operation with a valid options model parameter
   @Test
-  public void testRenameTableWOptions() throws Throwable {
+  public void testUpdateTableWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"columns\": [{\"column_name\": \"expenses\", \"comment\": \"expenses column\", \"extra\": \"varchar\", \"length\": \"30\", \"scale\": \"2\", \"type\": \"varchar\"}], \"table_name\": \"tableName\"}";
-    String renameTablePath = "/catalogs/testString/schemas/testString/tables/testString";
+    String mockResponseBody = "{\"columns\": [{\"column_name\": \"expenses\", \"comment\": \"expenses column\", \"extra\": \"varchar\", \"length\": \"30\", \"scale\": \"2\", \"precision\": \"10\", \"type\": \"varchar\"}], \"table_name\": \"tableName\"}";
+    String updateTablePath = "/catalogs/testString/schemas/testString/tables/testString";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
       .setResponseCode(200)
@@ -4952,18 +6774,19 @@ public class WatsonxDataTest {
       .build();
     Map<String, Object> tablePatchModelAsPatch = tablePatchModel.asPatch();
 
-    // Construct an instance of the RenameTableOptions model
-    RenameTableOptions renameTableOptionsModel = new RenameTableOptions.Builder()
+    // Construct an instance of the UpdateTableOptions model
+    UpdateTableOptions updateTableOptionsModel = new UpdateTableOptions.Builder()
       .catalogId("testString")
       .schemaId("testString")
       .tableId("testString")
       .engineId("testString")
       .body(tablePatchModelAsPatch)
+      .type("testString")
       .authInstanceId("testString")
       .build();
 
-    // Invoke renameTable() with a valid options model and verify the result
-    Response<Table> response = watsonxDataService.renameTable(renameTableOptionsModel).execute();
+    // Invoke updateTable() with a valid options model and verify the result
+    Response<Table> response = watsonxDataService.updateTable(updateTableOptionsModel).execute();
     assertNotNull(response);
     Table responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -4974,35 +6797,36 @@ public class WatsonxDataTest {
     assertEquals(request.getMethod(), "PATCH");
     // Verify request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, renameTablePath);
+    assertEquals(parsedPath, updateTablePath);
     // Verify query params
     Map<String, String> query = TestUtilities.parseQueryString(request);
     assertNotNull(query);
     assertEquals(query.get("engine_id"), "testString");
+    assertEquals(query.get("type"), "testString");
   }
 
-  // Test the renameTable operation with and without retries enabled
+  // Test the updateTable operation with and without retries enabled
   @Test
-  public void testRenameTableWRetries() throws Throwable {
+  public void testUpdateTableWRetries() throws Throwable {
     watsonxDataService.enableRetries(4, 30);
-    testRenameTableWOptions();
+    testUpdateTableWOptions();
 
     watsonxDataService.disableRetries();
-    testRenameTableWOptions();
+    testUpdateTableWOptions();
   }
 
-  // Test the renameTable operation with a null options model (negative test)
+  // Test the updateTable operation with a null options model (negative test)
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testRenameTableNoOptions() throws Throwable {
+  public void testUpdateTableNoOptions() throws Throwable {
     server.enqueue(new MockResponse());
-    watsonxDataService.renameTable(null).execute();
+    watsonxDataService.updateTable(null).execute();
   }
 
   // Test the listColumns operation with a valid options model parameter
   @Test
   public void testListColumnsWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"columns\": [{\"column_name\": \"expenses\", \"comment\": \"expenses column\", \"extra\": \"varchar\", \"length\": \"30\", \"scale\": \"2\", \"type\": \"varchar\"}]}";
+    String mockResponseBody = "{\"columns\": [{\"column_name\": \"expenses\", \"comment\": \"expenses column\", \"extra\": \"varchar\", \"length\": \"30\", \"scale\": \"2\", \"precision\": \"10\", \"type\": \"varchar\"}]}";
     String listColumnsPath = "/catalogs/testString/schemas/testString/tables/testString/columns";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -5058,7 +6882,7 @@ public class WatsonxDataTest {
   @Test
   public void testCreateColumnsWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"columns\": [{\"column_name\": \"expenses\", \"comment\": \"expenses column\", \"extra\": \"varchar\", \"length\": \"30\", \"scale\": \"2\", \"type\": \"varchar\"}]}";
+    String mockResponseBody = "{\"columns\": [{\"column_name\": \"expenses\", \"comment\": \"expenses column\", \"extra\": \"varchar\", \"length\": \"30\", \"scale\": \"2\", \"precision\": \"10\", \"type\": \"varchar\"}]}";
     String createColumnsPath = "/catalogs/testString/schemas/testString/tables/testString/columns";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -5072,6 +6896,7 @@ public class WatsonxDataTest {
       .extra("varchar")
       .length("30")
       .scale("2")
+      .precision("10")
       .type("varchar")
       .build();
 
@@ -5181,7 +7006,7 @@ public class WatsonxDataTest {
   @Test
   public void testUpdateColumnWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"column_name\": \"expenses\", \"comment\": \"expenses column\", \"extra\": \"varchar\", \"length\": \"30\", \"scale\": \"2\", \"type\": \"varchar\"}";
+    String mockResponseBody = "{\"column_name\": \"expenses\", \"comment\": \"expenses column\", \"extra\": \"varchar\", \"length\": \"30\", \"scale\": \"2\", \"precision\": \"10\", \"type\": \"varchar\"}";
     String updateColumnPath = "/catalogs/testString/schemas/testString/tables/testString/columns/testString";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -5245,7 +7070,7 @@ public class WatsonxDataTest {
   @Test
   public void testListTableSnapshotsWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"snapshots\": [{\"committed_at\": \"1609379392\", \"operation\": \"alter\", \"snapshot_id\": \"2332342122211222\", \"summary\": \"summary\"}]}";
+    String mockResponseBody = "{\"snapshots\": [{\"added_data_files\": \"1\", \"added_files_size\": \"17425\", \"added_records\": \"3277\", \"changed_partition_count\": \"1\", \"committed_at\": \"1609379392\", \"operation\": \"alter\", \"snapshot_id\": \"2332342122211222\", \"total_data_files\": \"2\", \"total_delete_files\": \"0\", \"total_equality_deletes\": \"0\", \"total_position_deletes\": \"0\", \"total_records\": \"5000\"}]}";
     String listTableSnapshotsPath = "/catalogs/testString/schemas/testString/tables/testString/snapshots";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -5418,7 +7243,7 @@ public class WatsonxDataTest {
   @Test
   public void testListMilvusServicesWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"milvus_services\": [{\"actions\": [\"actions\"], \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"milvus service for running sql queries\", \"grpc_host\": \"example.grpc.host\", \"grpc_port\": 8, \"host_name\": \"sampleMilvus\", \"https_host\": \"example.https.host\", \"https_port\": 9, \"origin\": \"native\", \"service_display_name\": \"sampleService\", \"service_id\": \"sampleService123\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"milvus\"}]}";
+    String mockResponseBody = "{\"milvus_services\": [{\"access_key\": \"Sample bucket access key\", \"actions\": [\"actions\"], \"bucket_name\": \"Sample bucket name\", \"bucket_type\": \"Sample bucket type\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"milvus service for running sql queries\", \"endpoint\": \"Sample bucket type\", \"grpc_host\": \"example.grpc.host\", \"grpc_port\": 8, \"host_name\": \"sampleMilvus\", \"https_host\": \"example.https.host\", \"https_port\": 9, \"origin\": \"native\", \"root_path\": \"Sample path\", \"secret_key\": \"Sample bucket secret access key\", \"service_display_name\": \"sampleService\", \"service_id\": \"sampleService123\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"tshirt_size\": \"small\", \"type\": \"milvus\"}]}";
     String listMilvusServicesPath = "/milvus_services";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -5462,7 +7287,7 @@ public class WatsonxDataTest {
   @Test
   public void testCreateMilvusServiceWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"actions\": [\"actions\"], \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"milvus service for running sql queries\", \"grpc_host\": \"example.grpc.host\", \"grpc_port\": 8, \"host_name\": \"sampleMilvus\", \"https_host\": \"example.https.host\", \"https_port\": 9, \"origin\": \"native\", \"service_display_name\": \"sampleService\", \"service_id\": \"sampleService123\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"milvus\"}";
+    String mockResponseBody = "{\"access_key\": \"Sample bucket access key\", \"actions\": [\"actions\"], \"bucket_name\": \"Sample bucket name\", \"bucket_type\": \"Sample bucket type\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"milvus service for running sql queries\", \"endpoint\": \"Sample bucket type\", \"grpc_host\": \"example.grpc.host\", \"grpc_port\": 8, \"host_name\": \"sampleMilvus\", \"https_host\": \"example.https.host\", \"https_port\": 9, \"origin\": \"native\", \"root_path\": \"Sample path\", \"secret_key\": \"Sample bucket secret access key\", \"service_display_name\": \"sampleService\", \"service_id\": \"sampleService123\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"tshirt_size\": \"small\", \"type\": \"milvus\"}";
     String createMilvusServicePath = "/milvus_services";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -5471,10 +7296,14 @@ public class WatsonxDataTest {
 
     // Construct an instance of the CreateMilvusServiceOptions model
     CreateMilvusServiceOptions createMilvusServiceOptionsModel = new CreateMilvusServiceOptions.Builder()
+      .bucketName("Sample bucket name")
       .origin("native")
-      .description("milvus service for running sql queries")
+      .rootPath("Sample path")
       .serviceDisplayName("sampleService")
+      .bucketType("Sample bucket type")
+      .description("milvus service for running sql queries")
       .tags(java.util.Arrays.asList("tag1", "tag2"))
+      .tshirtSize("small")
       .authInstanceId("testString")
       .build();
 
@@ -5517,7 +7346,7 @@ public class WatsonxDataTest {
   @Test
   public void testGetMilvusServiceWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"actions\": [\"actions\"], \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"milvus service for running sql queries\", \"grpc_host\": \"example.grpc.host\", \"grpc_port\": 8, \"host_name\": \"sampleMilvus\", \"https_host\": \"example.https.host\", \"https_port\": 9, \"origin\": \"native\", \"service_display_name\": \"sampleService\", \"service_id\": \"sampleService123\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"milvus\"}";
+    String mockResponseBody = "{\"access_key\": \"Sample bucket access key\", \"actions\": [\"actions\"], \"bucket_name\": \"Sample bucket name\", \"bucket_type\": \"Sample bucket type\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"milvus service for running sql queries\", \"endpoint\": \"Sample bucket type\", \"grpc_host\": \"example.grpc.host\", \"grpc_port\": 8, \"host_name\": \"sampleMilvus\", \"https_host\": \"example.https.host\", \"https_port\": 9, \"origin\": \"native\", \"root_path\": \"Sample path\", \"secret_key\": \"Sample bucket secret access key\", \"service_display_name\": \"sampleService\", \"service_id\": \"sampleService123\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"tshirt_size\": \"small\", \"type\": \"milvus\"}";
     String getMilvusServicePath = "/milvus_services/testString";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -5620,7 +7449,7 @@ public class WatsonxDataTest {
   @Test
   public void testUpdateMilvusServiceWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"actions\": [\"actions\"], \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"milvus service for running sql queries\", \"grpc_host\": \"example.grpc.host\", \"grpc_port\": 8, \"host_name\": \"sampleMilvus\", \"https_host\": \"example.https.host\", \"https_port\": 9, \"origin\": \"native\", \"service_display_name\": \"sampleService\", \"service_id\": \"sampleService123\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"type\": \"milvus\"}";
+    String mockResponseBody = "{\"access_key\": \"Sample bucket access key\", \"actions\": [\"actions\"], \"bucket_name\": \"Sample bucket name\", \"bucket_type\": \"Sample bucket type\", \"created_by\": \"<username>@<domain>.com\", \"created_on\": 9, \"description\": \"milvus service for running sql queries\", \"endpoint\": \"Sample bucket type\", \"grpc_host\": \"example.grpc.host\", \"grpc_port\": 8, \"host_name\": \"sampleMilvus\", \"https_host\": \"example.https.host\", \"https_port\": 9, \"origin\": \"native\", \"root_path\": \"Sample path\", \"secret_key\": \"Sample bucket secret access key\", \"service_display_name\": \"sampleService\", \"service_id\": \"sampleService123\", \"status\": \"running\", \"status_code\": 10, \"tags\": [\"tags\"], \"tshirt_size\": \"small\", \"type\": \"milvus\"}";
     String updateMilvusServicePath = "/milvus_services/testString";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -5677,6 +7506,268 @@ public class WatsonxDataTest {
     watsonxDataService.updateMilvusService(null).execute();
   }
 
+  // Test the listMilvusServiceDatabases operation with a valid options model parameter
+  @Test
+  public void testListMilvusServiceDatabasesWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"databases\": [\"default\"]}";
+    String listMilvusServiceDatabasesPath = "/milvus_services/testString/databases";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the ListMilvusServiceDatabasesOptions model
+    ListMilvusServiceDatabasesOptions listMilvusServiceDatabasesOptionsModel = new ListMilvusServiceDatabasesOptions.Builder()
+      .serviceId("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke listMilvusServiceDatabases() with a valid options model and verify the result
+    Response<MilvusServiceDatabases> response = watsonxDataService.listMilvusServiceDatabases(listMilvusServiceDatabasesOptionsModel).execute();
+    assertNotNull(response);
+    MilvusServiceDatabases responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, listMilvusServiceDatabasesPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the listMilvusServiceDatabases operation with and without retries enabled
+  @Test
+  public void testListMilvusServiceDatabasesWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testListMilvusServiceDatabasesWOptions();
+
+    watsonxDataService.disableRetries();
+    testListMilvusServiceDatabasesWOptions();
+  }
+
+  // Test the listMilvusServiceDatabases operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testListMilvusServiceDatabasesNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.listMilvusServiceDatabases(null).execute();
+  }
+
+  // Test the listMilvusDatabaseCollections operation with a valid options model parameter
+  @Test
+  public void testListMilvusDatabaseCollectionsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"collections\": [{\"collection_id\": 12, \"collection_name\": \"col1\", \"physical_channels\": [\"physicalChannels\"], \"virtual_channels\": [\"virtualChannels\"]}]}";
+    String listMilvusDatabaseCollectionsPath = "/milvus_services/testString/databases/testString/collections";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the ListMilvusDatabaseCollectionsOptions model
+    ListMilvusDatabaseCollectionsOptions listMilvusDatabaseCollectionsOptionsModel = new ListMilvusDatabaseCollectionsOptions.Builder()
+      .serviceId("testString")
+      .databaseId("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke listMilvusDatabaseCollections() with a valid options model and verify the result
+    Response<MilvusDatabaseCollections> response = watsonxDataService.listMilvusDatabaseCollections(listMilvusDatabaseCollectionsOptionsModel).execute();
+    assertNotNull(response);
+    MilvusDatabaseCollections responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, listMilvusDatabaseCollectionsPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the listMilvusDatabaseCollections operation with and without retries enabled
+  @Test
+  public void testListMilvusDatabaseCollectionsWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testListMilvusDatabaseCollectionsWOptions();
+
+    watsonxDataService.disableRetries();
+    testListMilvusDatabaseCollectionsWOptions();
+  }
+
+  // Test the listMilvusDatabaseCollections operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testListMilvusDatabaseCollectionsNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.listMilvusDatabaseCollections(null).execute();
+  }
+
+  // Test the createMilvusServicePause operation with a valid options model parameter
+  @Test
+  public void testCreateMilvusServicePauseWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"message\": \"message\", \"message_code\": \"messageCode\"}";
+    String createMilvusServicePausePath = "/milvus_services/testString/pause";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(201)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the CreateMilvusServicePauseOptions model
+    CreateMilvusServicePauseOptions createMilvusServicePauseOptionsModel = new CreateMilvusServicePauseOptions.Builder()
+      .serviceId("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke createMilvusServicePause() with a valid options model and verify the result
+    Response<SuccessResponse> response = watsonxDataService.createMilvusServicePause(createMilvusServicePauseOptionsModel).execute();
+    assertNotNull(response);
+    SuccessResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, createMilvusServicePausePath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the createMilvusServicePause operation with and without retries enabled
+  @Test
+  public void testCreateMilvusServicePauseWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testCreateMilvusServicePauseWOptions();
+
+    watsonxDataService.disableRetries();
+    testCreateMilvusServicePauseWOptions();
+  }
+
+  // Test the createMilvusServicePause operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testCreateMilvusServicePauseNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.createMilvusServicePause(null).execute();
+  }
+
+  // Test the createMilvusServiceResume operation with a valid options model parameter
+  @Test
+  public void testCreateMilvusServiceResumeWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"message\": \"message\", \"message_code\": \"messageCode\"}";
+    String createMilvusServiceResumePath = "/milvus_services/testString/resume";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(201)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the CreateMilvusServiceResumeOptions model
+    CreateMilvusServiceResumeOptions createMilvusServiceResumeOptionsModel = new CreateMilvusServiceResumeOptions.Builder()
+      .serviceId("testString")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke createMilvusServiceResume() with a valid options model and verify the result
+    Response<SuccessResponse> response = watsonxDataService.createMilvusServiceResume(createMilvusServiceResumeOptionsModel).execute();
+    assertNotNull(response);
+    SuccessResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, createMilvusServiceResumePath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the createMilvusServiceResume operation with and without retries enabled
+  @Test
+  public void testCreateMilvusServiceResumeWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testCreateMilvusServiceResumeWOptions();
+
+    watsonxDataService.disableRetries();
+    testCreateMilvusServiceResumeWOptions();
+  }
+
+  // Test the createMilvusServiceResume operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testCreateMilvusServiceResumeNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.createMilvusServiceResume(null).execute();
+  }
+
+  // Test the createMilvusServiceScale operation with a valid options model parameter
+  @Test
+  public void testCreateMilvusServiceScaleWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"message\": \"message\", \"message_code\": \"messageCode\"}";
+    String createMilvusServiceScalePath = "/milvus_services/testString/scale";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(201)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the CreateMilvusServiceScaleOptions model
+    CreateMilvusServiceScaleOptions createMilvusServiceScaleOptionsModel = new CreateMilvusServiceScaleOptions.Builder()
+      .serviceId("testString")
+      .tshirtSize("small")
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke createMilvusServiceScale() with a valid options model and verify the result
+    Response<SuccessResponse> response = watsonxDataService.createMilvusServiceScale(createMilvusServiceScaleOptionsModel).execute();
+    assertNotNull(response);
+    SuccessResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, createMilvusServiceScalePath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the createMilvusServiceScale operation with and without retries enabled
+  @Test
+  public void testCreateMilvusServiceScaleWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testCreateMilvusServiceScaleWOptions();
+
+    watsonxDataService.disableRetries();
+    testCreateMilvusServiceScaleWOptions();
+  }
+
+  // Test the createMilvusServiceScale operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testCreateMilvusServiceScaleNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    watsonxDataService.createMilvusServiceScale(null).execute();
+  }
+
   // Test the listIngestionJobs operation with a valid options model parameter
   @Test
   public void testListIngestionJobsWOptions() throws Throwable {
@@ -5691,7 +7782,7 @@ public class WatsonxDataTest {
     // Construct an instance of the ListIngestionJobsOptions model
     ListIngestionJobsOptions listIngestionJobsOptionsModel = new ListIngestionJobsOptions.Builder()
       .authInstanceId("testString")
-      .page(Long.valueOf("1"))
+      .start("1")
       .jobsPerPage(Long.valueOf("1"))
       .build();
 
@@ -5713,7 +7804,7 @@ public class WatsonxDataTest {
     // Verify query params
     Map<String, String> query = TestUtilities.parseQueryString(request);
     assertNotNull(query);
-    assertEquals(Long.valueOf(query.get("page")), Long.valueOf("1"));
+    assertEquals(query.get("start"), "1");
     assertEquals(Long.valueOf(query.get("jobs_per_page")), Long.valueOf("1"));
   }
 
@@ -5734,6 +7825,70 @@ public class WatsonxDataTest {
     watsonxDataService.listIngestionJobs(null).execute();
   }
 
+  // Test the listIngestionJobs operation using the IngestionJobsPager.getNext() method
+  @Test
+  public void testListIngestionJobsWithPagerGetNext() throws Throwable {
+    // Set up the two-page mock response.
+    String mockResponsePage1 = "{\"next\":{\"href\":\"https://myhost.com/somePath?start=1\"},\"total_count\":2,\"limit\":1,\"ingestion_jobs\":[{\"create_if_not_exist\":false,\"csv_property\":{\"encoding\":\"utf-8\",\"escape_character\":\"|\",\"field_delimiter\":\",\",\"header\":true,\"line_delimiter\":\"\n\"},\"details\":\"Path does not exist 'demobucket/data/yellow_tripdata_2022-01.parquet'. Detail: [errno 2] No such file or directory\",\"end_timestamp\":\"1685088775\",\"engine_id\":\"spark123\",\"engine_name\":\"sparkdemo\",\"execute_config\":{\"driver_cores\":1,\"driver_memory\":\"2G\",\"executor_cores\":1,\"executor_memory\":\"2G\",\"num_executors\":1},\"instance_id\":\"1684432229673971\",\"job_id\":\"ingestion-1699459946935\",\"partition_by\":\"col1, col2\",\"schema\":\"{\\\"type\\\":\\\"struct\\\",\\\"schema-id\\\":0,\\\"fields\\\":[{\\\"id\\\":1,\\\"name\\\":\\\"ID\\\",\\\"required\\\":true,\\\"type\\\":\\\"int\\\"},{\\\"id\\\":2,\\\"name\\\":\\\"Name\\\",\\\"required\\\":true,\\\"type\\\":\\\"string\\\"}]}\",\"source_data_files\":\"s3://demobucket/data/yellow_tripdata_2022-01.parquet\",\"source_file_type\":\"csv\",\"start_timestamp\":\"1685084455\",\"status\":\"running\",\"target_table\":\"demodb.test.targettable\",\"username\":\"ibmlhadmin\",\"validate_csv_header\":false}]}";
+    String mockResponsePage2 = "{\"total_count\":2,\"limit\":1,\"ingestion_jobs\":[{\"create_if_not_exist\":false,\"csv_property\":{\"encoding\":\"utf-8\",\"escape_character\":\"|\",\"field_delimiter\":\",\",\"header\":true,\"line_delimiter\":\"\n\"},\"details\":\"Path does not exist 'demobucket/data/yellow_tripdata_2022-01.parquet'. Detail: [errno 2] No such file or directory\",\"end_timestamp\":\"1685088775\",\"engine_id\":\"spark123\",\"engine_name\":\"sparkdemo\",\"execute_config\":{\"driver_cores\":1,\"driver_memory\":\"2G\",\"executor_cores\":1,\"executor_memory\":\"2G\",\"num_executors\":1},\"instance_id\":\"1684432229673971\",\"job_id\":\"ingestion-1699459946935\",\"partition_by\":\"col1, col2\",\"schema\":\"{\\\"type\\\":\\\"struct\\\",\\\"schema-id\\\":0,\\\"fields\\\":[{\\\"id\\\":1,\\\"name\\\":\\\"ID\\\",\\\"required\\\":true,\\\"type\\\":\\\"int\\\"},{\\\"id\\\":2,\\\"name\\\":\\\"Name\\\",\\\"required\\\":true,\\\"type\\\":\\\"string\\\"}]}\",\"source_data_files\":\"s3://demobucket/data/yellow_tripdata_2022-01.parquet\",\"source_file_type\":\"csv\",\"start_timestamp\":\"1685084455\",\"status\":\"running\",\"target_table\":\"demodb.test.targettable\",\"username\":\"ibmlhadmin\",\"validate_csv_header\":false}]}";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponsePage1));
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponsePage2));
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(400)
+      .setBody("{\"message\": \"No more results available!\"}"));
+
+    ListIngestionJobsOptions listIngestionJobsOptions = new ListIngestionJobsOptions.Builder()
+      .authInstanceId("testString")
+      .jobsPerPage(Long.valueOf("1"))
+      .build();
+
+    List<IngestionJob> allResults = new ArrayList<>();
+    IngestionJobsPager pager = new IngestionJobsPager(watsonxDataService, listIngestionJobsOptions);
+    while (pager.hasNext()) {
+      List<IngestionJob> nextPage = pager.getNext();
+      assertNotNull(nextPage);
+      allResults.addAll(nextPage);
+    }
+    assertEquals(allResults.size(), 2);
+  }
+  
+  // Test the listIngestionJobs operation using the IngestionJobsPager.getAll() method
+  @Test
+  public void testListIngestionJobsWithPagerGetAll() throws Throwable {
+    // Set up the two-page mock response.
+    String mockResponsePage1 = "{\"next\":{\"href\":\"https://myhost.com/somePath?start=1\"},\"total_count\":2,\"limit\":1,\"ingestion_jobs\":[{\"create_if_not_exist\":false,\"csv_property\":{\"encoding\":\"utf-8\",\"escape_character\":\"|\",\"field_delimiter\":\",\",\"header\":true,\"line_delimiter\":\"\n\"},\"details\":\"Path does not exist 'demobucket/data/yellow_tripdata_2022-01.parquet'. Detail: [errno 2] No such file or directory\",\"end_timestamp\":\"1685088775\",\"engine_id\":\"spark123\",\"engine_name\":\"sparkdemo\",\"execute_config\":{\"driver_cores\":1,\"driver_memory\":\"2G\",\"executor_cores\":1,\"executor_memory\":\"2G\",\"num_executors\":1},\"instance_id\":\"1684432229673971\",\"job_id\":\"ingestion-1699459946935\",\"partition_by\":\"col1, col2\",\"schema\":\"{\\\"type\\\":\\\"struct\\\",\\\"schema-id\\\":0,\\\"fields\\\":[{\\\"id\\\":1,\\\"name\\\":\\\"ID\\\",\\\"required\\\":true,\\\"type\\\":\\\"int\\\"},{\\\"id\\\":2,\\\"name\\\":\\\"Name\\\",\\\"required\\\":true,\\\"type\\\":\\\"string\\\"}]}\",\"source_data_files\":\"s3://demobucket/data/yellow_tripdata_2022-01.parquet\",\"source_file_type\":\"csv\",\"start_timestamp\":\"1685084455\",\"status\":\"running\",\"target_table\":\"demodb.test.targettable\",\"username\":\"ibmlhadmin\",\"validate_csv_header\":false}]}";
+    String mockResponsePage2 = "{\"total_count\":2,\"limit\":1,\"ingestion_jobs\":[{\"create_if_not_exist\":false,\"csv_property\":{\"encoding\":\"utf-8\",\"escape_character\":\"|\",\"field_delimiter\":\",\",\"header\":true,\"line_delimiter\":\"\n\"},\"details\":\"Path does not exist 'demobucket/data/yellow_tripdata_2022-01.parquet'. Detail: [errno 2] No such file or directory\",\"end_timestamp\":\"1685088775\",\"engine_id\":\"spark123\",\"engine_name\":\"sparkdemo\",\"execute_config\":{\"driver_cores\":1,\"driver_memory\":\"2G\",\"executor_cores\":1,\"executor_memory\":\"2G\",\"num_executors\":1},\"instance_id\":\"1684432229673971\",\"job_id\":\"ingestion-1699459946935\",\"partition_by\":\"col1, col2\",\"schema\":\"{\\\"type\\\":\\\"struct\\\",\\\"schema-id\\\":0,\\\"fields\\\":[{\\\"id\\\":1,\\\"name\\\":\\\"ID\\\",\\\"required\\\":true,\\\"type\\\":\\\"int\\\"},{\\\"id\\\":2,\\\"name\\\":\\\"Name\\\",\\\"required\\\":true,\\\"type\\\":\\\"string\\\"}]}\",\"source_data_files\":\"s3://demobucket/data/yellow_tripdata_2022-01.parquet\",\"source_file_type\":\"csv\",\"start_timestamp\":\"1685084455\",\"status\":\"running\",\"target_table\":\"demodb.test.targettable\",\"username\":\"ibmlhadmin\",\"validate_csv_header\":false}]}";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponsePage1));
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponsePage2));
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(400)
+      .setBody("{\"message\": \"No more results available!\"}"));
+
+    ListIngestionJobsOptions listIngestionJobsOptions = new ListIngestionJobsOptions.Builder()
+      .authInstanceId("testString")
+      .jobsPerPage(Long.valueOf("1"))
+      .build();
+
+    IngestionJobsPager pager = new IngestionJobsPager(watsonxDataService, listIngestionJobsOptions);
+    List<IngestionJob> allResults = pager.getAll();
+    assertNotNull(allResults);
+    assertEquals(allResults.size(), 2);
+  }
+  
   // Test the createIngestionJobs operation with a valid options model parameter
   @Test
   public void testCreateIngestionJobsWOptions() throws Throwable {
@@ -6051,6 +8206,50 @@ public class WatsonxDataTest {
   public void testCreatePreviewIngestionFileNoOptions() throws Throwable {
     server.enqueue(new MockResponse());
     watsonxDataService.createPreviewIngestionFile(null).execute();
+  }
+
+  // Test the getEndpoints operation with a valid options model parameter
+  @Test
+  public void testGetEndpointsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"endpoints\": [{\"external_host\": \"https://cpg-svc.your-hostname.apps.your-domain.com\", \"service_type\": \"cpg\"}]}";
+    String getEndpointsPath = "/endpoints";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetEndpointsOptions model
+    GetEndpointsOptions getEndpointsOptionsModel = new GetEndpointsOptions.Builder()
+      .authInstanceId("testString")
+      .build();
+
+    // Invoke getEndpoints() with a valid options model and verify the result
+    Response<EndpointCollection> response = watsonxDataService.getEndpoints(getEndpointsOptionsModel).execute();
+    assertNotNull(response);
+    EndpointCollection responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getEndpointsPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the getEndpoints operation with and without retries enabled
+  @Test
+  public void testGetEndpointsWRetries() throws Throwable {
+    watsonxDataService.enableRetries(4, 30);
+    testGetEndpointsWOptions();
+
+    watsonxDataService.disableRetries();
+    testGetEndpointsWOptions();
   }
 
   // Perform setup needed before each test method

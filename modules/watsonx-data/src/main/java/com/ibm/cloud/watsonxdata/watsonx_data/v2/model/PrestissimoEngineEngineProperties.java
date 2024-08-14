@@ -127,7 +127,7 @@ public class PrestissimoEngineEngineProperties extends GenericModel {
   /**
    * Gets the catalog.
    *
-   * catalog properties.
+   * Catalog settings.
    *
    * @return the catalog
    */
@@ -149,7 +149,7 @@ public class PrestissimoEngineEngineProperties extends GenericModel {
   /**
    * Gets the velox.
    *
-   * velox properties.
+   * velox settings.
    *
    * @return the velox
    */

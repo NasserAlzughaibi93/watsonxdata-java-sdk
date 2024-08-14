@@ -35,11 +35,17 @@ public class BucketDetailsTest {
       .accessKey("b9cbf248ea5c4c96947e64407108559j")
       .bucketName("sample-bucket")
       .endpoint("https://s3.<region>.cloud-object-storage.appdomain.cloud/")
+      .keyFile("key_file")
+      .provider("ibm_cos")
+      .region("us-south")
       .secretKey("13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87")
       .build();
     assertEquals(bucketDetailsModel.accessKey(), "b9cbf248ea5c4c96947e64407108559j");
     assertEquals(bucketDetailsModel.bucketName(), "sample-bucket");
     assertEquals(bucketDetailsModel.endpoint(), "https://s3.<region>.cloud-object-storage.appdomain.cloud/");
+    assertEquals(bucketDetailsModel.keyFile(), "key_file");
+    assertEquals(bucketDetailsModel.provider(), "ibm_cos");
+    assertEquals(bucketDetailsModel.region(), "us-south");
     assertEquals(bucketDetailsModel.secretKey(), "13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87");
 
     String json = TestUtilities.serialize(bucketDetailsModel);
@@ -49,6 +55,9 @@ public class BucketDetailsTest {
     assertEquals(bucketDetailsModelNew.accessKey(), "b9cbf248ea5c4c96947e64407108559j");
     assertEquals(bucketDetailsModelNew.bucketName(), "sample-bucket");
     assertEquals(bucketDetailsModelNew.endpoint(), "https://s3.<region>.cloud-object-storage.appdomain.cloud/");
+    assertEquals(bucketDetailsModelNew.keyFile(), "key_file");
+    assertEquals(bucketDetailsModelNew.provider(), "ibm_cos");
+    assertEquals(bucketDetailsModelNew.region(), "us-south");
     assertEquals(bucketDetailsModelNew.secretKey(), "13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87");
   }
 

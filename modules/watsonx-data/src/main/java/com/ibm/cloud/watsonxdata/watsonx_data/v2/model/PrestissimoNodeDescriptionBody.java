@@ -17,7 +17,7 @@ import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * Node details.
+ * coordinator/worker property settings.
  */
 public class PrestissimoNodeDescriptionBody extends GenericModel {
 

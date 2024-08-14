@@ -14,11 +14,13 @@
 package com.ibm.cloud.watsonxdata.watsonx_data.v2.model;
 
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnginePropertiesLogConfiguration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnginePropertiesOaiGen1Configuration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnginePropertiesOaiGen1Jvm;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.NodeDescriptionBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEngineEngineProperties;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePropertiesCatalog;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePropertiesEventListener;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePropertiesGlobal;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.utils.TestUtilities;
 import java.io.InputStream;
@@ -55,6 +57,11 @@ public class PrestoEngineEnginePropertiesTest {
     assertEquals(enginePropertiesOaiGen1ConfigurationModel.coordinator(), nodeDescriptionBodyModel);
     assertEquals(enginePropertiesOaiGen1ConfigurationModel.worker(), nodeDescriptionBodyModel);
 
+    PrestoEnginePropertiesEventListener prestoEnginePropertiesEventListenerModel = new PrestoEnginePropertiesEventListener.Builder()
+      .eventListenerProperty("testString")
+      .build();
+    assertEquals(prestoEnginePropertiesEventListenerModel.eventListenerProperty(), "testString");
+
     PrestoEnginePropertiesGlobal prestoEnginePropertiesGlobalModel = new PrestoEnginePropertiesGlobal.Builder()
       .globalProperty("enable-mixed-case-support:true")
       .build();
@@ -67,16 +74,27 @@ public class PrestoEngineEnginePropertiesTest {
     assertEquals(enginePropertiesOaiGen1JvmModel.coordinator(), nodeDescriptionBodyModel);
     assertEquals(enginePropertiesOaiGen1JvmModel.worker(), nodeDescriptionBodyModel);
 
+    EnginePropertiesLogConfiguration enginePropertiesLogConfigurationModel = new EnginePropertiesLogConfiguration.Builder()
+      .coordinator(nodeDescriptionBodyModel)
+      .worker(nodeDescriptionBodyModel)
+      .build();
+    assertEquals(enginePropertiesLogConfigurationModel.coordinator(), nodeDescriptionBodyModel);
+    assertEquals(enginePropertiesLogConfigurationModel.worker(), nodeDescriptionBodyModel);
+
     PrestoEngineEngineProperties prestoEngineEnginePropertiesModel = new PrestoEngineEngineProperties.Builder()
       .catalog(prestoEnginePropertiesCatalogModel)
       .configuration(enginePropertiesOaiGen1ConfigurationModel)
+      .eventListener(prestoEnginePropertiesEventListenerModel)
       .global(prestoEnginePropertiesGlobalModel)
       .jvm(enginePropertiesOaiGen1JvmModel)
+      .logConfig(enginePropertiesLogConfigurationModel)
       .build();
     assertEquals(prestoEngineEnginePropertiesModel.catalog(), prestoEnginePropertiesCatalogModel);
     assertEquals(prestoEngineEnginePropertiesModel.configuration(), enginePropertiesOaiGen1ConfigurationModel);
+    assertEquals(prestoEngineEnginePropertiesModel.eventListener(), prestoEnginePropertiesEventListenerModel);
     assertEquals(prestoEngineEnginePropertiesModel.global(), prestoEnginePropertiesGlobalModel);
     assertEquals(prestoEngineEnginePropertiesModel.jvm(), enginePropertiesOaiGen1JvmModel);
+    assertEquals(prestoEngineEnginePropertiesModel.logConfig(), enginePropertiesLogConfigurationModel);
 
     String json = TestUtilities.serialize(prestoEngineEnginePropertiesModel);
 
@@ -84,7 +102,9 @@ public class PrestoEngineEnginePropertiesTest {
     assertTrue(prestoEngineEnginePropertiesModelNew instanceof PrestoEngineEngineProperties);
     assertEquals(prestoEngineEnginePropertiesModelNew.catalog().toString(), prestoEnginePropertiesCatalogModel.toString());
     assertEquals(prestoEngineEnginePropertiesModelNew.configuration().toString(), enginePropertiesOaiGen1ConfigurationModel.toString());
+    assertEquals(prestoEngineEnginePropertiesModelNew.eventListener().toString(), prestoEnginePropertiesEventListenerModel.toString());
     assertEquals(prestoEngineEnginePropertiesModelNew.global().toString(), prestoEnginePropertiesGlobalModel.toString());
     assertEquals(prestoEngineEnginePropertiesModelNew.jvm().toString(), enginePropertiesOaiGen1JvmModel.toString());
+    assertEquals(prestoEngineEnginePropertiesModelNew.logConfig().toString(), enginePropertiesLogConfigurationModel.toString());
   }
 }

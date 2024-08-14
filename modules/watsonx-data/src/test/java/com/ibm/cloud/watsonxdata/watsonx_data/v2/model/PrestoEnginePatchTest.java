@@ -14,6 +14,7 @@
 package com.ibm.cloud.watsonxdata.watsonx_data.v2.model;
 
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnginePropertiesLogConfiguration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnginePropertiesOaiGen1Configuration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnginePropertiesOaiGen1Jvm;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.NodeDescriptionBody;
@@ -21,6 +22,7 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEngineEnginePropert
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePatch;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePatchRemoveEngineProperties;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePropertiesCatalog;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePropertiesEventListener;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePropertiesGlobal;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesOaiGenConfiguration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesOaiGenJvm;
@@ -60,6 +62,11 @@ public class PrestoEnginePatchTest {
     assertEquals(enginePropertiesOaiGen1ConfigurationModel.coordinator(), nodeDescriptionBodyModel);
     assertEquals(enginePropertiesOaiGen1ConfigurationModel.worker(), nodeDescriptionBodyModel);
 
+    PrestoEnginePropertiesEventListener prestoEnginePropertiesEventListenerModel = new PrestoEnginePropertiesEventListener.Builder()
+      .eventListenerProperty("testString")
+      .build();
+    assertEquals(prestoEnginePropertiesEventListenerModel.eventListenerProperty(), "testString");
+
     PrestoEnginePropertiesGlobal prestoEnginePropertiesGlobalModel = new PrestoEnginePropertiesGlobal.Builder()
       .globalProperty("enable-mixed-case-support:true")
       .build();
@@ -72,16 +79,27 @@ public class PrestoEnginePatchTest {
     assertEquals(enginePropertiesOaiGen1JvmModel.coordinator(), nodeDescriptionBodyModel);
     assertEquals(enginePropertiesOaiGen1JvmModel.worker(), nodeDescriptionBodyModel);
 
+    EnginePropertiesLogConfiguration enginePropertiesLogConfigurationModel = new EnginePropertiesLogConfiguration.Builder()
+      .coordinator(nodeDescriptionBodyModel)
+      .worker(nodeDescriptionBodyModel)
+      .build();
+    assertEquals(enginePropertiesLogConfigurationModel.coordinator(), nodeDescriptionBodyModel);
+    assertEquals(enginePropertiesLogConfigurationModel.worker(), nodeDescriptionBodyModel);
+
     PrestoEngineEngineProperties prestoEngineEnginePropertiesModel = new PrestoEngineEngineProperties.Builder()
       .catalog(prestoEnginePropertiesCatalogModel)
       .configuration(enginePropertiesOaiGen1ConfigurationModel)
+      .eventListener(prestoEnginePropertiesEventListenerModel)
       .global(prestoEnginePropertiesGlobalModel)
       .jvm(enginePropertiesOaiGen1JvmModel)
+      .logConfig(enginePropertiesLogConfigurationModel)
       .build();
     assertEquals(prestoEngineEnginePropertiesModel.catalog(), prestoEnginePropertiesCatalogModel);
     assertEquals(prestoEngineEnginePropertiesModel.configuration(), enginePropertiesOaiGen1ConfigurationModel);
+    assertEquals(prestoEngineEnginePropertiesModel.eventListener(), prestoEnginePropertiesEventListenerModel);
     assertEquals(prestoEngineEnginePropertiesModel.global(), prestoEnginePropertiesGlobalModel);
     assertEquals(prestoEngineEnginePropertiesModel.jvm(), enginePropertiesOaiGen1JvmModel);
+    assertEquals(prestoEngineEnginePropertiesModel.logConfig(), enginePropertiesLogConfigurationModel);
 
     RemoveEnginePropertiesOaiGenConfiguration removeEnginePropertiesOaiGenConfigurationModel = new RemoveEnginePropertiesOaiGenConfiguration.Builder()
       .coordinator(java.util.Arrays.asList("testString"))
@@ -98,13 +116,15 @@ public class PrestoEnginePatchTest {
     assertEquals(removeEnginePropertiesOaiGenJvmModel.worker(), java.util.Arrays.asList("testString"));
 
     PrestoEnginePatchRemoveEngineProperties prestoEnginePatchRemoveEnginePropertiesModel = new PrestoEnginePatchRemoveEngineProperties.Builder()
+      .catalog(prestoEnginePropertiesCatalogModel)
       .configuration(removeEnginePropertiesOaiGenConfigurationModel)
       .jvm(removeEnginePropertiesOaiGenJvmModel)
-      .catalog(prestoEnginePropertiesCatalogModel)
+      .eventListener(java.util.Arrays.asList())
       .build();
+    assertEquals(prestoEnginePatchRemoveEnginePropertiesModel.catalog(), prestoEnginePropertiesCatalogModel);
     assertEquals(prestoEnginePatchRemoveEnginePropertiesModel.configuration(), removeEnginePropertiesOaiGenConfigurationModel);
     assertEquals(prestoEnginePatchRemoveEnginePropertiesModel.jvm(), removeEnginePropertiesOaiGenJvmModel);
-    assertEquals(prestoEnginePatchRemoveEnginePropertiesModel.catalog(), prestoEnginePropertiesCatalogModel);
+    assertEquals(prestoEnginePatchRemoveEnginePropertiesModel.eventListener(), java.util.Arrays.asList());
 
     PrestoEnginePatch prestoEnginePatchModel = new PrestoEnginePatch.Builder()
       .description("updated description for presto engine")
@@ -147,6 +167,10 @@ public class PrestoEnginePatchTest {
       .worker(nodeDescriptionBodyModel)
       .build();
 
+    PrestoEnginePropertiesEventListener prestoEnginePropertiesEventListenerModel = new PrestoEnginePropertiesEventListener.Builder()
+      .eventListenerProperty("testString")
+      .build();
+
     PrestoEnginePropertiesGlobal prestoEnginePropertiesGlobalModel = new PrestoEnginePropertiesGlobal.Builder()
       .globalProperty("enable-mixed-case-support:true")
       .build();
@@ -156,11 +180,18 @@ public class PrestoEnginePatchTest {
       .worker(nodeDescriptionBodyModel)
       .build();
 
+    EnginePropertiesLogConfiguration enginePropertiesLogConfigurationModel = new EnginePropertiesLogConfiguration.Builder()
+      .coordinator(nodeDescriptionBodyModel)
+      .worker(nodeDescriptionBodyModel)
+      .build();
+
     PrestoEngineEngineProperties prestoEngineEnginePropertiesModel = new PrestoEngineEngineProperties.Builder()
       .catalog(prestoEnginePropertiesCatalogModel)
       .configuration(enginePropertiesOaiGen1ConfigurationModel)
+      .eventListener(prestoEnginePropertiesEventListenerModel)
       .global(prestoEnginePropertiesGlobalModel)
       .jvm(enginePropertiesOaiGen1JvmModel)
+      .logConfig(enginePropertiesLogConfigurationModel)
       .build();
 
     RemoveEnginePropertiesOaiGenConfiguration removeEnginePropertiesOaiGenConfigurationModel = new RemoveEnginePropertiesOaiGenConfiguration.Builder()
@@ -174,9 +205,10 @@ public class PrestoEnginePatchTest {
       .build();
 
     PrestoEnginePatchRemoveEngineProperties prestoEnginePatchRemoveEnginePropertiesModel = new PrestoEnginePatchRemoveEngineProperties.Builder()
+      .catalog(prestoEnginePropertiesCatalogModel)
       .configuration(removeEnginePropertiesOaiGenConfigurationModel)
       .jvm(removeEnginePropertiesOaiGenJvmModel)
-      .catalog(prestoEnginePropertiesCatalogModel)
+      .eventListener(java.util.Arrays.asList())
       .build();
 
     PrestoEnginePatch prestoEnginePatchModel = new PrestoEnginePatch.Builder()

@@ -97,7 +97,7 @@ public class EnginePropertiesOaiGen1Configuration extends GenericModel {
   /**
    * Gets the coordinator.
    *
-   * coordinator/worker property settings.
+   * Coordinator/ worker properties.
    *
    * @return the coordinator
    */
@@ -108,7 +108,7 @@ public class EnginePropertiesOaiGen1Configuration extends GenericModel {
   /**
    * Gets the worker.
    *
-   * coordinator/worker property settings.
+   * Coordinator/ worker properties.
    *
    * @return the worker
    */

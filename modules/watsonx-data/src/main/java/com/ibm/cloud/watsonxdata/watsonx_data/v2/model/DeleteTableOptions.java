@@ -24,6 +24,7 @@ public class DeleteTableOptions extends GenericModel {
   protected String schemaId;
   protected String tableId;
   protected String engineId;
+  protected String type;
   protected String authInstanceId;
 
   /**
@@ -34,6 +35,7 @@ public class DeleteTableOptions extends GenericModel {
     private String schemaId;
     private String tableId;
     private String engineId;
+    private String type;
     private String authInstanceId;
 
     /**
@@ -46,6 +48,7 @@ public class DeleteTableOptions extends GenericModel {
       this.schemaId = deleteTableOptions.schemaId;
       this.tableId = deleteTableOptions.tableId;
       this.engineId = deleteTableOptions.engineId;
+      this.type = deleteTableOptions.type;
       this.authInstanceId = deleteTableOptions.authInstanceId;
     }
 
@@ -124,6 +127,17 @@ public class DeleteTableOptions extends GenericModel {
     }
 
     /**
+     * Set the type.
+     *
+     * @param type the type
+     * @return the DeleteTableOptions builder
+     */
+    public Builder type(String type) {
+      this.type = type;
+      return this;
+    }
+
+    /**
      * Set the authInstanceId.
      *
      * @param authInstanceId the authInstanceId
@@ -150,6 +164,7 @@ public class DeleteTableOptions extends GenericModel {
     schemaId = builder.schemaId;
     tableId = builder.tableId;
     engineId = builder.engineId;
+    type = builder.type;
     authInstanceId = builder.authInstanceId;
   }
 
@@ -204,6 +219,17 @@ public class DeleteTableOptions extends GenericModel {
    */
   public String engineId() {
     return engineId;
+  }
+
+  /**
+   * Gets the type.
+   *
+   * URL encoded table type.
+   *
+   * @return the type
+   */
+  public String type() {
+    return type;
   }
 
   /**

@@ -13,6 +13,10 @@
 
 package com.ibm.cloud.watsonxdata.watsonx_data.v2.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
@@ -20,17 +24,20 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
  */
 public class PrestoEnginePatchRemoveEngineProperties extends GenericModel {
 
+  protected PrestoEnginePropertiesCatalog catalog;
   protected RemoveEnginePropertiesOaiGenConfiguration configuration;
   protected RemoveEnginePropertiesOaiGenJvm jvm;
-  protected PrestoEnginePropertiesCatalog catalog;
+  @SerializedName("event_listener")
+  protected List<String> eventListener;
 
   /**
    * Builder.
    */
   public static class Builder {
+    private PrestoEnginePropertiesCatalog catalog;
     private RemoveEnginePropertiesOaiGenConfiguration configuration;
     private RemoveEnginePropertiesOaiGenJvm jvm;
-    private PrestoEnginePropertiesCatalog catalog;
+    private List<String> eventListener;
 
     /**
      * Instantiates a new Builder from an existing PrestoEnginePatchRemoveEngineProperties instance.
@@ -38,9 +45,10 @@ public class PrestoEnginePatchRemoveEngineProperties extends GenericModel {
      * @param prestoEnginePatchRemoveEngineProperties the instance to initialize the Builder with
      */
     private Builder(PrestoEnginePatchRemoveEngineProperties prestoEnginePatchRemoveEngineProperties) {
+      this.catalog = prestoEnginePatchRemoveEngineProperties.catalog;
       this.configuration = prestoEnginePatchRemoveEngineProperties.configuration;
       this.jvm = prestoEnginePatchRemoveEngineProperties.jvm;
-      this.catalog = prestoEnginePatchRemoveEngineProperties.catalog;
+      this.eventListener = prestoEnginePatchRemoveEngineProperties.eventListener;
     }
 
     /**
@@ -56,6 +64,33 @@ public class PrestoEnginePatchRemoveEngineProperties extends GenericModel {
      */
     public PrestoEnginePatchRemoveEngineProperties build() {
       return new PrestoEnginePatchRemoveEngineProperties(this);
+    }
+
+    /**
+     * Adds a new element to eventListener.
+     *
+     * @param eventListener the new element to be added
+     * @return the PrestoEnginePatchRemoveEngineProperties builder
+     */
+    public Builder addEventListener(String eventListener) {
+      com.ibm.cloud.sdk.core.util.Validator.notNull(eventListener,
+        "eventListener cannot be null");
+      if (this.eventListener == null) {
+        this.eventListener = new ArrayList<String>();
+      }
+      this.eventListener.add(eventListener);
+      return this;
+    }
+
+    /**
+     * Set the catalog.
+     *
+     * @param catalog the catalog
+     * @return the PrestoEnginePatchRemoveEngineProperties builder
+     */
+    public Builder catalog(PrestoEnginePropertiesCatalog catalog) {
+      this.catalog = catalog;
+      return this;
     }
 
     /**
@@ -81,13 +116,14 @@ public class PrestoEnginePatchRemoveEngineProperties extends GenericModel {
     }
 
     /**
-     * Set the catalog.
+     * Set the eventListener.
+     * Existing eventListener will be replaced.
      *
-     * @param catalog the catalog
+     * @param eventListener the eventListener
      * @return the PrestoEnginePatchRemoveEngineProperties builder
      */
-    public Builder catalog(PrestoEnginePropertiesCatalog catalog) {
-      this.catalog = catalog;
+    public Builder eventListener(List<String> eventListener) {
+      this.eventListener = eventListener;
       return this;
     }
   }
@@ -95,9 +131,10 @@ public class PrestoEnginePatchRemoveEngineProperties extends GenericModel {
   protected PrestoEnginePatchRemoveEngineProperties() { }
 
   protected PrestoEnginePatchRemoveEngineProperties(Builder builder) {
+    catalog = builder.catalog;
     configuration = builder.configuration;
     jvm = builder.jvm;
-    catalog = builder.catalog;
+    eventListener = builder.eventListener;
   }
 
   /**
@@ -107,6 +144,17 @@ public class PrestoEnginePatchRemoveEngineProperties extends GenericModel {
    */
   public Builder newBuilder() {
     return new Builder(this);
+  }
+
+  /**
+   * Gets the catalog.
+   *
+   * Catalog settings.
+   *
+   * @return the catalog
+   */
+  public PrestoEnginePropertiesCatalog catalog() {
+    return catalog;
   }
 
   /**
@@ -132,14 +180,14 @@ public class PrestoEnginePatchRemoveEngineProperties extends GenericModel {
   }
 
   /**
-   * Gets the catalog.
+   * Gets the eventListener.
    *
-   * Catalog configuration settings.
+   * Event Listener properties.
    *
-   * @return the catalog
+   * @return the eventListener
    */
-  public PrestoEnginePropertiesCatalog catalog() {
-    return catalog;
+  public List<String> eventListener() {
+    return eventListener;
   }
 }
 

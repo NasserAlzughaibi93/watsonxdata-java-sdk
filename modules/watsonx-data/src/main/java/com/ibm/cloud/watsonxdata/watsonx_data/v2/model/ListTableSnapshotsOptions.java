@@ -209,7 +209,7 @@ public class ListTableSnapshotsOptions extends GenericModel {
   /**
    * Gets the authInstanceId.
    *
-   * CRN.
+   * watsonx.data instance ID.
    *
    * @return the authInstanceId
    */

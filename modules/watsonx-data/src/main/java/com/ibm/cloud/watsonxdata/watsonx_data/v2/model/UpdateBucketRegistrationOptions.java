@@ -151,7 +151,7 @@ public class UpdateBucketRegistrationOptions extends GenericModel {
   /**
    * Gets the authInstanceId.
    *
-   * CRN.
+   * Instance ID.
    *
    * @return the authInstanceId
    */

@@ -82,7 +82,7 @@ public class ListBucketRegistrationsOptions extends GenericModel {
   /**
    * Gets the authInstanceId.
    *
-   * CRN.
+   * Instance ID.
    *
    * @return the authInstanceId
    */

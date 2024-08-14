@@ -22,6 +22,7 @@ public class ListBucketObjectsOptions extends GenericModel {
 
   protected String bucketId;
   protected String authInstanceId;
+  protected String path;
 
   /**
    * Builder.
@@ -29,6 +30,7 @@ public class ListBucketObjectsOptions extends GenericModel {
   public static class Builder {
     private String bucketId;
     private String authInstanceId;
+    private String path;
 
     /**
      * Instantiates a new Builder from an existing ListBucketObjectsOptions instance.
@@ -38,6 +40,7 @@ public class ListBucketObjectsOptions extends GenericModel {
     private Builder(ListBucketObjectsOptions listBucketObjectsOptions) {
       this.bucketId = listBucketObjectsOptions.bucketId;
       this.authInstanceId = listBucketObjectsOptions.authInstanceId;
+      this.path = listBucketObjectsOptions.path;
     }
 
     /**
@@ -85,6 +88,17 @@ public class ListBucketObjectsOptions extends GenericModel {
       this.authInstanceId = authInstanceId;
       return this;
     }
+
+    /**
+     * Set the path.
+     *
+     * @param path the path
+     * @return the ListBucketObjectsOptions builder
+     */
+    public Builder path(String path) {
+      this.path = path;
+      return this;
+    }
   }
 
   protected ListBucketObjectsOptions() { }
@@ -94,6 +108,7 @@ public class ListBucketObjectsOptions extends GenericModel {
       "bucketId cannot be empty");
     bucketId = builder.bucketId;
     authInstanceId = builder.authInstanceId;
+    path = builder.path;
   }
 
   /**
@@ -119,12 +134,23 @@ public class ListBucketObjectsOptions extends GenericModel {
   /**
    * Gets the authInstanceId.
    *
-   * CRN.
+   * Instance ID.
    *
    * @return the authInstanceId
    */
   public String authInstanceId() {
     return authInstanceId;
+  }
+
+  /**
+   * Gets the path.
+   *
+   * path.
+   *
+   * @return the path
+   */
+  public String path() {
+    return path;
   }
 }
 

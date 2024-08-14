@@ -59,10 +59,4 @@ public class SyncCatalogsTest {
     assertTrue(mergePatch.containsKey("sync_iceberg_md"));
   }
 
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testSyncCatalogsError() throws Throwable {
-    new SyncCatalogs.Builder().build();
-  }
-
 }

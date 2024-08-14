@@ -37,6 +37,12 @@ public class BucketRegistration extends GenericModel {
     String IBM_COS = "ibm_cos";
     /** ibm_ceph. */
     String IBM_CEPH = "ibm_ceph";
+    /** adls_gen1. */
+    String ADLS_GEN1 = "adls_gen1";
+    /** adls_gen2. */
+    String ADLS_GEN2 = "adls_gen2";
+    /** google_cs. */
+    String GOOGLE_CS = "google_cs";
   }
 
   /**
@@ -79,6 +85,8 @@ public class BucketRegistration extends GenericModel {
   protected String managedBy;
   protected String region;
   protected String state;
+  @SerializedName("storage_details")
+  protected StorageDetails storageDetails;
   protected List<String> tags;
 
   protected BucketRegistration() { }
@@ -213,6 +221,17 @@ public class BucketRegistration extends GenericModel {
    */
   public String getState() {
     return state;
+  }
+
+  /**
+   * Gets the storageDetails.
+   *
+   * storage details.
+   *
+   * @return the storageDetails
+   */
+  public StorageDetails getStorageDetails() {
+    return storageDetails;
   }
 
   /**

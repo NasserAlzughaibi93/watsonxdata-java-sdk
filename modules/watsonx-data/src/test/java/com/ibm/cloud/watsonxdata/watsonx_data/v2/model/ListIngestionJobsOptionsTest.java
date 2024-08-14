@@ -33,11 +33,11 @@ public class ListIngestionJobsOptionsTest {
   public void testListIngestionJobsOptions() throws Throwable {
     ListIngestionJobsOptions listIngestionJobsOptionsModel = new ListIngestionJobsOptions.Builder()
       .authInstanceId("testString")
-      .page(Long.valueOf("1"))
+      .start("1")
       .jobsPerPage(Long.valueOf("1"))
       .build();
     assertEquals(listIngestionJobsOptionsModel.authInstanceId(), "testString");
-    assertEquals(listIngestionJobsOptionsModel.page(), Long.valueOf("1"));
+    assertEquals(listIngestionJobsOptionsModel.start(), "1");
     assertEquals(listIngestionJobsOptionsModel.jobsPerPage(), Long.valueOf("1"));
   }
 

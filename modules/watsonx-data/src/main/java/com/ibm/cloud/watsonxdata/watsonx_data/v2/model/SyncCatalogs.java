@@ -53,17 +53,6 @@ public class SyncCatalogs extends GenericModel {
     }
 
     /**
-     * Instantiates a new builder with required properties.
-     *
-     * @param autoAddNewTables the autoAddNewTables
-     * @param syncIcebergMd the syncIcebergMd
-     */
-    public Builder(Boolean autoAddNewTables, Boolean syncIcebergMd) {
-      this.autoAddNewTables = autoAddNewTables;
-      this.syncIcebergMd = syncIcebergMd;
-    }
-
-    /**
      * Builds a SyncCatalogs.
      *
      * @return the new SyncCatalogs instance
@@ -98,10 +87,6 @@ public class SyncCatalogs extends GenericModel {
   protected SyncCatalogs() { }
 
   protected SyncCatalogs(Builder builder) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(builder.autoAddNewTables,
-      "autoAddNewTables cannot be null");
-    com.ibm.cloud.sdk.core.util.Validator.notNull(builder.syncIcebergMd,
-      "syncIcebergMd cannot be null");
     autoAddNewTables = builder.autoAddNewTables;
     syncIcebergMd = builder.syncIcebergMd;
   }

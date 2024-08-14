@@ -35,6 +35,12 @@ public class CreateBucketRegistrationOptions extends GenericModel {
     String IBM_COS = "ibm_cos";
     /** ibm_ceph. */
     String IBM_CEPH = "ibm_ceph";
+    /** adls_gen1. */
+    String ADLS_GEN1 = "adls_gen1";
+    /** adls_gen2. */
+    String ADLS_GEN2 = "adls_gen2";
+    /** google_cs. */
+    String GOOGLE_CS = "google_cs";
   }
 
   /**
@@ -47,13 +53,14 @@ public class CreateBucketRegistrationOptions extends GenericModel {
     String CUSTOMER = "customer";
   }
 
-  protected BucketDetails bucketDetails;
   protected String bucketType;
   protected String description;
   protected String managedBy;
   protected BucketCatalog associatedCatalog;
+  protected BucketDetails bucketDetails;
   protected String bucketDisplayName;
   protected String region;
+  protected StorageDetails storageDetails;
   protected List<String> tags;
   protected String authInstanceId;
 
@@ -61,13 +68,14 @@ public class CreateBucketRegistrationOptions extends GenericModel {
    * Builder.
    */
   public static class Builder {
-    private BucketDetails bucketDetails;
     private String bucketType;
     private String description;
     private String managedBy;
     private BucketCatalog associatedCatalog;
+    private BucketDetails bucketDetails;
     private String bucketDisplayName;
     private String region;
+    private StorageDetails storageDetails;
     private List<String> tags;
     private String authInstanceId;
 
@@ -77,13 +85,14 @@ public class CreateBucketRegistrationOptions extends GenericModel {
      * @param createBucketRegistrationOptions the instance to initialize the Builder with
      */
     private Builder(CreateBucketRegistrationOptions createBucketRegistrationOptions) {
-      this.bucketDetails = createBucketRegistrationOptions.bucketDetails;
       this.bucketType = createBucketRegistrationOptions.bucketType;
       this.description = createBucketRegistrationOptions.description;
       this.managedBy = createBucketRegistrationOptions.managedBy;
       this.associatedCatalog = createBucketRegistrationOptions.associatedCatalog;
+      this.bucketDetails = createBucketRegistrationOptions.bucketDetails;
       this.bucketDisplayName = createBucketRegistrationOptions.bucketDisplayName;
       this.region = createBucketRegistrationOptions.region;
+      this.storageDetails = createBucketRegistrationOptions.storageDetails;
       this.tags = createBucketRegistrationOptions.tags;
       this.authInstanceId = createBucketRegistrationOptions.authInstanceId;
     }
@@ -97,13 +106,11 @@ public class CreateBucketRegistrationOptions extends GenericModel {
     /**
      * Instantiates a new builder with required properties.
      *
-     * @param bucketDetails the bucketDetails
      * @param bucketType the bucketType
      * @param description the description
      * @param managedBy the managedBy
      */
-    public Builder(BucketDetails bucketDetails, String bucketType, String description, String managedBy) {
-      this.bucketDetails = bucketDetails;
+    public Builder(String bucketType, String description, String managedBy) {
       this.bucketType = bucketType;
       this.description = description;
       this.managedBy = managedBy;
@@ -131,17 +138,6 @@ public class CreateBucketRegistrationOptions extends GenericModel {
         this.tags = new ArrayList<String>();
       }
       this.tags.add(tags);
-      return this;
-    }
-
-    /**
-     * Set the bucketDetails.
-     *
-     * @param bucketDetails the bucketDetails
-     * @return the CreateBucketRegistrationOptions builder
-     */
-    public Builder bucketDetails(BucketDetails bucketDetails) {
-      this.bucketDetails = bucketDetails;
       return this;
     }
 
@@ -190,6 +186,17 @@ public class CreateBucketRegistrationOptions extends GenericModel {
     }
 
     /**
+     * Set the bucketDetails.
+     *
+     * @param bucketDetails the bucketDetails
+     * @return the CreateBucketRegistrationOptions builder
+     */
+    public Builder bucketDetails(BucketDetails bucketDetails) {
+      this.bucketDetails = bucketDetails;
+      return this;
+    }
+
+    /**
      * Set the bucketDisplayName.
      *
      * @param bucketDisplayName the bucketDisplayName
@@ -208,6 +215,17 @@ public class CreateBucketRegistrationOptions extends GenericModel {
      */
     public Builder region(String region) {
       this.region = region;
+      return this;
+    }
+
+    /**
+     * Set the storageDetails.
+     *
+     * @param storageDetails the storageDetails
+     * @return the CreateBucketRegistrationOptions builder
+     */
+    public Builder storageDetails(StorageDetails storageDetails) {
+      this.storageDetails = storageDetails;
       return this;
     }
 
@@ -238,21 +256,20 @@ public class CreateBucketRegistrationOptions extends GenericModel {
   protected CreateBucketRegistrationOptions() { }
 
   protected CreateBucketRegistrationOptions(Builder builder) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(builder.bucketDetails,
-      "bucketDetails cannot be null");
     com.ibm.cloud.sdk.core.util.Validator.notNull(builder.bucketType,
       "bucketType cannot be null");
     com.ibm.cloud.sdk.core.util.Validator.notNull(builder.description,
       "description cannot be null");
     com.ibm.cloud.sdk.core.util.Validator.notNull(builder.managedBy,
       "managedBy cannot be null");
-    bucketDetails = builder.bucketDetails;
     bucketType = builder.bucketType;
     description = builder.description;
     managedBy = builder.managedBy;
     associatedCatalog = builder.associatedCatalog;
+    bucketDetails = builder.bucketDetails;
     bucketDisplayName = builder.bucketDisplayName;
     region = builder.region;
+    storageDetails = builder.storageDetails;
     tags = builder.tags;
     authInstanceId = builder.authInstanceId;
   }
@@ -264,17 +281,6 @@ public class CreateBucketRegistrationOptions extends GenericModel {
    */
   public Builder newBuilder() {
     return new Builder(this);
-  }
-
-  /**
-   * Gets the bucketDetails.
-   *
-   * bucket details.
-   *
-   * @return the bucketDetails
-   */
-  public BucketDetails bucketDetails() {
-    return bucketDetails;
   }
 
   /**
@@ -322,6 +328,17 @@ public class CreateBucketRegistrationOptions extends GenericModel {
   }
 
   /**
+   * Gets the bucketDetails.
+   *
+   * bucket details.
+   *
+   * @return the bucketDetails
+   */
+  public BucketDetails bucketDetails() {
+    return bucketDetails;
+  }
+
+  /**
    * Gets the bucketDisplayName.
    *
    * bucket display name.
@@ -344,6 +361,17 @@ public class CreateBucketRegistrationOptions extends GenericModel {
   }
 
   /**
+   * Gets the storageDetails.
+   *
+   * storage details.
+   *
+   * @return the storageDetails
+   */
+  public StorageDetails storageDetails() {
+    return storageDetails;
+  }
+
+  /**
    * Gets the tags.
    *
    * tags.
@@ -357,7 +385,7 @@ public class CreateBucketRegistrationOptions extends GenericModel {
   /**
    * Gets the authInstanceId.
    *
-   * CRN.
+   * Instance ID.
    *
    * @return the authInstanceId
    */

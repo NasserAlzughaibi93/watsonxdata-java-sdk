@@ -17,15 +17,14 @@ import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.service.exception.ServiceResponseException;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import com.ibm.cloud.sdk.core.util.CredentialUtils;
-import com.ibm.cloud.watsonx_data.test.SdkIntegrationTestBase;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.AddPrestissimoEngineCatalogsOptions;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.AddPrestoEngineCatalogsOptions;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.AddSparkEngineCatalogsOptions;
+import com.ibm.cloud.watsonxdata.test.SdkIntegrationTestBase;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.BucketCatalog;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.BucketDetails;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.BucketObjectProperties;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.BucketRegistration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.BucketRegistrationCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.BucketRegistrationObjectCollection;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.BucketRegistrationObjectSizeCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.BucketRegistrationPatch;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Catalog;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CatalogCollection;
@@ -38,25 +37,37 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateBucketRegistrationO
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateColumnsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateDatabaseRegistrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateDb2EngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateDriverRegistrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEnginePauseCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEngineRestartCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEngineResumeCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateEngineScaleCreatedBody;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateExecuteQueryOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateHdfsStorageOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateIngestionJobsLocalFilesOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateIngestionJobsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateIntegrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateMilvusServiceOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateMilvusServicePauseOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateMilvusServiceResumeOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateMilvusServiceScaleOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateNetezzaEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateOtherEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePrestissimoEngineCatalogsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePrestissimoEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePrestoEngineCatalogsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePrestoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreatePreviewIngestionFileOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSalIntegrationEnrichmentGlobalSettingsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSalIntegrationEnrichmentOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSalIntegrationEnrichmentSettingsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSalIntegrationOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSalIntegrationUploadGlossaryOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSchemaCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSchemaOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSparkEngineApplicationOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSparkEngineCatalogsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSparkEngineOptions;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSparkEnginePauseOptions;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSparkEngineResumeOptions;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.CreateSparkEngineScaleOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseCatalog;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseDetails;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistration;
@@ -64,51 +75,84 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationColle
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationDatabasePropertiesItems;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationPatch;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationPatchDatabaseDetails;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationPatchTopicsItems;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationPrototypeDatabasePropertiesItems;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationTopicsItems;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Db2Engine;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Db2EngineCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Db2EngineDetails;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Db2EngineDetailsBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Db2EnginePatch;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteBucketRegistrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteColumnOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDatabaseCatalogOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDb2EngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDeactivateBucketOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDriverEnginesOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteDriverRegistrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteIngestionJobsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteIntegrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteMilvusServiceOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteNetezzaEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteOtherEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeletePrestissimoEngineCatalogsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeletePrestissimoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeletePrestoEngineCatalogsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteSalIntegrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteSchemaOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteSparkEngineApplicationsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteSparkEngineCatalogsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteSparkEngineHistoryServerOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteSparkEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeleteTableOptions;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DeregisterBucketOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DisplayNameInfoResponse;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Driver;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DriverRegistration;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DriverRegistrationCollection;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DriverRegistrationEngine;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DriverRegistrationEnginePrototype;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Endpoint;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EndpointCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EngineDetailsBody;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnginePropertiesLogConfiguration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnginePropertiesOaiGen1Configuration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnginePropertiesOaiGen1Jvm;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnginePropertiesOaiGenConfiguration;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnrichmentAsset;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.EnrichmentObj;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ErrorObj;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ExecuteQueryCreatedBody;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetBucketObjectPropertiesOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetBucketRegistrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetCatalogOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetDatabaseOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetEndpointsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetIngestionJobOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetIntegrationsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetMilvusServiceOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetPrestissimoEngineCatalogOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetPrestissimoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetPrestoEngineCatalogOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetPrestoEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationEnrichmentAssetsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationEnrichmentDataAssetOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationEnrichmentGlobalSettingsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationEnrichmentJobRunLogsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationEnrichmentJobRunsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationEnrichmentJobsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationEnrichmentSettingsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationGlossaryTermsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationMappingsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSalIntegrationUploadGlossaryStatusOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSparkEngineApplicationStatusOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSparkEngineCatalogOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSparkEngineHistoryServerOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetSparkEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GetTableOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.GlossaryObject;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.HdfsStorageRegistration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJob;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobCollectionPage;
@@ -116,13 +160,21 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobCsvProperty;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobExecuteConfig;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobPrototypeCsvProperty;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobPrototypeExecuteConfig;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IngestionJobsPager;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Integration;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IntegrationCollection;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.IntegrationPatch;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListAllIntegrationsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListBucketObjectsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListBucketRegistrationsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListCatalogsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListColumnsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListDatabaseRegistrationsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListDb2EnginesOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListDriverRegistrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListIngestionJobsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListMilvusDatabaseCollectionsOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListMilvusServiceDatabasesOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListMilvusServicesOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListNetezzaEnginesOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListOtherEnginesOptions;
@@ -139,9 +191,12 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListSparkVersionsOKBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListSparkVersionsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListTableSnapshotsOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ListTablesOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.MilvusDatabaseCollections;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.MilvusService;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.MilvusServiceCollection;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.MilvusServiceDatabases;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.MilvusServicePatch;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Milvusdbcollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.NetezzaEngine;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.NetezzaEngineCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.NetezzaEngineDetails;
@@ -153,8 +208,10 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.OtherEngine;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.OtherEngineCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.OtherEngineDetails;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.OtherEngineDetailsBody;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Path;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PausePrestissimoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PausePrestoEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PauseSparkEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestissimoEndpoints;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestissimoEngine;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestissimoEngineCollection;
@@ -171,6 +228,7 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEngineEnginePropert
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePatch;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePatchRemoveEngineProperties;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePropertiesCatalog;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePropertiesEventListener;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestoEnginePropertiesGlobal;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PreviewIngestionFile;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PreviewIngestionFilePrototypeCsvProperty;
@@ -179,14 +237,16 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEngineProperties;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesConfiguration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesOaiGenConfiguration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesOaiGenJvm;
-import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RenameTableOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesPrestissimoOaiGenJvm;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ReplaceSnapshotCreatedBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RestartPrestissimoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RestartPrestoEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ResultExecuteQuery;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ResultPrestissimoExplainStatement;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ResultRunPrestissimoExplainAnalyzeStatement;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ResumePrestissimoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ResumePrestoEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ResumeSparkEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RollbackTableOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RunExplainAnalyzeStatementOKBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RunExplainAnalyzeStatementOptions;
@@ -194,8 +254,33 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RunExplainStatementOKBody
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RunExplainStatementOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RunPrestissimoExplainAnalyzeStatementOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RunPrestissimoExplainStatementOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegration;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentAssets;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentDataAsset;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobRun;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobRunLogs;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobs;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobsProperties;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobsResultItem;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobsResultItemEntity;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobsResultItemEntityJob;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobsResultItemEntityJobConfiguration;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobsResultItemEntityTaskCredentialsSupport;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentJobsResultItemMetadata;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentSettings;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentSettingsSemanticExpansion;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfiguration;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfiguration;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationEnrichmentSettingsTermAssignment;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationGlossaryTerms;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationMappings;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationPatch;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationUploadGlossary;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SalIntegrationUploadGlossaryStatus;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ScalePrestissimoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ScalePrestoEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ScaleSparkEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.ScheduleInfo;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SparkApplicationConfig;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SparkApplicationDetails;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SparkApplicationEnv;
@@ -213,6 +298,7 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SparkHistoryServer;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SparkScaleConfig;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SparkVolumeDetails;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.StartSparkEngineHistoryServerOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.StorageDetails;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SuccessResponse;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.SyncCatalogs;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.Table;
@@ -224,17 +310,22 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateBucketRegistrationO
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateColumnOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateDatabaseOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateDb2EngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateDriverEnginesOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateIntegrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateMilvusServiceOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateNetezzaEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdatePrestissimoEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdatePrestoEngineOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateSalIntegrationOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateSparkEngineBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateSparkEngineBodyEngineDetails;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateSparkEngineOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateSyncCatalogOKBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateSyncCatalogOptions;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.UpdateTableOptions;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.utils.TestUtilities;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -306,27 +397,43 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
   @Test(dependsOnMethods = { "testListBucketRegistrations" })
   public void testCreateBucketRegistration() throws Exception {
     try {
-      BucketDetails bucketDetailsModel = new BucketDetails.Builder()
-        .accessKey("b9cbf248ea5c4c96947e64407108559j")
-        .bucketName("sample-bucket")
-        .endpoint("https://s3.<region>.cloud-object-storage.appdomain.cloud/")
-        .secretKey("13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87")
-        .build();
-
       BucketCatalog bucketCatalogModel = new BucketCatalog.Builder()
         .catalogName("sampleCatalog")
         .catalogTags(java.util.Arrays.asList("catalog_tag_1", "catalog_tag_2"))
         .catalogType("iceberg")
         .build();
 
+      BucketDetails bucketDetailsModel = new BucketDetails.Builder()
+        .accessKey("b9cbf248ea5c4c96947e64407108559j")
+        .bucketName("sample-bucket")
+        .endpoint("https://s3.<region>.cloud-object-storage.appdomain.cloud/")
+        .keyFile("key_file")
+        .provider("ibm_cos")
+        .region("us-south")
+        .secretKey("13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87")
+        .build();
+
+      StorageDetails storageDetailsModel = new StorageDetails.Builder()
+        .accessKey("<access_key>")
+        .applicationId("<application_id>")
+        .authMode("<account_key/sas/service_principle>")
+        .containerName("sample-container")
+        .directoryId("<directory_id>")
+        .endpoint("abfss://<container_name>@<storage_account_name>.dfs.core.windows.net/")
+        .sasToken("<sas_token>")
+        .secretKey("secret_key")
+        .storageAccountName("sample-storage")
+        .build();
+
       CreateBucketRegistrationOptions createBucketRegistrationOptions = new CreateBucketRegistrationOptions.Builder()
-        .bucketDetails(bucketDetailsModel)
         .bucketType("ibm_cos")
         .description("COS bucket for customer data")
         .managedBy("ibm")
         .associatedCatalog(bucketCatalogModel)
+        .bucketDetails(bucketDetailsModel)
         .bucketDisplayName("sample-bucket-displayname")
         .region("us-south")
+        .storageDetails(storageDetailsModel)
         .tags(java.util.Arrays.asList("bucket-tag1", "bucket-tag2"))
         .authInstanceId("testString")
         .build();
@@ -376,6 +483,9 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
         .accessKey("b9cbf248ea5c4c96947e64407108559j")
         .bucketName("sample-bucket")
         .endpoint("https://s3.<region>.cloud-object-storage.appdomain.cloud/")
+        .keyFile("key_file")
+        .provider("ibm_cos")
+        .region("us-south")
         .secretKey("13b4045cac1a0be54c9fjbe53cb22df5fn397cd2c45b66c87")
         .build();
 
@@ -437,6 +547,7 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
       ListBucketObjectsOptions listBucketObjectsOptions = new ListBucketObjectsOptions.Builder()
         .bucketId("testString")
         .authInstanceId("testString")
+        .path("testString")
         .build();
 
       // Invoke operation
@@ -455,6 +566,75 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
   }
 
   @Test(dependsOnMethods = { "testListBucketObjects" })
+  public void testGetBucketObjectProperties() throws Exception {
+    try {
+      Path pathModel = new Path.Builder()
+        .path("string")
+        .build();
+
+      GetBucketObjectPropertiesOptions getBucketObjectPropertiesOptions = new GetBucketObjectPropertiesOptions.Builder()
+        .bucketId("testString")
+        .paths(java.util.Arrays.asList(pathModel))
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<BucketObjectProperties> response = service.getBucketObjectProperties(getBucketObjectPropertiesOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 201);
+
+      BucketObjectProperties bucketObjectPropertiesResult = response.getResult();
+      assertNotNull(bucketObjectPropertiesResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testGetBucketObjectProperties" })
+  public void testCreateHdfsStorage() throws Exception {
+    try {
+      CreateHdfsStorageOptions createHdfsStorageOptions = new CreateHdfsStorageOptions.Builder()
+        .bucketDisplayName("testString")
+        .bucketType("testString")
+        .hmsThriftUri("testString")
+        .hmsThriftPort(Long.valueOf("1"))
+        .coreSite("testString")
+        .hdfsSite("testString")
+        .kerberos("testString")
+        .catalogName("testString")
+        .catalogType("testString")
+        .krb5Config("testString")
+        .hiveKeytab(TestUtilities.createMockStream("This is a mock file."))
+        .hiveKeytabContentType("testString")
+        .hdfsKeytab(TestUtilities.createMockStream("This is a mock file."))
+        .hdfsKeytabContentType("testString")
+        .hiveServerPrincipal("testString")
+        .hiveClientPrincipal("testString")
+        .hdfsPrincipal("testString")
+        .description("testString")
+        .createdOn("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<HdfsStorageRegistration> response = service.createHdfsStorage(createHdfsStorageOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 201);
+
+      HdfsStorageRegistration hdfsStorageRegistrationResult = response.getResult();
+      assertNotNull(hdfsStorageRegistrationResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testCreateHdfsStorage" })
   public void testListDatabaseRegistrations() throws Exception {
     try {
       ListDatabaseRegistrationsOptions listDatabaseRegistrationsOptions = new ListDatabaseRegistrationsOptions.Builder()
@@ -486,19 +666,42 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
         .build();
 
       DatabaseDetails databaseDetailsModel = new DatabaseDetails.Builder()
+        .authenticationType("LDAP")
+        .brokerAuthenticationPassword("samplepassword")
+        .brokerAuthenticationType("PASSWORD")
+        .brokerAuthenticationUser("sampleuser")
         .certificate("contents of a pem/crt file")
         .certificateExtension("pem/crt")
+        .connectionMethod("basic, apikey")
+        .connectionMode("service_name")
+        .connectionModeValue("orclpdb")
+        .connectionType("JDBC, Arrow flight")
+        .controllerAuthenticationPassword("samplepassword")
+        .controllerAuthenticationType("PASSWORD")
+        .controllerAuthenticationUser("sampleuser")
+        .cpdHostname("samplecpdhostname")
+        .credentialsKey("eyJ0eXBlIjoic2VydmljZV9hY2NvdW50IiwicHJvamVjdF9pZCI6ImNvbm9wcy1iaWdxdWVyeSIsInByaXZhdGVfa2V5X2lkIjoiMGY3......")
         .databaseName("new_database")
         .hostname("db2@<hostname>.com")
         .hostnameInCertificate("samplehostname")
         .hosts("abc.com:1234,xyz.com:4321")
+        .informixServer("ol_informix1410")
         .password("samplepassword")
         .port(Long.valueOf("4553"))
+        .projectId("conops-bigquery")
         .sasl(true)
+        .serviceApiKey("sampleapikey")
+        .serviceHostname("api.dataplatform.dev.cloud.ibm.com")
+        .servicePassword("samplepassword")
+        .servicePort(Long.valueOf("443"))
+        .serviceSsl(true)
+        .serviceTokenUrl("sampletoakenurl")
+        .serviceUsername("sampleusername")
         .ssl(true)
         .tables("kafka_table_name")
         .username("sampleuser")
         .validateServerCertificate(true)
+        .verifyHostName(true)
         .build();
 
       DatabaseRegistrationPrototypeDatabasePropertiesItems databaseRegistrationPrototypeDatabasePropertiesItemsModel = new DatabaseRegistrationPrototypeDatabasePropertiesItems.Builder()
@@ -565,11 +768,19 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
         .username("sampleuser")
         .build();
 
+      DatabaseRegistrationPatchTopicsItems databaseRegistrationPatchTopicsItemsModel = new DatabaseRegistrationPatchTopicsItems.Builder()
+        .createdOn("1686792721")
+        .fileContents("sample file contents")
+        .fileName("sample file name")
+        .topicName("customer")
+        .build();
+
       DatabaseRegistrationPatch databaseRegistrationPatchModel = new DatabaseRegistrationPatch.Builder()
         .databaseDetails(databaseRegistrationPatchDatabaseDetailsModel)
         .databaseDisplayName("new_database")
         .description("External database description")
         .tags(java.util.Arrays.asList("testdatabase", "userdatabase"))
+        .topics(java.util.Arrays.asList(databaseRegistrationPatchTopicsItemsModel))
         .build();
       Map<String, Object> databaseRegistrationPatchModelAsPatch = databaseRegistrationPatchModel.asPatch();
 
@@ -595,6 +806,84 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
   }
 
   @Test(dependsOnMethods = { "testUpdateDatabase" })
+  public void testListDriverRegistration() throws Exception {
+    try {
+      ListDriverRegistrationOptions listDriverRegistrationOptions = new ListDriverRegistrationOptions.Builder()
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<DriverRegistrationCollection> response = service.listDriverRegistration(listDriverRegistrationOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      DriverRegistrationCollection driverRegistrationCollectionResult = response.getResult();
+      assertNotNull(driverRegistrationCollectionResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testListDriverRegistration" })
+  public void testCreateDriverRegistration() throws Exception {
+    try {
+      CreateDriverRegistrationOptions createDriverRegistrationOptions = new CreateDriverRegistrationOptions.Builder()
+        .driver(TestUtilities.createMockStream("This is a mock file."))
+        .driverName("testString")
+        .connectionType("testString")
+        .driverContentType("testString")
+        .version("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<DriverRegistration> response = service.createDriverRegistration(createDriverRegistrationOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 201);
+
+      DriverRegistration driverRegistrationResult = response.getResult();
+      assertNotNull(driverRegistrationResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testCreateDriverRegistration" })
+  public void testUpdateDriverEngines() throws Exception {
+    try {
+      DriverRegistrationEnginePrototype driverRegistrationEnginePrototypeModel = new DriverRegistrationEnginePrototype.Builder()
+        .engines(java.util.Arrays.asList("testString"))
+        .build();
+      Map<String, Object> driverRegistrationEnginePrototypeModelAsPatch = driverRegistrationEnginePrototypeModel.asPatch();
+
+      UpdateDriverEnginesOptions updateDriverEnginesOptions = new UpdateDriverEnginesOptions.Builder()
+        .driverId("testString")
+        .body(driverRegistrationEnginePrototypeModelAsPatch)
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<DriverRegistrationEngine> response = service.updateDriverEngines(updateDriverEnginesOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      DriverRegistrationEngine driverRegistrationEngineResult = response.getResult();
+      assertNotNull(driverRegistrationEngineResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testUpdateDriverEngines" })
   public void testListOtherEngines() throws Exception {
     try {
       ListOtherEnginesOptions listOtherEnginesOptions = new ListOtherEnginesOptions.Builder()
@@ -630,7 +919,6 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
         .description("external engine description")
         .origin("external")
         .tags(java.util.Arrays.asList("tag1", "tag2"))
-        .type("netezza")
         .authInstanceId("testString")
         .build();
 
@@ -650,6 +938,120 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
   }
 
   @Test(dependsOnMethods = { "testCreateOtherEngine" })
+  public void testListAllIntegrations() throws Exception {
+    try {
+      ListAllIntegrationsOptions listAllIntegrationsOptions = new ListAllIntegrationsOptions.Builder()
+        .authInstanceId("testString")
+        .secret("testString")
+        .serviceType("testString")
+        .state(java.util.Arrays.asList("testString"))
+        .build();
+
+      // Invoke operation
+      Response<IntegrationCollection> response = service.listAllIntegrations(listAllIntegrationsOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      IntegrationCollection integrationCollectionResult = response.getResult();
+      assertNotNull(integrationCollectionResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testListAllIntegrations" })
+  public void testCreateIntegration() throws Exception {
+    try {
+      CreateIntegrationOptions createIntegrationOptions = new CreateIntegrationOptions.Builder()
+        .apikey("testString")
+        .enableDataPolicyWithinWxd(false)
+        .password("password")
+        .resource("resource_name")
+        .serviceType("ranger")
+        .storageCatalogs(java.util.Arrays.asList("testString"))
+        .url("http://abcd.efgh.com:9876/")
+        .username("username")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<Integration> response = service.createIntegration(createIntegrationOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 201);
+
+      Integration integrationResult = response.getResult();
+      assertNotNull(integrationResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testCreateIntegration" })
+  public void testGetIntegrations() throws Exception {
+    try {
+      GetIntegrationsOptions getIntegrationsOptions = new GetIntegrationsOptions.Builder()
+        .integrationId("testString")
+        .authInstanceId("testString")
+        .secret("testString")
+        .build();
+
+      // Invoke operation
+      Response<Integration> response = service.getIntegrations(getIntegrationsOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      Integration integrationResult = response.getResult();
+      assertNotNull(integrationResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testGetIntegrations" })
+  public void testUpdateIntegration() throws Exception {
+    try {
+      IntegrationPatch integrationPatchModel = new IntegrationPatch.Builder()
+        .apikey("apikey")
+        .enableDataPolicyWithinWxd(true)
+        .password("password")
+        .resource("resource_name")
+        .storageCatalogs(java.util.Arrays.asList("iceberg_data", "hive_data"))
+        .url("http://abcd.efgh.com:9876/")
+        .username("username")
+        .build();
+      Map<String, Object> integrationPatchModelAsPatch = integrationPatchModel.asPatch();
+
+      UpdateIntegrationOptions updateIntegrationOptions = new UpdateIntegrationOptions.Builder()
+        .integrationId("testString")
+        .integrationPatch(integrationPatchModelAsPatch)
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<Integration> response = service.updateIntegration(updateIntegrationOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      Integration integrationResult = response.getResult();
+      assertNotNull(integrationResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testUpdateIntegration" })
   public void testListDb2Engines() throws Exception {
     try {
       ListDb2EnginesOptions listDb2EnginesOptions = new ListDb2EnginesOptions.Builder()
@@ -818,6 +1220,32 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
   }
 
   @Test(dependsOnMethods = { "testUpdateNetezzaEngine" })
+  public void testCreateExecuteQuery() throws Exception {
+    try {
+      CreateExecuteQueryOptions createExecuteQueryOptions = new CreateExecuteQueryOptions.Builder()
+        .engineId("testString")
+        .sqlString("select expenses from expenditure")
+        .catalogName("sampleCatalog")
+        .schemaName("SampleSchema1")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<ExecuteQueryCreatedBody> response = service.createExecuteQuery(createExecuteQueryOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 201);
+
+      ExecuteQueryCreatedBody executeQueryCreatedBodyResult = response.getResult();
+      assertNotNull(executeQueryCreatedBodyResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testCreateExecuteQuery" })
   public void testListPrestissimoEngines() throws Exception {
     try {
       ListPrestissimoEnginesOptions listPrestissimoEnginesOptions = new ListPrestissimoEnginesOptions.Builder()
@@ -961,10 +1389,14 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
         .worker(java.util.Arrays.asList("testString"))
         .build();
 
+      RemoveEnginePropertiesPrestissimoOaiGenJvm removeEnginePropertiesPrestissimoOaiGenJvmModel = new RemoveEnginePropertiesPrestissimoOaiGenJvm.Builder()
+        .coordinator(java.util.Arrays.asList("testString"))
+        .build();
+
       RemoveEngineProperties removeEnginePropertiesModel = new RemoveEngineProperties.Builder()
         .catalog(prestissimoEnginePropertiesCatalogModel)
         .configuration(removeEnginePropertiesConfigurationModel)
-        .jvm(removeEnginePropertiesConfigurationModel)
+        .jvm(removeEnginePropertiesPrestissimoOaiGenJvmModel)
         .velox(java.util.Arrays.asList("testString"))
         .build();
 
@@ -1023,22 +1455,22 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
   }
 
   @Test(dependsOnMethods = { "testListPrestissimoEngineCatalogs" })
-  public void testAddPrestissimoEngineCatalogs() throws Exception {
+  public void testCreatePrestissimoEngineCatalogs() throws Exception {
     try {
-      AddPrestissimoEngineCatalogsOptions addPrestissimoEngineCatalogsOptions = new AddPrestissimoEngineCatalogsOptions.Builder()
+      CreatePrestissimoEngineCatalogsOptions createPrestissimoEngineCatalogsOptions = new CreatePrestissimoEngineCatalogsOptions.Builder()
         .engineId("testString")
-        .catalogNames("testString")
+        .catalogName("testString")
         .authInstanceId("testString")
         .build();
 
       // Invoke operation
-      Response<CatalogCollection> response = service.addPrestissimoEngineCatalogs(addPrestissimoEngineCatalogsOptions).execute();
+      Response<Catalog> response = service.createPrestissimoEngineCatalogs(createPrestissimoEngineCatalogsOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 201);
 
-      CatalogCollection catalogCollectionResult = response.getResult();
-      assertNotNull(catalogCollectionResult);
+      Catalog catalogResult = response.getResult();
+      assertNotNull(catalogResult);
 
     } catch (ServiceResponseException e) {
         fail(String.format("Service returned status code %d: %s%nError details: %s",
@@ -1046,7 +1478,7 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test(dependsOnMethods = { "testAddPrestissimoEngineCatalogs" })
+  @Test(dependsOnMethods = { "testCreatePrestissimoEngineCatalogs" })
   public void testGetPrestissimoEngineCatalog() throws Exception {
     try {
       GetPrestissimoEngineCatalogOptions getPrestissimoEngineCatalogOptions = new GetPrestissimoEngineCatalogOptions.Builder()
@@ -1327,6 +1759,10 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
         .worker(nodeDescriptionBodyModel)
         .build();
 
+      PrestoEnginePropertiesEventListener prestoEnginePropertiesEventListenerModel = new PrestoEnginePropertiesEventListener.Builder()
+        .eventListenerProperty("testString")
+        .build();
+
       PrestoEnginePropertiesGlobal prestoEnginePropertiesGlobalModel = new PrestoEnginePropertiesGlobal.Builder()
         .globalProperty("enable-mixed-case-support:true")
         .build();
@@ -1336,11 +1772,18 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
         .worker(nodeDescriptionBodyModel)
         .build();
 
+      EnginePropertiesLogConfiguration enginePropertiesLogConfigurationModel = new EnginePropertiesLogConfiguration.Builder()
+        .coordinator(nodeDescriptionBodyModel)
+        .worker(nodeDescriptionBodyModel)
+        .build();
+
       PrestoEngineEngineProperties prestoEngineEnginePropertiesModel = new PrestoEngineEngineProperties.Builder()
         .catalog(prestoEnginePropertiesCatalogModel)
         .configuration(enginePropertiesOaiGen1ConfigurationModel)
+        .eventListener(prestoEnginePropertiesEventListenerModel)
         .global(prestoEnginePropertiesGlobalModel)
         .jvm(enginePropertiesOaiGen1JvmModel)
+        .logConfig(enginePropertiesLogConfigurationModel)
         .build();
 
       RemoveEnginePropertiesOaiGenConfiguration removeEnginePropertiesOaiGenConfigurationModel = new RemoveEnginePropertiesOaiGenConfiguration.Builder()
@@ -1354,9 +1797,10 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
         .build();
 
       PrestoEnginePatchRemoveEngineProperties prestoEnginePatchRemoveEnginePropertiesModel = new PrestoEnginePatchRemoveEngineProperties.Builder()
+        .catalog(prestoEnginePropertiesCatalogModel)
         .configuration(removeEnginePropertiesOaiGenConfigurationModel)
         .jvm(removeEnginePropertiesOaiGenJvmModel)
-        .catalog(prestoEnginePropertiesCatalogModel)
+        .eventListener(java.util.Arrays.asList())
         .build();
 
       PrestoEnginePatch prestoEnginePatchModel = new PrestoEnginePatch.Builder()
@@ -1414,22 +1858,22 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
   }
 
   @Test(dependsOnMethods = { "testListPrestoEngineCatalogs" })
-  public void testAddPrestoEngineCatalogs() throws Exception {
+  public void testCreatePrestoEngineCatalogs() throws Exception {
     try {
-      AddPrestoEngineCatalogsOptions addPrestoEngineCatalogsOptions = new AddPrestoEngineCatalogsOptions.Builder()
+      CreatePrestoEngineCatalogsOptions createPrestoEngineCatalogsOptions = new CreatePrestoEngineCatalogsOptions.Builder()
         .engineId("testString")
-        .catalogNames("testString")
+        .catalogName("testString")
         .authInstanceId("testString")
         .build();
 
       // Invoke operation
-      Response<CatalogCollection> response = service.addPrestoEngineCatalogs(addPrestoEngineCatalogsOptions).execute();
+      Response<Catalog> response = service.createPrestoEngineCatalogs(createPrestoEngineCatalogsOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 201);
 
-      CatalogCollection catalogCollectionResult = response.getResult();
-      assertNotNull(catalogCollectionResult);
+      Catalog catalogResult = response.getResult();
+      assertNotNull(catalogResult);
 
     } catch (ServiceResponseException e) {
         fail(String.format("Service returned status code %d: %s%nError details: %s",
@@ -1437,7 +1881,7 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test(dependsOnMethods = { "testAddPrestoEngineCatalogs" })
+  @Test(dependsOnMethods = { "testCreatePrestoEngineCatalogs" })
   public void testGetPrestoEngineCatalog() throws Exception {
     try {
       GetPrestoEngineCatalogOptions getPrestoEngineCatalogOptions = new GetPrestoEngineCatalogOptions.Builder()
@@ -1612,6 +2056,470 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
   }
 
   @Test(dependsOnMethods = { "testScalePrestoEngine" })
+  public void testGetSalIntegration() throws Exception {
+    try {
+      GetSalIntegrationOptions getSalIntegrationOptions = new GetSalIntegrationOptions.Builder()
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<SalIntegration> response = service.getSalIntegration(getSalIntegrationOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      SalIntegration salIntegrationResult = response.getResult();
+      assertNotNull(salIntegrationResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testGetSalIntegration" })
+  public void testCreateSalIntegration() throws Exception {
+    try {
+      CreateSalIntegrationOptions createSalIntegrationOptions = new CreateSalIntegrationOptions.Builder()
+        .apikey("12efd3raq")
+        .engineId("presto-01")
+        .storageResourceCrn("crn:v1:staging:public:cloud-object-storage:global:a/a7026b374f39f570d20984c1ac6ecf63:5778e94f-c8c7-46a8-9878-d5eeadb51161")
+        .storageType("bmcos_object_storage")
+        .trialPlan(true)
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<SalIntegration> response = service.createSalIntegration(createSalIntegrationOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 201);
+
+      SalIntegration salIntegrationResult = response.getResult();
+      assertNotNull(salIntegrationResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testCreateSalIntegration" })
+  public void testUpdateSalIntegration() throws Exception {
+    try {
+      SalIntegrationPatch salIntegrationPatchModel = new SalIntegrationPatch.Builder()
+        .op("add")
+        .path("storage")
+        .value("new-apikey")
+        .build();
+      Map<String, Object> salIntegrationPatchModelAsPatch = salIntegrationPatchModel.asPatch();
+
+      UpdateSalIntegrationOptions updateSalIntegrationOptions = new UpdateSalIntegrationOptions.Builder()
+        .body(salIntegrationPatchModelAsPatch)
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<SalIntegration> response = service.updateSalIntegration(updateSalIntegrationOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      SalIntegration salIntegrationResult = response.getResult();
+      assertNotNull(salIntegrationResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testUpdateSalIntegration" })
+  public void testCreateSalIntegrationEnrichment() throws Exception {
+    try {
+      EnrichmentObj enrichmentObjModel = new EnrichmentObj.Builder()
+        .catalog("iceberg_data")
+        .operation("create")
+        .schema("testString")
+        .tables(java.util.Arrays.asList("testString"))
+        .build();
+
+      CreateSalIntegrationEnrichmentOptions createSalIntegrationEnrichmentOptions = new CreateSalIntegrationEnrichmentOptions.Builder()
+        .enrichmentPrototype(enrichmentObjModel)
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<Void> response = service.createSalIntegrationEnrichment(createSalIntegrationEnrichmentOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 204);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testCreateSalIntegrationEnrichment" })
+  public void testGetSalIntegrationEnrichmentAssets() throws Exception {
+    try {
+      GetSalIntegrationEnrichmentAssetsOptions getSalIntegrationEnrichmentAssetsOptions = new GetSalIntegrationEnrichmentAssetsOptions.Builder()
+        .projectId("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<SalIntegrationEnrichmentAssets> response = service.getSalIntegrationEnrichmentAssets(getSalIntegrationEnrichmentAssetsOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      SalIntegrationEnrichmentAssets salIntegrationEnrichmentAssetsResult = response.getResult();
+      assertNotNull(salIntegrationEnrichmentAssetsResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testGetSalIntegrationEnrichmentAssets" })
+  public void testGetSalIntegrationEnrichmentDataAsset() throws Exception {
+    try {
+      GetSalIntegrationEnrichmentDataAssetOptions getSalIntegrationEnrichmentDataAssetOptions = new GetSalIntegrationEnrichmentDataAssetOptions.Builder()
+        .projectId("testString")
+        .assetId("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<SalIntegrationEnrichmentDataAsset> response = service.getSalIntegrationEnrichmentDataAsset(getSalIntegrationEnrichmentDataAssetOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      SalIntegrationEnrichmentDataAsset salIntegrationEnrichmentDataAssetResult = response.getResult();
+      assertNotNull(salIntegrationEnrichmentDataAssetResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testGetSalIntegrationEnrichmentDataAsset" })
+  public void testGetSalIntegrationEnrichmentJobRunLogs() throws Exception {
+    try {
+      GetSalIntegrationEnrichmentJobRunLogsOptions getSalIntegrationEnrichmentJobRunLogsOptions = new GetSalIntegrationEnrichmentJobRunLogsOptions.Builder()
+        .jobId("testString")
+        .jobRunId("testString")
+        .projectId("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<SalIntegrationEnrichmentJobRunLogs> response = service.getSalIntegrationEnrichmentJobRunLogs(getSalIntegrationEnrichmentJobRunLogsOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      SalIntegrationEnrichmentJobRunLogs salIntegrationEnrichmentJobRunLogsResult = response.getResult();
+      assertNotNull(salIntegrationEnrichmentJobRunLogsResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testGetSalIntegrationEnrichmentJobRunLogs" })
+  public void testGetSalIntegrationEnrichmentJobRuns() throws Exception {
+    try {
+      GetSalIntegrationEnrichmentJobRunsOptions getSalIntegrationEnrichmentJobRunsOptions = new GetSalIntegrationEnrichmentJobRunsOptions.Builder()
+        .jobId("testString")
+        .projectId("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<SalIntegrationEnrichmentJobRun> response = service.getSalIntegrationEnrichmentJobRuns(getSalIntegrationEnrichmentJobRunsOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      SalIntegrationEnrichmentJobRun salIntegrationEnrichmentJobRunResult = response.getResult();
+      assertNotNull(salIntegrationEnrichmentJobRunResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testGetSalIntegrationEnrichmentJobRuns" })
+  public void testGetSalIntegrationEnrichmentJobs() throws Exception {
+    try {
+      GetSalIntegrationEnrichmentJobsOptions getSalIntegrationEnrichmentJobsOptions = new GetSalIntegrationEnrichmentJobsOptions.Builder()
+        .wkcProjectId("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<SalIntegrationEnrichmentJobs> response = service.getSalIntegrationEnrichmentJobs(getSalIntegrationEnrichmentJobsOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      SalIntegrationEnrichmentJobs salIntegrationEnrichmentJobsResult = response.getResult();
+      assertNotNull(salIntegrationEnrichmentJobsResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testGetSalIntegrationEnrichmentJobs" })
+  public void testGetSalIntegrationGlossaryTerms() throws Exception {
+    try {
+      GetSalIntegrationGlossaryTermsOptions getSalIntegrationGlossaryTermsOptions = new GetSalIntegrationGlossaryTermsOptions.Builder()
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<SalIntegrationGlossaryTerms> response = service.getSalIntegrationGlossaryTerms(getSalIntegrationGlossaryTermsOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      SalIntegrationGlossaryTerms salIntegrationGlossaryTermsResult = response.getResult();
+      assertNotNull(salIntegrationGlossaryTermsResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testGetSalIntegrationGlossaryTerms" })
+  public void testGetSalIntegrationMappings() throws Exception {
+    try {
+      GetSalIntegrationMappingsOptions getSalIntegrationMappingsOptions = new GetSalIntegrationMappingsOptions.Builder()
+        .catalogName("testString")
+        .schemaName("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<SalIntegrationMappings> response = service.getSalIntegrationMappings(getSalIntegrationMappingsOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      SalIntegrationMappings salIntegrationMappingsResult = response.getResult();
+      assertNotNull(salIntegrationMappingsResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testGetSalIntegrationMappings" })
+  public void testGetSalIntegrationEnrichmentGlobalSettings() throws Exception {
+    try {
+      GetSalIntegrationEnrichmentGlobalSettingsOptions getSalIntegrationEnrichmentGlobalSettingsOptions = new GetSalIntegrationEnrichmentGlobalSettingsOptions.Builder()
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<SalIntegrationEnrichmentSettings> response = service.getSalIntegrationEnrichmentGlobalSettings(getSalIntegrationEnrichmentGlobalSettingsOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      SalIntegrationEnrichmentSettings salIntegrationEnrichmentSettingsResult = response.getResult();
+      assertNotNull(salIntegrationEnrichmentSettingsResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testGetSalIntegrationEnrichmentGlobalSettings" })
+  public void testCreateSalIntegrationEnrichmentGlobalSettings() throws Exception {
+    try {
+      SalIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfiguration salIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfigurationModel = new SalIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfiguration.Builder()
+        .assignmentThreshold(Double.valueOf("0.14"))
+        .suggestionThreshold(Double.valueOf("0.9"))
+        .build();
+
+      SalIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfiguration salIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfigurationModel = new SalIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfiguration.Builder()
+        .assignmentThreshold(Double.valueOf("0.1"))
+        .suggestionThreshold(Double.valueOf("0.1"))
+        .build();
+
+      SalIntegrationEnrichmentSettingsSemanticExpansion salIntegrationEnrichmentSettingsSemanticExpansionModel = new SalIntegrationEnrichmentSettingsSemanticExpansion.Builder()
+        .descriptionGeneration(true)
+        .descriptionGenerationConfiguration(salIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfigurationModel)
+        .nameExpansion(true)
+        .nameExpansionConfiguration(salIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfigurationModel)
+        .build();
+
+      SalIntegrationEnrichmentSettingsTermAssignment salIntegrationEnrichmentSettingsTermAssignmentModel = new SalIntegrationEnrichmentSettingsTermAssignment.Builder()
+        .classBasedAssignments(false)
+        .evaluateNegativeAssignments(false)
+        .llmBasedAssignments(false)
+        .mlBasedAssignmentsCustom(false)
+        .mlBasedAssignmentsDefault(false)
+        .nameMatching(false)
+        .termAssignmentThreshold(Double.valueOf("0.3"))
+        .termSuggestionThreshold(Double.valueOf("0.4"))
+        .build();
+
+      CreateSalIntegrationEnrichmentGlobalSettingsOptions createSalIntegrationEnrichmentGlobalSettingsOptions = new CreateSalIntegrationEnrichmentGlobalSettingsOptions.Builder()
+        .semanticExpansion(salIntegrationEnrichmentSettingsSemanticExpansionModel)
+        .termAssignment(salIntegrationEnrichmentSettingsTermAssignmentModel)
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<SalIntegrationEnrichmentSettings> response = service.createSalIntegrationEnrichmentGlobalSettings(createSalIntegrationEnrichmentGlobalSettingsOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 201);
+
+      SalIntegrationEnrichmentSettings salIntegrationEnrichmentSettingsResult = response.getResult();
+      assertNotNull(salIntegrationEnrichmentSettingsResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testCreateSalIntegrationEnrichmentGlobalSettings" })
+  public void testGetSalIntegrationEnrichmentSettings() throws Exception {
+    try {
+      GetSalIntegrationEnrichmentSettingsOptions getSalIntegrationEnrichmentSettingsOptions = new GetSalIntegrationEnrichmentSettingsOptions.Builder()
+        .projectId("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<SalIntegrationEnrichmentSettings> response = service.getSalIntegrationEnrichmentSettings(getSalIntegrationEnrichmentSettingsOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      SalIntegrationEnrichmentSettings salIntegrationEnrichmentSettingsResult = response.getResult();
+      assertNotNull(salIntegrationEnrichmentSettingsResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testGetSalIntegrationEnrichmentSettings" })
+  public void testCreateSalIntegrationEnrichmentSettings() throws Exception {
+    try {
+      SalIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfiguration salIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfigurationModel = new SalIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfiguration.Builder()
+        .assignmentThreshold(Double.valueOf("0.14"))
+        .suggestionThreshold(Double.valueOf("0.9"))
+        .build();
+
+      SalIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfiguration salIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfigurationModel = new SalIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfiguration.Builder()
+        .assignmentThreshold(Double.valueOf("0.1"))
+        .suggestionThreshold(Double.valueOf("0.1"))
+        .build();
+
+      SalIntegrationEnrichmentSettingsSemanticExpansion salIntegrationEnrichmentSettingsSemanticExpansionModel = new SalIntegrationEnrichmentSettingsSemanticExpansion.Builder()
+        .descriptionGeneration(true)
+        .descriptionGenerationConfiguration(salIntegrationEnrichmentSettingsSemanticExpansionDescriptionGenerationConfigurationModel)
+        .nameExpansion(true)
+        .nameExpansionConfiguration(salIntegrationEnrichmentSettingsSemanticExpansionNameExpansionConfigurationModel)
+        .build();
+
+      SalIntegrationEnrichmentSettingsTermAssignment salIntegrationEnrichmentSettingsTermAssignmentModel = new SalIntegrationEnrichmentSettingsTermAssignment.Builder()
+        .classBasedAssignments(false)
+        .evaluateNegativeAssignments(false)
+        .llmBasedAssignments(false)
+        .mlBasedAssignmentsCustom(false)
+        .mlBasedAssignmentsDefault(false)
+        .nameMatching(false)
+        .termAssignmentThreshold(Double.valueOf("0.3"))
+        .termSuggestionThreshold(Double.valueOf("0.4"))
+        .build();
+
+      CreateSalIntegrationEnrichmentSettingsOptions createSalIntegrationEnrichmentSettingsOptions = new CreateSalIntegrationEnrichmentSettingsOptions.Builder()
+        .semanticExpansion(salIntegrationEnrichmentSettingsSemanticExpansionModel)
+        .termAssignment(salIntegrationEnrichmentSettingsTermAssignmentModel)
+        .projectId("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<Void> response = service.createSalIntegrationEnrichmentSettings(createSalIntegrationEnrichmentSettingsOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 204);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testCreateSalIntegrationEnrichmentSettings" })
+  public void testCreateSalIntegrationUploadGlossary() throws Exception {
+    try {
+      CreateSalIntegrationUploadGlossaryOptions createSalIntegrationUploadGlossaryOptions = new CreateSalIntegrationUploadGlossaryOptions.Builder()
+        .replaceOption("all")
+        .glossaryCsv(TestUtilities.createMockStream("This is a mock file."))
+        .glossaryCsvContentType("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<SalIntegrationUploadGlossary> response = service.createSalIntegrationUploadGlossary(createSalIntegrationUploadGlossaryOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 201);
+
+      SalIntegrationUploadGlossary salIntegrationUploadGlossaryResult = response.getResult();
+      assertNotNull(salIntegrationUploadGlossaryResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testCreateSalIntegrationUploadGlossary" })
+  public void testGetSalIntegrationUploadGlossaryStatus() throws Exception {
+    try {
+      GetSalIntegrationUploadGlossaryStatusOptions getSalIntegrationUploadGlossaryStatusOptions = new GetSalIntegrationUploadGlossaryStatusOptions.Builder()
+        .processId("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<SalIntegrationUploadGlossaryStatus> response = service.getSalIntegrationUploadGlossaryStatus(getSalIntegrationUploadGlossaryStatusOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      SalIntegrationUploadGlossaryStatus salIntegrationUploadGlossaryStatusResult = response.getResult();
+      assertNotNull(salIntegrationUploadGlossaryStatusResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testGetSalIntegrationUploadGlossaryStatus" })
   public void testListSparkEngines() throws Exception {
     try {
       ListSparkEnginesOptions listSparkEnginesOptions = new ListSparkEnginesOptions.Builder()
@@ -1883,22 +2791,22 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
   }
 
   @Test(dependsOnMethods = { "testListSparkEngineCatalogs" })
-  public void testAddSparkEngineCatalogs() throws Exception {
+  public void testCreateSparkEngineCatalogs() throws Exception {
     try {
-      AddSparkEngineCatalogsOptions addSparkEngineCatalogsOptions = new AddSparkEngineCatalogsOptions.Builder()
+      CreateSparkEngineCatalogsOptions createSparkEngineCatalogsOptions = new CreateSparkEngineCatalogsOptions.Builder()
         .engineId("testString")
-        .catalogNames("testString")
+        .catalogName("testString")
         .authInstanceId("testString")
         .build();
 
       // Invoke operation
-      Response<CatalogCollection> response = service.addSparkEngineCatalogs(addSparkEngineCatalogsOptions).execute();
+      Response<Catalog> response = service.createSparkEngineCatalogs(createSparkEngineCatalogsOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 201);
 
-      CatalogCollection catalogCollectionResult = response.getResult();
-      assertNotNull(catalogCollectionResult);
+      Catalog catalogResult = response.getResult();
+      assertNotNull(catalogResult);
 
     } catch (ServiceResponseException e) {
         fail(String.format("Service returned status code %d: %s%nError details: %s",
@@ -1906,7 +2814,7 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test(dependsOnMethods = { "testAddSparkEngineCatalogs" })
+  @Test(dependsOnMethods = { "testCreateSparkEngineCatalogs" })
   public void testGetSparkEngineCatalog() throws Exception {
     try {
       GetSparkEngineCatalogOptions getSparkEngineCatalogOptions = new GetSparkEngineCatalogOptions.Builder()
@@ -1979,18 +2887,18 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
   }
 
   @Test(dependsOnMethods = { "testStartSparkEngineHistoryServer" })
-  public void testCreateSparkEnginePause() throws Exception {
+  public void testPauseSparkEngine() throws Exception {
     try {
-      CreateSparkEnginePauseOptions createSparkEnginePauseOptions = new CreateSparkEnginePauseOptions.Builder()
+      PauseSparkEngineOptions pauseSparkEngineOptions = new PauseSparkEngineOptions.Builder()
         .engineId("testString")
         .authInstanceId("testString")
         .build();
 
       // Invoke operation
-      Response<SuccessResponse> response = service.createSparkEnginePause(createSparkEnginePauseOptions).execute();
+      Response<SuccessResponse> response = service.pauseSparkEngine(pauseSparkEngineOptions).execute();
       // Validate response
       assertNotNull(response);
-      assertEquals(response.getStatusCode(), 201);
+      assertEquals(response.getStatusCode(), 200);
 
       SuccessResponse successResponseResult = response.getResult();
       assertNotNull(successResponseResult);
@@ -2001,19 +2909,19 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test(dependsOnMethods = { "testCreateSparkEnginePause" })
-  public void testCreateSparkEngineResume() throws Exception {
+  @Test(dependsOnMethods = { "testPauseSparkEngine" })
+  public void testResumeSparkEngine() throws Exception {
     try {
-      CreateSparkEngineResumeOptions createSparkEngineResumeOptions = new CreateSparkEngineResumeOptions.Builder()
+      ResumeSparkEngineOptions resumeSparkEngineOptions = new ResumeSparkEngineOptions.Builder()
         .engineId("testString")
         .authInstanceId("testString")
         .build();
 
       // Invoke operation
-      Response<SuccessResponse> response = service.createSparkEngineResume(createSparkEngineResumeOptions).execute();
+      Response<SuccessResponse> response = service.resumeSparkEngine(resumeSparkEngineOptions).execute();
       // Validate response
       assertNotNull(response);
-      assertEquals(response.getStatusCode(), 201);
+      assertEquals(response.getStatusCode(), 200);
 
       SuccessResponse successResponseResult = response.getResult();
       assertNotNull(successResponseResult);
@@ -2024,20 +2932,20 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test(dependsOnMethods = { "testCreateSparkEngineResume" })
-  public void testCreateSparkEngineScale() throws Exception {
+  @Test(dependsOnMethods = { "testResumeSparkEngine" })
+  public void testScaleSparkEngine() throws Exception {
     try {
-      CreateSparkEngineScaleOptions createSparkEngineScaleOptions = new CreateSparkEngineScaleOptions.Builder()
+      ScaleSparkEngineOptions scaleSparkEngineOptions = new ScaleSparkEngineOptions.Builder()
         .engineId("testString")
         .numberOfNodes(Long.valueOf("2"))
         .authInstanceId("testString")
         .build();
 
       // Invoke operation
-      Response<SuccessResponse> response = service.createSparkEngineScale(createSparkEngineScaleOptions).execute();
+      Response<SuccessResponse> response = service.scaleSparkEngine(scaleSparkEngineOptions).execute();
       // Validate response
       assertNotNull(response);
-      assertEquals(response.getStatusCode(), 201);
+      assertEquals(response.getStatusCode(), 202);
 
       SuccessResponse successResponseResult = response.getResult();
       assertNotNull(successResponseResult);
@@ -2048,7 +2956,7 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test(dependsOnMethods = { "testCreateSparkEngineScale" })
+  @Test(dependsOnMethods = { "testScaleSparkEngine" })
   public void testListSparkVersions() throws Exception {
     try {
       ListSparkVersionsOptions listSparkVersionsOptions = new ListSparkVersionsOptions.Builder()
@@ -2148,6 +3056,8 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
         .customPath("sample-path")
         .schemaName("SampleSchema1")
         .bucketName("sample-bucket")
+        .hostname("db2@hostname.com")
+        .port(Long.valueOf("4553"))
         .authInstanceId("testString")
         .build();
 
@@ -2199,6 +3109,7 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
         .schemaId("testString")
         .tableId("testString")
         .engineId("testString")
+        .type("testString")
         .authInstanceId("testString")
         .build();
 
@@ -2218,24 +3129,25 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
   }
 
   @Test(dependsOnMethods = { "testGetTable" })
-  public void testRenameTable() throws Exception {
+  public void testUpdateTable() throws Exception {
     try {
       TablePatch tablePatchModel = new TablePatch.Builder()
         .tableName("updated_table_name")
         .build();
       Map<String, Object> tablePatchModelAsPatch = tablePatchModel.asPatch();
 
-      RenameTableOptions renameTableOptions = new RenameTableOptions.Builder()
+      UpdateTableOptions updateTableOptions = new UpdateTableOptions.Builder()
         .catalogId("testString")
         .schemaId("testString")
         .tableId("testString")
         .engineId("testString")
         .body(tablePatchModelAsPatch)
+        .type("testString")
         .authInstanceId("testString")
         .build();
 
       // Invoke operation
-      Response<Table> response = service.renameTable(renameTableOptions).execute();
+      Response<Table> response = service.updateTable(updateTableOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 200);
@@ -2249,7 +3161,7 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test(dependsOnMethods = { "testRenameTable" })
+  @Test(dependsOnMethods = { "testUpdateTable" })
   public void testListColumns() throws Exception {
     try {
       ListColumnsOptions listColumnsOptions = new ListColumnsOptions.Builder()
@@ -2284,6 +3196,7 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
         .extra("varchar")
         .length("30")
         .scale("2")
+        .precision("10")
         .type("varchar")
         .build();
 
@@ -2453,10 +3366,14 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
   public void testCreateMilvusService() throws Exception {
     try {
       CreateMilvusServiceOptions createMilvusServiceOptions = new CreateMilvusServiceOptions.Builder()
+        .bucketName("Sample bucket name")
         .origin("native")
-        .description("milvus service for running sql queries")
+        .rootPath("Sample path")
         .serviceDisplayName("sampleService")
+        .bucketType("Sample bucket type")
+        .description("milvus service for running sql queries")
         .tags(java.util.Arrays.asList("tag1", "tag2"))
+        .tshirtSize("small")
         .authInstanceId("testString")
         .build();
 
@@ -2530,11 +3447,128 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
   }
 
   @Test(dependsOnMethods = { "testUpdateMilvusService" })
+  public void testListMilvusServiceDatabases() throws Exception {
+    try {
+      ListMilvusServiceDatabasesOptions listMilvusServiceDatabasesOptions = new ListMilvusServiceDatabasesOptions.Builder()
+        .serviceId("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<MilvusServiceDatabases> response = service.listMilvusServiceDatabases(listMilvusServiceDatabasesOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      MilvusServiceDatabases milvusServiceDatabasesResult = response.getResult();
+      assertNotNull(milvusServiceDatabasesResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testListMilvusServiceDatabases" })
+  public void testListMilvusDatabaseCollections() throws Exception {
+    try {
+      ListMilvusDatabaseCollectionsOptions listMilvusDatabaseCollectionsOptions = new ListMilvusDatabaseCollectionsOptions.Builder()
+        .serviceId("testString")
+        .databaseId("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<MilvusDatabaseCollections> response = service.listMilvusDatabaseCollections(listMilvusDatabaseCollectionsOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      MilvusDatabaseCollections milvusDatabaseCollectionsResult = response.getResult();
+      assertNotNull(milvusDatabaseCollectionsResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testListMilvusDatabaseCollections" })
+  public void testCreateMilvusServicePause() throws Exception {
+    try {
+      CreateMilvusServicePauseOptions createMilvusServicePauseOptions = new CreateMilvusServicePauseOptions.Builder()
+        .serviceId("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<SuccessResponse> response = service.createMilvusServicePause(createMilvusServicePauseOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 201);
+
+      SuccessResponse successResponseResult = response.getResult();
+      assertNotNull(successResponseResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testCreateMilvusServicePause" })
+  public void testCreateMilvusServiceResume() throws Exception {
+    try {
+      CreateMilvusServiceResumeOptions createMilvusServiceResumeOptions = new CreateMilvusServiceResumeOptions.Builder()
+        .serviceId("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<SuccessResponse> response = service.createMilvusServiceResume(createMilvusServiceResumeOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 201);
+
+      SuccessResponse successResponseResult = response.getResult();
+      assertNotNull(successResponseResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testCreateMilvusServiceResume" })
+  public void testCreateMilvusServiceScale() throws Exception {
+    try {
+      CreateMilvusServiceScaleOptions createMilvusServiceScaleOptions = new CreateMilvusServiceScaleOptions.Builder()
+        .serviceId("testString")
+        .tshirtSize("small")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<SuccessResponse> response = service.createMilvusServiceScale(createMilvusServiceScaleOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 201);
+
+      SuccessResponse successResponseResult = response.getResult();
+      assertNotNull(successResponseResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testCreateMilvusServiceScale" })
   public void testListIngestionJobs() throws Exception {
     try {
       ListIngestionJobsOptions listIngestionJobsOptions = new ListIngestionJobsOptions.Builder()
         .authInstanceId("testString")
-        .page(Long.valueOf("1"))
+        .start("1")
         .jobsPerPage(Long.valueOf("1"))
         .build();
 
@@ -2547,6 +3581,38 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
       IngestionJobCollection ingestionJobCollectionResult = response.getResult();
       assertNotNull(ingestionJobCollectionResult);
 
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testListIngestionJobs" })
+  public void testListIngestionJobsWithPager() throws Exception {
+    try {
+      ListIngestionJobsOptions options = new ListIngestionJobsOptions.Builder()
+        .authInstanceId("testString")
+        .jobsPerPage(Long.valueOf("1"))
+        .build();
+
+      // Test getNext().
+      List<IngestionJob> allResults = new ArrayList<>();
+      IngestionJobsPager pager = new IngestionJobsPager(service, options);
+      while (pager.hasNext()) {
+        List<IngestionJob> nextPage = pager.getNext();
+        assertNotNull(nextPage);
+        allResults.addAll(nextPage);
+      }
+      assertFalse(allResults.isEmpty());
+
+      // Test getAll();
+      pager = new IngestionJobsPager(service, options);
+      List<IngestionJob> allItems = pager.getAll();
+      assertNotNull(allItems);
+      assertFalse(allItems.isEmpty());
+
+      assertEquals(allItems.size(), allResults.size());
+      System.out.println(String.format("Retrieved a total of %d item(s) with pagination.", allResults.size()));
     } catch (ServiceResponseException e) {
         fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
@@ -2693,15 +3759,37 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
   }
 
   @Test(dependsOnMethods = { "testCreatePreviewIngestionFile" })
-  public void testDeregisterBucket() throws Exception {
+  public void testGetEndpoints() throws Exception {
     try {
-      DeregisterBucketOptions deregisterBucketOptions = new DeregisterBucketOptions.Builder()
+      GetEndpointsOptions getEndpointsOptions = new GetEndpointsOptions.Builder()
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<EndpointCollection> response = service.getEndpoints(getEndpointsOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      EndpointCollection endpointCollectionResult = response.getResult();
+      assertNotNull(endpointCollectionResult);
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testGetEndpoints" })
+  public void testDeleteBucketRegistration() throws Exception {
+    try {
+      DeleteBucketRegistrationOptions deleteBucketRegistrationOptions = new DeleteBucketRegistrationOptions.Builder()
         .bucketId("testString")
         .authInstanceId("testString")
         .build();
 
       // Invoke operation
-      Response<Void> response = service.deregisterBucket(deregisterBucketOptions).execute();
+      Response<Void> response = service.deleteBucketRegistration(deleteBucketRegistrationOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 204);
@@ -2711,7 +3799,7 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test(dependsOnMethods = { "testDeregisterBucket" })
+  @Test(dependsOnMethods = { "testDeleteBucketRegistration" })
   public void testDeleteDeactivateBucket() throws Exception {
     try {
       DeleteDeactivateBucketOptions deleteDeactivateBucketOptions = new DeleteDeactivateBucketOptions.Builder()
@@ -2750,6 +3838,45 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
   }
 
   @Test(dependsOnMethods = { "testDeleteDatabaseCatalog" })
+  public void testDeleteDriverRegistration() throws Exception {
+    try {
+      DeleteDriverRegistrationOptions deleteDriverRegistrationOptions = new DeleteDriverRegistrationOptions.Builder()
+        .driverId("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<Void> response = service.deleteDriverRegistration(deleteDriverRegistrationOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 204);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testDeleteDriverRegistration" })
+  public void testDeleteDriverEngines() throws Exception {
+    try {
+      DeleteDriverEnginesOptions deleteDriverEnginesOptions = new DeleteDriverEnginesOptions.Builder()
+        .driverId("testString")
+        .engineIds("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<Void> response = service.deleteDriverEngines(deleteDriverEnginesOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 204);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testDeleteDriverEngines" })
   public void testDeleteOtherEngine() throws Exception {
     try {
       DeleteOtherEngineOptions deleteOtherEngineOptions = new DeleteOtherEngineOptions.Builder()
@@ -2769,6 +3896,25 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
   }
 
   @Test(dependsOnMethods = { "testDeleteOtherEngine" })
+  public void testDeleteIntegration() throws Exception {
+    try {
+      DeleteIntegrationOptions deleteIntegrationOptions = new DeleteIntegrationOptions.Builder()
+        .integrationId("testString")
+        .authInstanceId("testString")
+        .build();
+
+      // Invoke operation
+      Response<Void> response = service.deleteIntegration(deleteIntegrationOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 204);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testDeleteIntegration" })
   public void testDeleteDb2Engine() throws Exception {
     try {
       DeleteDb2EngineOptions deleteDb2EngineOptions = new DeleteDb2EngineOptions.Builder()
@@ -2885,6 +4031,22 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
   }
 
   @Test(dependsOnMethods = { "testDeletePrestoEngineCatalogs" })
+  public void testDeleteSalIntegration() throws Exception {
+    try {
+      DeleteSalIntegrationOptions deleteSalIntegrationOptions = new DeleteSalIntegrationOptions();
+
+      // Invoke operation
+      Response<Void> response = service.deleteSalIntegration(deleteSalIntegrationOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 204);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testDeleteSalIntegration" })
   public void testDeleteSparkEngine() throws Exception {
     try {
       DeleteSparkEngineOptions deleteSparkEngineOptions = new DeleteSparkEngineOptions.Builder()
@@ -2992,6 +4154,7 @@ public class WatsonxDataIT extends SdkIntegrationTestBase {
         .schemaId("testString")
         .tableId("testString")
         .engineId("testString")
+        .type("testString")
         .authInstanceId("testString")
         .build();
 

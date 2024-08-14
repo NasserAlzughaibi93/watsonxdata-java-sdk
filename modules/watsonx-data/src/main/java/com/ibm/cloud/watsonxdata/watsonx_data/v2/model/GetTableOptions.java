@@ -24,6 +24,7 @@ public class GetTableOptions extends GenericModel {
   protected String schemaId;
   protected String tableId;
   protected String engineId;
+  protected String type;
   protected String authInstanceId;
 
   /**
@@ -34,6 +35,7 @@ public class GetTableOptions extends GenericModel {
     private String schemaId;
     private String tableId;
     private String engineId;
+    private String type;
     private String authInstanceId;
 
     /**
@@ -46,6 +48,7 @@ public class GetTableOptions extends GenericModel {
       this.schemaId = getTableOptions.schemaId;
       this.tableId = getTableOptions.tableId;
       this.engineId = getTableOptions.engineId;
+      this.type = getTableOptions.type;
       this.authInstanceId = getTableOptions.authInstanceId;
     }
 
@@ -124,6 +127,17 @@ public class GetTableOptions extends GenericModel {
     }
 
     /**
+     * Set the type.
+     *
+     * @param type the type
+     * @return the GetTableOptions builder
+     */
+    public Builder type(String type) {
+      this.type = type;
+      return this;
+    }
+
+    /**
      * Set the authInstanceId.
      *
      * @param authInstanceId the authInstanceId
@@ -150,6 +164,7 @@ public class GetTableOptions extends GenericModel {
     schemaId = builder.schemaId;
     tableId = builder.tableId;
     engineId = builder.engineId;
+    type = builder.type;
     authInstanceId = builder.authInstanceId;
   }
 
@@ -204,6 +219,17 @@ public class GetTableOptions extends GenericModel {
    */
   public String engineId() {
     return engineId;
+  }
+
+  /**
+   * Gets the type.
+   *
+   * URL encoded table type.
+   *
+   * @return the type
+   */
+  public String type() {
+    return type;
   }
 
   /**

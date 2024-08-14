@@ -44,6 +44,7 @@ public class DatabaseRegistration extends GenericModel {
   protected String databaseType;
   protected String description;
   protected List<String> tags;
+  protected List<DatabaseRegistrationTopicsItems> topics;
 
   protected DatabaseRegistration() { }
 
@@ -177,6 +178,17 @@ public class DatabaseRegistration extends GenericModel {
    */
   public List<String> getTags() {
     return tags;
+  }
+
+  /**
+   * Gets the topics.
+   *
+   * List of topics.
+   *
+   * @return the topics
+   */
+  public List<DatabaseRegistrationTopicsItems> getTopics() {
+    return topics;
   }
 }
 

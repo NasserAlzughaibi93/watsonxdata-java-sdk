@@ -27,6 +27,7 @@ public class Column extends GenericModel {
   protected String extra;
   protected String length;
   protected String scale;
+  protected String precision;
   protected String type;
 
   /**
@@ -38,6 +39,7 @@ public class Column extends GenericModel {
     private String extra;
     private String length;
     private String scale;
+    private String precision;
     private String type;
 
     /**
@@ -51,6 +53,7 @@ public class Column extends GenericModel {
       this.extra = column.extra;
       this.length = column.length;
       this.scale = column.scale;
+      this.precision = column.precision;
       this.type = column.type;
     }
 
@@ -125,6 +128,17 @@ public class Column extends GenericModel {
     }
 
     /**
+     * Set the precision.
+     *
+     * @param precision the precision
+     * @return the Column builder
+     */
+    public Builder precision(String precision) {
+      this.precision = precision;
+      return this;
+    }
+
+    /**
      * Set the type.
      *
      * @param type the type
@@ -144,6 +158,7 @@ public class Column extends GenericModel {
     extra = builder.extra;
     length = builder.length;
     scale = builder.scale;
+    precision = builder.precision;
     type = builder.type;
   }
 
@@ -209,6 +224,17 @@ public class Column extends GenericModel {
    */
   public String scale() {
     return scale;
+  }
+
+  /**
+   * Gets the precision.
+   *
+   * precision.
+   *
+   * @return the precision
+   */
+  public String precision() {
+    return precision;
   }
 
   /**

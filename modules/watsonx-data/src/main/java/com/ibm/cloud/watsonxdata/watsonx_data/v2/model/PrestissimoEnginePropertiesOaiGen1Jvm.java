@@ -82,7 +82,7 @@ public class PrestissimoEnginePropertiesOaiGen1Jvm extends GenericModel {
   /**
    * Gets the coordinator.
    *
-   * coordinator/worker property settings.
+   * Coordinator/ worker properties.
    *
    * @return the coordinator
    */

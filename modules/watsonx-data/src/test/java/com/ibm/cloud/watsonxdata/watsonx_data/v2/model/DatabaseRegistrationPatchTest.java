@@ -16,6 +16,7 @@ package com.ibm.cloud.watsonxdata.watsonx_data.v2.model;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationPatch;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationPatchDatabaseDetails;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationPatchTopicsItems;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.utils.TestUtilities;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -40,16 +41,29 @@ public class DatabaseRegistrationPatchTest {
     assertEquals(databaseRegistrationPatchDatabaseDetailsModel.password(), "samplepassword");
     assertEquals(databaseRegistrationPatchDatabaseDetailsModel.username(), "sampleuser");
 
+    DatabaseRegistrationPatchTopicsItems databaseRegistrationPatchTopicsItemsModel = new DatabaseRegistrationPatchTopicsItems.Builder()
+      .createdOn("1686792721")
+      .fileContents("sample file contents")
+      .fileName("sample file name")
+      .topicName("customer")
+      .build();
+    assertEquals(databaseRegistrationPatchTopicsItemsModel.createdOn(), "1686792721");
+    assertEquals(databaseRegistrationPatchTopicsItemsModel.fileContents(), "sample file contents");
+    assertEquals(databaseRegistrationPatchTopicsItemsModel.fileName(), "sample file name");
+    assertEquals(databaseRegistrationPatchTopicsItemsModel.topicName(), "customer");
+
     DatabaseRegistrationPatch databaseRegistrationPatchModel = new DatabaseRegistrationPatch.Builder()
       .databaseDetails(databaseRegistrationPatchDatabaseDetailsModel)
       .databaseDisplayName("new_database")
       .description("External database description")
       .tags(java.util.Arrays.asList("testdatabase", "userdatabase"))
+      .topics(java.util.Arrays.asList(databaseRegistrationPatchTopicsItemsModel))
       .build();
     assertEquals(databaseRegistrationPatchModel.databaseDetails(), databaseRegistrationPatchDatabaseDetailsModel);
     assertEquals(databaseRegistrationPatchModel.databaseDisplayName(), "new_database");
     assertEquals(databaseRegistrationPatchModel.description(), "External database description");
     assertEquals(databaseRegistrationPatchModel.tags(), java.util.Arrays.asList("testdatabase", "userdatabase"));
+    assertEquals(databaseRegistrationPatchModel.topics(), java.util.Arrays.asList(databaseRegistrationPatchTopicsItemsModel));
 
     String json = TestUtilities.serialize(databaseRegistrationPatchModel);
 
@@ -66,11 +80,19 @@ public class DatabaseRegistrationPatchTest {
       .username("sampleuser")
       .build();
 
+    DatabaseRegistrationPatchTopicsItems databaseRegistrationPatchTopicsItemsModel = new DatabaseRegistrationPatchTopicsItems.Builder()
+      .createdOn("1686792721")
+      .fileContents("sample file contents")
+      .fileName("sample file name")
+      .topicName("customer")
+      .build();
+
     DatabaseRegistrationPatch databaseRegistrationPatchModel = new DatabaseRegistrationPatch.Builder()
       .databaseDetails(databaseRegistrationPatchDatabaseDetailsModel)
       .databaseDisplayName("new_database")
       .description("External database description")
       .tags(java.util.Arrays.asList("testdatabase", "userdatabase"))
+      .topics(java.util.Arrays.asList(databaseRegistrationPatchTopicsItemsModel))
       .build();
 
     Map<String, Object> mergePatch = databaseRegistrationPatchModel.asPatch();
@@ -79,6 +101,7 @@ public class DatabaseRegistrationPatchTest {
     assertEquals(mergePatch.get("database_display_name"), "new_database");
     assertEquals(mergePatch.get("description"), "External database description");
     assertTrue(mergePatch.containsKey("tags"));
+    assertTrue(mergePatch.containsKey("topics"));
   }
 
 }

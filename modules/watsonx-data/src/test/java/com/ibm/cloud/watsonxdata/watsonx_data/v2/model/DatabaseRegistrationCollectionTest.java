@@ -19,6 +19,7 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseDetails;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistration;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationCollection;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationDatabasePropertiesItems;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.DatabaseRegistrationTopicsItems;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.utils.TestUtilities;
 import java.io.InputStream;
 import java.util.HashMap;

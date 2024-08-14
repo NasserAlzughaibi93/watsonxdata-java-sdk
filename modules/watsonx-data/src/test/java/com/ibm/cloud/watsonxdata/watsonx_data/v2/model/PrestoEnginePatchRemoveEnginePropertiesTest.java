@@ -34,6 +34,11 @@ public class PrestoEnginePatchRemoveEnginePropertiesTest {
 
   @Test
   public void testPrestoEnginePatchRemoveEngineProperties() throws Throwable {
+    PrestoEnginePropertiesCatalog prestoEnginePropertiesCatalogModel = new PrestoEnginePropertiesCatalog.Builder()
+      .catalogName("testString")
+      .build();
+    assertEquals(prestoEnginePropertiesCatalogModel.catalogName(), "testString");
+
     RemoveEnginePropertiesOaiGenConfiguration removeEnginePropertiesOaiGenConfigurationModel = new RemoveEnginePropertiesOaiGenConfiguration.Builder()
       .coordinator(java.util.Arrays.asList("testString"))
       .worker(java.util.Arrays.asList("testString"))
@@ -48,26 +53,23 @@ public class PrestoEnginePatchRemoveEnginePropertiesTest {
     assertEquals(removeEnginePropertiesOaiGenJvmModel.coordinator(), java.util.Arrays.asList("testString"));
     assertEquals(removeEnginePropertiesOaiGenJvmModel.worker(), java.util.Arrays.asList("testString"));
 
-    PrestoEnginePropertiesCatalog prestoEnginePropertiesCatalogModel = new PrestoEnginePropertiesCatalog.Builder()
-      .catalogName("testString")
-      .build();
-    assertEquals(prestoEnginePropertiesCatalogModel.catalogName(), "testString");
-
     PrestoEnginePatchRemoveEngineProperties prestoEnginePatchRemoveEnginePropertiesModel = new PrestoEnginePatchRemoveEngineProperties.Builder()
+      .catalog(prestoEnginePropertiesCatalogModel)
       .configuration(removeEnginePropertiesOaiGenConfigurationModel)
       .jvm(removeEnginePropertiesOaiGenJvmModel)
-      .catalog(prestoEnginePropertiesCatalogModel)
+      .eventListener(java.util.Arrays.asList())
       .build();
+    assertEquals(prestoEnginePatchRemoveEnginePropertiesModel.catalog(), prestoEnginePropertiesCatalogModel);
     assertEquals(prestoEnginePatchRemoveEnginePropertiesModel.configuration(), removeEnginePropertiesOaiGenConfigurationModel);
     assertEquals(prestoEnginePatchRemoveEnginePropertiesModel.jvm(), removeEnginePropertiesOaiGenJvmModel);
-    assertEquals(prestoEnginePatchRemoveEnginePropertiesModel.catalog(), prestoEnginePropertiesCatalogModel);
+    assertEquals(prestoEnginePatchRemoveEnginePropertiesModel.eventListener(), java.util.Arrays.asList());
 
     String json = TestUtilities.serialize(prestoEnginePatchRemoveEnginePropertiesModel);
 
     PrestoEnginePatchRemoveEngineProperties prestoEnginePatchRemoveEnginePropertiesModelNew = TestUtilities.deserialize(json, PrestoEnginePatchRemoveEngineProperties.class);
     assertTrue(prestoEnginePatchRemoveEnginePropertiesModelNew instanceof PrestoEnginePatchRemoveEngineProperties);
+    assertEquals(prestoEnginePatchRemoveEnginePropertiesModelNew.catalog().toString(), prestoEnginePropertiesCatalogModel.toString());
     assertEquals(prestoEnginePatchRemoveEnginePropertiesModelNew.configuration().toString(), removeEnginePropertiesOaiGenConfigurationModel.toString());
     assertEquals(prestoEnginePatchRemoveEnginePropertiesModelNew.jvm().toString(), removeEnginePropertiesOaiGenJvmModel.toString());
-    assertEquals(prestoEnginePatchRemoveEnginePropertiesModelNew.catalog().toString(), prestoEnginePropertiesCatalogModel.toString());
   }
 }

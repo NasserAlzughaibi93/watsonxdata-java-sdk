@@ -32,6 +32,7 @@ public class DatabaseRegistrationPatch extends GenericModel {
   protected String databaseDisplayName;
   protected String description;
   protected List<String> tags;
+  protected List<DatabaseRegistrationPatchTopicsItems> topics;
 
   /**
    * Builder.
@@ -41,6 +42,7 @@ public class DatabaseRegistrationPatch extends GenericModel {
     private String databaseDisplayName;
     private String description;
     private List<String> tags;
+    private List<DatabaseRegistrationPatchTopicsItems> topics;
 
     /**
      * Instantiates a new Builder from an existing DatabaseRegistrationPatch instance.
@@ -52,6 +54,7 @@ public class DatabaseRegistrationPatch extends GenericModel {
       this.databaseDisplayName = databaseRegistrationPatch.databaseDisplayName;
       this.description = databaseRegistrationPatch.description;
       this.tags = databaseRegistrationPatch.tags;
+      this.topics = databaseRegistrationPatch.topics;
     }
 
     /**
@@ -82,6 +85,22 @@ public class DatabaseRegistrationPatch extends GenericModel {
         this.tags = new ArrayList<String>();
       }
       this.tags.add(tags);
+      return this;
+    }
+
+    /**
+     * Adds a new element to topics.
+     *
+     * @param topics the new element to be added
+     * @return the DatabaseRegistrationPatch builder
+     */
+    public Builder addTopics(DatabaseRegistrationPatchTopicsItems topics) {
+      com.ibm.cloud.sdk.core.util.Validator.notNull(topics,
+        "topics cannot be null");
+      if (this.topics == null) {
+        this.topics = new ArrayList<DatabaseRegistrationPatchTopicsItems>();
+      }
+      this.topics.add(topics);
       return this;
     }
 
@@ -129,6 +148,18 @@ public class DatabaseRegistrationPatch extends GenericModel {
       this.tags = tags;
       return this;
     }
+
+    /**
+     * Set the topics.
+     * Existing topics will be replaced.
+     *
+     * @param topics the topics
+     * @return the DatabaseRegistrationPatch builder
+     */
+    public Builder topics(List<DatabaseRegistrationPatchTopicsItems> topics) {
+      this.topics = topics;
+      return this;
+    }
   }
 
   protected DatabaseRegistrationPatch() { }
@@ -138,6 +169,7 @@ public class DatabaseRegistrationPatch extends GenericModel {
     databaseDisplayName = builder.databaseDisplayName;
     description = builder.description;
     tags = builder.tags;
+    topics = builder.topics;
   }
 
   /**
@@ -191,6 +223,17 @@ public class DatabaseRegistrationPatch extends GenericModel {
    */
   public List<String> tags() {
     return tags;
+  }
+
+  /**
+   * Gets the topics.
+   *
+   * List of topics.
+   *
+   * @return the topics
+   */
+  public List<DatabaseRegistrationPatchTopicsItems> topics() {
+    return topics;
   }
 
   /**

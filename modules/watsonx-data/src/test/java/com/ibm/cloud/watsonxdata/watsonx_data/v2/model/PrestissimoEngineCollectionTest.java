@@ -27,6 +27,7 @@ import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestissimoEngineProperti
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.PrestissimoNodeDescriptionBody;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEngineProperties;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesConfiguration;
+import com.ibm.cloud.watsonxdata.watsonx_data.v2.model.RemoveEnginePropertiesPrestissimoOaiGenJvm;
 import com.ibm.cloud.watsonxdata.watsonx_data.v2.utils.TestUtilities;
 import java.io.InputStream;
 import java.util.HashMap;

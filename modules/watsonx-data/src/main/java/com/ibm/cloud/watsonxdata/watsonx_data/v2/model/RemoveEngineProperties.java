@@ -25,7 +25,7 @@ public class RemoveEngineProperties extends GenericModel {
 
   protected PrestissimoEnginePropertiesCatalog catalog;
   protected RemoveEnginePropertiesConfiguration configuration;
-  protected RemoveEnginePropertiesConfiguration jvm;
+  protected RemoveEnginePropertiesPrestissimoOaiGenJvm jvm;
   protected List<String> velox;
 
   /**
@@ -34,7 +34,7 @@ public class RemoveEngineProperties extends GenericModel {
   public static class Builder {
     private PrestissimoEnginePropertiesCatalog catalog;
     private RemoveEnginePropertiesConfiguration configuration;
-    private RemoveEnginePropertiesConfiguration jvm;
+    private RemoveEnginePropertiesPrestissimoOaiGenJvm jvm;
     private List<String> velox;
 
     /**
@@ -108,7 +108,7 @@ public class RemoveEngineProperties extends GenericModel {
      * @param jvm the jvm
      * @return the RemoveEngineProperties builder
      */
-    public Builder jvm(RemoveEnginePropertiesConfiguration jvm) {
+    public Builder jvm(RemoveEnginePropertiesPrestissimoOaiGenJvm jvm) {
       this.jvm = jvm;
       return this;
     }
@@ -147,7 +147,7 @@ public class RemoveEngineProperties extends GenericModel {
   /**
    * Gets the catalog.
    *
-   * catalog properties.
+   * Catalog settings.
    *
    * @return the catalog
    */
@@ -169,11 +169,11 @@ public class RemoveEngineProperties extends GenericModel {
   /**
    * Gets the jvm.
    *
-   * remove engine properties configuration.
+   * JVM properties.
    *
    * @return the jvm
    */
-  public RemoveEnginePropertiesConfiguration jvm() {
+  public RemoveEnginePropertiesPrestissimoOaiGenJvm jvm() {
     return jvm;
   }
 

@@ -20,7 +20,7 @@ import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * catalog properties.
+ * Catalog settings.
  */
 public class PrestissimoEnginePropertiesCatalog extends GenericModel {
 
